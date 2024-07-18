@@ -4,7 +4,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-10">
-                    <h2>Daftar User</h2>
+                    <h2>Daftar User [test]</h2>
                 </div>
                 <div class="col-md-2">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createUser">
@@ -69,6 +69,92 @@
         </div>
     </div>
 
+    <!-- Create User Modal -->
+    <div class="modal fade" id="createUser">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Tambah User</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <form action="{{ route('user_store') }}" method="post">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="nij">NIJ</label>
+                            <input type="text" class="form-control" name="nij" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="nama_lengkap">Nama Lengkap</label>
+                            <input type="text" class="form-control" name="nama_lengkap" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="alamat">Alamat</label>
+                            <input type="text" class="form-control" name="alamat" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="jenis_kelamin">Jenis Kelamin</label>
+                            <select class="form-control" name="jenis_kelamin" required>
+                                <option value="0">Laki-laki</option>
+                                <option value="1">Perempuan</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="tempat_lahir">Tempat Lahir</label>
+                            <input type="text" class="form-control" name="tempat_lahir" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tanggal_lahir">Tanggal Lahir [bug]</label>
+                            <input type="text" class="form-control datepicker" id="tglLahir" name="tanggal_lahir" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telp">No. Telp</label>
+                            <input type="text" class="form-control" name="telp" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="kesibukan">Kesibukan</label>
+                            <select class="form-control" name="kesibukan" required>
+                                <option value="Bekerja">Bekerja</option>
+                                <option value="Kuliah">Kuliah</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="nomor_cg">Nomor CG</label>
+                            <input type="text" class="form-control" name="nomor_cg" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="posisi_cg">Posisi CG</label>
+                            <select class="form-control" name="posisi_cg" required>
+                                <option value="Anggota">Anggota</option>
+                                <option value="Pemimpin">Pemimpin</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="nama_pemimpin">Nama Pemimpin</label>
+                            <input type="text" class="form-control" name="nama_pemimpin" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telp_pemimpin">No. Telp Pemimpin</label>
+                            <input type="text" class="form-control" name="telp_pemimpin" required>
+                        </div>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update User Modal -->
     <div class="modal fade" id="updateUser">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -82,138 +168,69 @@
                     @csrf
                     <input type="hidden" name="idUser">
                     <div class="modal-body">
-                            <div class="form-group row">
-                                <div class="col-md-6">
-                                    <label for="nij">NIJ:</label>
-                                    <input type="text" class="form-control" id="nij" name="nij" value="{{ old('nij') }}">
-                                    @error('nij')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="nama_lengkap">Nama Lengkap:</label>
-                                    <input type="text" class="form-control" id="nama_lengkap" name="nama_lengkap" value="{{ old('nama_lengkap') }}">
-                                    @error('nama_lengkap')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="alamat">Alamat:</label>
-                                <input type="text" class="form-control" id="alamat" name="alamat" value="{{ old('alamat') }}">
-                                @error('alamat')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-6">
-                                    <label for="kesibukan">Kesibukan:</label>
-                                    <select class="form-control" id="kesibukan" name="kesibukan">
-                                        <option value="Pekerja" {{ old('kesibukan') == 'Pekerja' ? 'selected' : '' }}>Pekerja</option>
-                                        <option value="Pelajar" {{ old('kesibukan') == 'Pelajar' ? 'selected' : '' }}>Pelajar</option>
-                                        <option value="Mahasiswa" {{ old('kesibukan') == 'Mahasiswa' ? 'selected' : '' }}>Mahasiswa</option>
-                                        <option value="Lainnya" {{ old('kesibukan') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
-                                    </select>
-                                    @error('kesibukan')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="email">Email:</label>
-                                    <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}">
-                                    @error('email')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-
-                            <div class="form-group row">
-                                <div class="col-md-6">
-                                    <label for="email">Tempat lahir :</label>
-                                    <input type="tempatLahir" class="form-control" id="tempatLahir" name="tempatLahir" value="{{ old('tempatLahir') }}">
-                                    @error('tempatLahir')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="tglLahirUpdate">Tanggal lahir :</label>
-                                    <input type="text" class="form-control" id="tglLahirUpdate" name="tglLahirUpdate">
-                                </div>
-                            </div>
-
-
-                            <div class="form-group row">
-                                <div class="col-md-6">
-                                    <label for="jenis_kelamin">Jenis Kelamin:</label>
-                                    <select class="form-control" id="jenis_kelamin" name="jenis_kelamin">
-                                        <option value="1" {{ old('jenis_kelamin') == 'Male' ? 'selected' : '' }}>Male</option>
-                                        <option value="0" {{ old('jenis_kelamin') == 'Female' ? 'selected' : '' }}>Female</option>
-                                    </select>
-                                    @error('jenis_kelamin')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="telp">Nomor Telepon:</label>
-                                    <input type="text" class="form-control" id="telp" name="telp" value="{{ old('telp') }}" placeholder="+62872619819">
-                                    @error('telp')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-
-                            <div class="form-group row">
-                                <div class="col-md-6">
-                                    <label for="nomor_cg">Nomor CG:</label>
-                                    <input type="text" class="form-control" id="nomor_cg" name="nomor_cg" value="{{ old('nomor_cg') }}">
-                                    @error('nomor_cg')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="posisi_cg">Posisi CG:</label>
-                                    <select class="form-control" id="posisi_cg" name="posisi_cg">
-                                        <option value="Simpatisan" {{ old('posisi_cg') == 'Simpatisan' ? 'selected' : '' }}>Simpatisan</option>
-                                        <option value="Member" {{ old('posisi_cg') == 'Member' ? 'selected' : '' }}>Member</option>
-                                        <option value="Sponsor" {{ old('posisi_cg') == 'Sponsor' ? 'selected' : '' }}>Sponsor</option>
-                                        <option value="CG Leader" {{ old('posisi_cg') == 'CG Leader' ? 'selected' : '' }}>CG Leader</option>
-                                        <option value="Coach" {{ old('posisi_cg') == 'Coach' ? 'selected' : '' }}>Coach</option>
-                                        <option value="T.L" {{ old('posisi_cg') == 'T.L' ? 'selected' : '' }}>T.L</option>
-                                    </select>
-                                    @error('posisi_cg')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-md-6">
-                                        <label for="nama_pemimpin">Nama Pemimpin:</label>
-                                        <input type="text" class="form-control" id="nama_pemimpin" name="nama_pemimpin" value="{{ old('nama_pemimpin') }}">
-                                        @error('nama_pemimpin')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <label for="telp_pemimpin">Nomor Telepon Pemimpin:</label>
-                                        <input type="text" class="form-control" id="telp_pemimpin" name="telp_pemimpin" value="{{ old('telp_pemimpin') }}">
-                                        @error('telp_pemimpin')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                            </div>
-
-
-
+                        <div class="form-group">
+                            <label for="nij">NIJ</label>
+                            <input type="text" class="form-control" name="nij" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="nama_lengkap">Nama Lengkap</label>
+                            <input type="text" class="form-control" name="nama_lengkap" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="alamat">Alamat</label>
+                            <input type="text" class="form-control" name="alamat" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="jenis_kelamin">Jenis Kelamin</label>
+                            <select class="form-control" name="jenis_kelamin" required>
+                                <option value="0">Laki-laki</option>
+                                <option value="1">Perempuan</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="tempat_lahir">Tempat Lahir</label>
+                            <input type="text" class="form-control" name="tempat_lahir" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tanggal_lahir">Tanggal Lahir</label>
+                            <input type="text" class="form-control" id="tglLahirUpdate" name="tanggal_lahir" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telp">No. Telp</label>
+                            <input type="text" class="form-control" name="telp" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="kesibukan">Kesibukan</label>
+                            <select class="form-control" name="kesibukan" required>
+                                <option value="Bekerja">Bekerja</option>
+                                <option value="Kuliah">Kuliah</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="nomor_cg">Nomor CG</label>
+                            <input type="text" class="form-control" name="nomor_cg" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="posisi_cg">Posisi CG</label>
+                            <select class="form-control" name="posisi_cg" required>
+                                <option value="Anggota">Anggota</option>
+                                <option value="Pemimpin">Pemimpin</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="nama_pemimpin">Nama Pemimpin</label>
+                            <input type="text" class="form-control" name="nama_pemimpin" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telp_pemimpin">No. Telp Pemimpin</label>
+                            <input type="text" class="form-control" name="telp_pemimpin" required>
+                        </div>
                     </div>
-
                     <!-- Modal footer -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -223,162 +240,8 @@
             </div>
         </div>
     </div>
-
-    <div class="modal fade" id="createUser">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Tambah User</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <form action="{{ route('user_store') }}" method="post">
-                    @csrf
-                    <div class="modal-body">
-                            <div class="form-group row">
-                                <div class="col-md-6">
-                                    <label for="nij">NIJ:</label>
-                                    <input type="text" class="form-control" id="nij" name="nij" value="{{ old('nij') }}">
-                                    @error('nij')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="nama_lengkap">Nama Lengkap:</label>
-                                    <input type="text" class="form-control" id="nama_lengkap" name="nama_lengkap" value="{{ old('nama_lengkap') }}">
-                                    @error('nama_lengkap')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="alamat">Alamat:</label>
-                                <input type="text" class="form-control" id="alamat" name="alamat" value="{{ old('alamat') }}">
-                                @error('alamat')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-6">
-                                    <label for="kesibukan">Kesibukan:</label>
-                                    <select class="form-control" id="kesibukan" name="kesibukan">
-                                        <option value="Pekerja" {{ old('kesibukan') == 'Pekerja' ? 'selected' : '' }}>Pekerja</option>
-                                        <option value="Pelajar" {{ old('kesibukan') == 'Pelajar' ? 'selected' : '' }}>Pelajar</option>
-                                        <option value="Mahasiswa" {{ old('kesibukan') == 'Mahasiswa' ? 'selected' : '' }}>Mahasiswa</option>
-                                        <option value="Lainnya" {{ old('kesibukan') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
-                                    </select>
-                                    @error('kesibukan')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="email">Email:</label>
-                                    <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}">
-                                    @error('email')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-
-                            <div class="form-group row">
-                                <div class="col-md-6">
-                                    <label for="email">Tempat lahir :</label>
-                                    <input type="tempatLahir" class="form-control" id="tempatLahir" name="tempatLahir" value="{{ old('tempatLahir') }}">
-                                    @error('tempatLahir')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="tglLahirUpdate">Tanggal lahir :</label>
-                                    <input type="text" class="form-control" id="tglLahirUpdate" name="tglLahirUpdate">
-                                </div>
-                            </div>
-
-
-                            <div class="form-group row">
-                                <div class="col-md-6">
-                                    <label for="jenis_kelamin">Jenis Kelamin:</label>
-                                    <select class="form-control" id="jenis_kelamin" name="jenis_kelamin">
-                                        <option value="1" {{ old('jenis_kelamin') == 'Male' ? 'selected' : '' }}>Male</option>
-                                        <option value="0" {{ old('jenis_kelamin') == 'Female' ? 'selected' : '' }}>Female</option>
-                                    </select>
-                                    @error('jenis_kelamin')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="telp">Nomor Telepon:</label>
-                                    <input type="text" class="form-control" id="telp" name="telp" value="{{ old('telp') }}" placeholder="+62872619819">
-                                    @error('telp')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-
-                            <div class="form-group row">
-                                <div class="col-md-6">
-                                    <label for="nomor_cg">Nomor CG:</label>
-                                    <input type="text" class="form-control" id="nomor_cg" name="nomor_cg" value="{{ old('nomor_cg') }}">
-                                    @error('nomor_cg')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="posisi_cg">Posisi CG:</label>
-                                    <select class="form-control" id="posisi_cg" name="posisi_cg">
-                                        <option value="Simpatisan" {{ old('posisi_cg') == 'Simpatisan' ? 'selected' : '' }}>Simpatisan</option>
-                                        <option value="Member" {{ old('posisi_cg') == 'Member' ? 'selected' : '' }}>Member</option>
-                                        <option value="Sponsor" {{ old('posisi_cg') == 'Sponsor' ? 'selected' : '' }}>Sponsor</option>
-                                        <option value="CG Leader" {{ old('posisi_cg') == 'CG Leader' ? 'selected' : '' }}>CG Leader</option>
-                                        <option value="Coach" {{ old('posisi_cg') == 'Coach' ? 'selected' : '' }}>Coach</option>
-                                        <option value="T.L" {{ old('posisi_cg') == 'T.L' ? 'selected' : '' }}>T.L</option>
-                                    </select>
-                                    @error('posisi_cg')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-md-6">
-                                        <label for="nama_pemimpin">Nama Pemimpin:</label>
-                                        <input type="text" class="form-control" id="nama_pemimpin" name="nama_pemimpin" value="{{ old('nama_pemimpin') }}">
-                                        @error('nama_pemimpin')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <label for="telp_pemimpin">Nomor Telepon Pemimpin:</label>
-                                        <input type="text" class="form-control" id="telp_pemimpin" name="telp_pemimpin" value="{{ old('telp_pemimpin') }}">
-                                        @error('telp_pemimpin')
-                                            <div class="text-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                            </div>
-
-
-
-                    </div>
-
-                    <!-- Modal footer -->
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-
 @endsection
+
 @section('script')
 <script>
     var today = new Date();
@@ -389,21 +252,18 @@
 
     // Set the default value property to today's date
     $('#tglLahir').datepicker({
-        // format: 'yyyy-mm-dd', // You can change the date format
-        format: 'dd-mm-yyyy', // You can change the date format
+        format: 'dd-mm-yyyy',
         autoclose: true
     });
     $("#tglLahir").val(today);
     $('#tglLahirUpdate').datepicker({
-        // format: 'yyyy-mm-dd', // You can change the date format
-        format: 'dd-mm-yyyy', // You can change the date format
+        format: 'dd-mm-yyyy',
         autoclose: true
     });
     $('#tabelUser').DataTable({
         "paging": true,
         "pageLength": 10,
     });
-
 
     $(document).ready(function () {
         $('.buttonEdit').on('click', function() {
@@ -415,7 +275,6 @@
                 data.push(value);
             });
             console.log(data);
-            var row = $(this).closest('tr');
             let id = data[0];
             let nij = data[1];
             let nama = data[2];
@@ -453,3 +312,4 @@
 
 </script>
 @endsection
+

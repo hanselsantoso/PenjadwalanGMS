@@ -41,7 +41,7 @@ class AdminController extends Controller
         $user->kesibukan = $request->input('kesibukan');
         $user->email = $request->input('email');
         $user->tempat_lahir = $request->input('tempatLahir');
-        $user->tanggal_lahir =  Carbon::createFromFormat('d-m-Y', $request->tglLahir)->format('Y-m-d');
+        $user->tanggal_lahir =  Carbon::createFromFormat('d-m-Y', $request->tanggal_lahir)->format('Y-m-d');
         $user->jenis_kelamin = $request->input('jenis_kelamin');
         $user->telp = $request->input('telp');
         $user->nomor_cg = $request->input('nomor_cg');
@@ -67,7 +67,7 @@ class AdminController extends Controller
         $user->kesibukan = $request->input('kesibukan');
         $user->email = $request->input('email');
         $user->tempat_lahir = $request->input('tempatLahir');
-        $user->tanggal_lahir =  Carbon::createFromFormat('d-m-Y', $request->tglLahirUpdate)->format('Y-m-d');
+        $user->tanggal_lahir =  Carbon::createFromFormat('d-m-Y', $request->tanggal_lahir)->format('Y-m-d');
         $user->jenis_kelamin = $request->input('jenis_kelamin');
         $user->telp = $request->input('telp');
         $user->nomor_cg = $request->input('nomor_cg');
