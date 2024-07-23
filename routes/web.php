@@ -12,6 +12,9 @@ use App\Http\Controllers\SHUController;
 use App\Http\Controllers\simpananController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CabangController;
+use App\Http\Controllers\TagController;
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -52,4 +55,13 @@ Route::prefix('admin')->middleware(['role:0'])->group(function(){
 
 Route::prefix('user')->middleware(['role:1'])->group(function(){
     Route::get('/index', [UserController::class, 'index']);
+});
+// cabang
+Route::prefix('cabang')->group(function(){
+    Route::get('/', [CabangController::class, 'cabang'])->name('cabang');
+});
+
+// tag
+Route::prefix('tag')->group(function(){
+    Route::get('/', [TagController::class, 'tag'])->name('tag');
 });
