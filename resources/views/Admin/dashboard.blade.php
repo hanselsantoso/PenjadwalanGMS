@@ -4,7 +4,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-10">
-                    <h2>Daftar User [test]</h2>
+                    <h2>Daftar User</h2>
                 </div>
                 <div class="col-md-2">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createUser">
