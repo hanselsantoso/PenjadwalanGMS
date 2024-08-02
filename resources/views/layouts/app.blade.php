@@ -23,6 +23,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/css/bootstrap-datepicker.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/js/bootstrap-datepicker.min.js"></script>
 
+
+
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 <body>
@@ -39,7 +41,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-                        
+
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -51,18 +53,14 @@
                                         {{ __('Admin') }}
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="/admin/aturan">{{ __('Aturan') }}</a>
-                                        <a class="dropdown-item" href="/admin/bunga">{{ __('Bunga Simpanan') }}</a>
-                                        <a class="dropdown-item" href="/admin/bungaPinjaman">{{ __('Bunga Pinjaman') }}</a>
-                                        <a class="dropdown-item" href="/admin/cicilan">{{ __('Cicilan') }}</a>
-                                        <a class="dropdown-item" href="/admin/aturanPinjaman">{{ __('Aturan Pinjaman') }}</a>
-                                        <a class="dropdown-item" href="/admin/iuran">{{ __('IuranWajib') }}</a>
-                                        <a class="dropdown-item" href="/admin/shu">{{ __('SHU') }}</a>
-                                        <a class="dropdown-item" href="/admin/listSHU">{{ __('Log SHU') }}</a>
+                                        <a class="dropdown-item" href="/admin/user">{{ __('User') }}</a>
+                                        <a class="dropdown-item" href="/admin/cabang">{{ __('Cabang') }}</a>
+                                        <a class="dropdown-item" href="/admin/tag">{{ __('Tag') }}</a>
+                                        <a class="dropdown-item" href="/admin/mapping">{{ __('Mapping') }}</a>
                                     </div>
                                 </li>
                                 </li>
-                                <li class="nav-item">
+                                {{-- <li class="nav-item">
                                     <a class="nav-link" href="/admin/index">{{ __('Nasabah') }}</a>
                                 </li>
                                 <li class="nav-item">
@@ -70,7 +68,7 @@
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ url('/tag') }}">Tag</a>
-                                </li>
+                                </li> --}}
                                 <li class="nav-item dropdown">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                         {{ Auth::user()->name }}

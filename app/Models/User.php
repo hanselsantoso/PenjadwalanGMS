@@ -67,4 +67,9 @@ class User extends Authenticatable
     public function isUser(){
         return $this->role === 2;
     }
+
+    public function tags()
+    {
+        return $this->hasMany(UserTag::class);
+    }
 }

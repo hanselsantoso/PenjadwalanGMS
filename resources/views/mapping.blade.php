@@ -4,11 +4,11 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-10">
-                    <h2>Daftar Cabang</h2>
+                    <h2>Daftar Mapping User</h2>
                 </div>
                 <div class="col-md-2">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createCabang">
-                        Tambah Cabang
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createMapping">
+                        Tambah
                     </button>
                 </div>
             </div>
@@ -16,28 +16,31 @@
                 <thead>
                   <tr>
                     <th>No</th>
-                    <th>Nama Cabang </th>
+                    <th>Nama User </th>
+                    <th>Tags </th>
                     <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                    @foreach ($cabang as $item)
+                    @foreach ($mapping as $item)
                         <tr>
-                            <input type="hidden" name="id_cabang" value="{{$item["id_cabang"] }}">
-                            <input type="hidden" name="nama_cabang" value="{{$item["nama_cabang"] }}">
+                            <input type="hidden" name="id_user_tag" value="{{$item["id_user_tag"] }}">
+                            <input type="hidden" name="id_user" value="{{$item["id_user"] }}">
+                            <input type="hidden" name="id_tag" value="{{$item["id_tag"] }}">
                             <td>{{ $loop->index + 1 }}</td>
-                            <td> {{$item["nama_cabang"] }}</td>
+                            <td> {{$item->user->nama_lengkap }}</td>
+                            <td> {{$item->tag->nama_tag }}</td>
 
                             <td>
                                 <a href="" class="btn btn-primary">View</a>
-                                <a href="#" class="btn btn-warning buttonEdit" data-toggle="modal" data-target="#updateCabang">Update</a>
-                                @if ($item->status_cabang == 1)
-                                    <form action="/admin/cabang/deactivate/{{ $item["id_cabang"] }}" method="post">
+                                <a href="#" class="btn btn-warning buttonEdit" data-toggle="modal" data-target="#updateMapping">Update</a>
+                                @if ($item->status_user_tag == 1)
+                                    <form action="/admin/mapping/deactivate/{{ $item["id_user_tag"] }}" method="post">
                                         @csrf
                                         <button type="submit" class="btn btn-danger">Suspend</button>
                                     </form>
                                 @else
-                                    <form action="/admin/cabang/activate/{{ $item["id_cabang"] }}" method="post">
+                                    <form action="/admin/mapping/activate/{{ $item["id_user_tag"] }}" method="post">
                                         @csrf
                                         <button type="submit" class="btn btn-success">Aktifkan</button>
                                     </form>
@@ -51,7 +54,7 @@
         </div>
     </div>
     <!-- Create User Modal -->
-    <div class="modal fade" id="createCabang">
+    <div class="modal fade" id="createMapping">
         <div class="modal-dialog">
             <div class="modal-content">
                 <!-- Modal Header -->
@@ -59,12 +62,27 @@
                     <h4 class="modal-title">Tambah Cabang</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <form action="{{ route('cabang_store') }}" method="post">
+                <form action="{{ route('mapping_store') }}" method="post">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="nama_cabang">Nama Cabang</label>
-                            <input type="text" class="form-control" name="nama_cabang" required>
+                            <label for="user">User</label>
+                            <select class="form-control" name="user" required>
+                                <option value="0">Pilih User</option>
+                                @foreach ($user as $item)
+                                    <option value="{{ $item->id }}">{{ $item->nama_lengkap }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tags">Tags</label>
+                            <select class="form-control" name="tags">
+                                <option value="0">Pilih Tag</option>
+                                @foreach ($tags as $tag)
+                                    <option value="{{ $tag->id_tag }}">{{ $tag->nama_tag }}</option>
+                                @endforeach
+                            </select>
                         </div>
 
                     </div>
@@ -79,7 +97,7 @@
     </div>
 
     <!-- Update User Modal -->
-    <div class="modal fade" id="updateCabang">
+    <div class="modal fade" id="updateMapping">
         <div class="modal-dialog">
             <div class="modal-content">
                 <!-- Modal Header -->
@@ -87,16 +105,31 @@
                     <h4 class="modal-title">Ubah Cabang</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <form action="{{ route('cabang_update') }}" method="post">
+                <form action="{{ route('mapping_update') }}" method="post">
                     @method('PUT')
                     @csrf
-                    <input type="hidden" name="id_cabang">
+                    <input type="hidden" name="id_user_tag">
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="nama_cabang">Nama Cabang</label>
-                            <input type="text" class="form-control" name="nama_cabang" required>
+                            <label for="user">User</label>
+                            <select class="form-control" name="user" required>
+                                <option value="0">Pilih User</option>
+
+                                @foreach ($user as $item)
+                                    <option value="{{ $item->id }}">{{ $item->nama_lengkap }}</option>
+                                @endforeach
+                            </select>
                         </div>
 
+                        <div class="form-group">
+                            <label for="tags">Tags</label>
+                            <select class="form-control" name="tags">
+                                <option value="0">Pilih Tag</option>
+                                @foreach ($tags as $tag)
+                                    <option value="{{ $tag->id_tag }}">{{ $tag->nama_tag }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                     <!-- Modal footer -->
                     <div class="modal-footer">
@@ -129,10 +162,12 @@
             });
             console.log(data);
             let id = data[0];
-            let nama = data[1];
+            let nama_user = data[1];
+            let nama_tag = data[2];
 
-            $('#updateCabang').find('input[name="id_cabang"]').val(id);
-            $('#updateCabang').find('input[name="nama_cabang"]').val(nama);
+            $('#updateMapping').find('input[name="id_user_tag"]').val(id);
+            $('#updateMapping').find('select[name="user"]').val(nama_user);
+            $('#updateMapping').find('select[name="tags"]').val(nama_tag);
         });
     });
 

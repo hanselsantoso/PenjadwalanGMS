@@ -281,7 +281,7 @@
             let email = data[3];
             let alamat = data[4];
             let jenis_kelamin = data[5];
-            let tempatLahir = data[6];
+            let tempat_lahir = data[6];
             let tanggalLahir = data[7];
             let telp = data[8];
             let kesibukan = data[9];
@@ -296,7 +296,7 @@
             $('#updateUser').find('input[name="alamat"]').val(alamat);
             $('#updateUser').find('select[name="kesibukan"]').val(kesibukan);
             $('#updateUser').find('input[name="email"]').val(email);
-            $('#updateUser').find('input[name="tempatLahir"]').val(tempatLahir);
+            $('#updateUser').find('input[name="tempat_lahir"]').val(tempat_lahir);
             $('#updateUser').find('input[name="tglLahirUpdate"]').datepicker('setDate', tanggalLahir);
 
             $("#tglLahirUpdate").datepicker("setDate", tanggalLahir);

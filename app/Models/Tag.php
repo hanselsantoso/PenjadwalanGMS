@@ -14,6 +14,10 @@ class Tag extends Model
      *
      * @var array<int, string>
      */
+
+     protected $table = 'tag';
+
+
     protected $fillable = [
         'id_tag',
         'nama_tag',
@@ -44,5 +48,10 @@ class Tag extends Model
     public function isActive()
     {
         return $this->status_tag === 1;
+    }
+
+    public function tags()
+    {
+        return $this->hasMany(UserTag::class);
     }
 }

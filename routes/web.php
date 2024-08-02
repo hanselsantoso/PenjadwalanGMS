@@ -13,6 +13,8 @@ use App\Http\Controllers\simpananController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CabangController;
+use App\Http\Controllers\JadwalIbadahController;
+use App\Http\Controllers\MappingController;
 use App\Http\Controllers\TagController;
 
 use Illuminate\Support\Facades\Route;
@@ -51,17 +53,40 @@ Route::prefix('admin')->middleware(['role:0'])->group(function(){
         Route::post('/deactivate/{id}', [AdminController::class, 'deactivate'])->name('user_deactivate');
         Route::post('/activate/{id}', [AdminController::class, 'activate'])->name('user_activate');
     });
+
+    Route::prefix('cabang')->group(function(){
+        Route::get('/', [CabangController::class, 'cabang'])->name('cabang_index');
+        Route::post('/', [CabangController::class, 'store'])->name('cabang_store');
+        Route::put('/', [CabangController::class, 'update'])->name('cabang_update');
+        Route::post('/deactivate/{id}', [CabangController::class, 'deactivate'])->name('cabang_deactivate');
+        Route::post('/activate/{id}', [CabangController::class, 'activate'])->name('cabang_activate');
+    });
+
+    Route::prefix('tag')->group(function(){
+        Route::get('/', [TagController::class, 'tag'])->name('tag_index');
+        Route::post('/', [TagController::class, 'store'])->name('tag_store');
+        Route::put('/', [TagController::class, 'update'])->name('tag_update');
+        Route::post('/deactivate/{id}', [TagController::class, 'deactivate'])->name('tag_deactivate');
+        Route::post('/activate/{id}', [TagController::class, 'activate'])->name('tag_activate');
+    });
+
+    Route::prefix('mapping')->group(function(){
+        Route::get('/', [MappingController::class, 'mapping'])->name('mapping_index');
+        Route::post('/', [MappingController::class, 'store'])->name('mapping_store');
+        Route::put('/', [MappingController::class, 'update'])->name('mapping_update');
+        Route::post('/deactivate/{id}', [MappingController::class, 'deactivate'])->name('mapping_deactivate');
+        Route::post('/activate/{id}', [MappingController::class, 'activate'])->name('mapping_activate');
+    });
+
+    Route::prefix('jadwal_ibadah')->group(function(){
+        Route::get('/', [JadwalIbadahController::class, 'mapping'])->name('mapping_index');
+        Route::post('/', [JadwalIbadahController::class, 'store'])->name('mapping_store');
+        Route::put('/', [JadwalIbadahController::class, 'update'])->name('mapping_update');
+        Route::post('/deactivate/{id}', [JadwalIbadahController::class, 'deactivate'])->name('mapping_deactivate');
+        Route::post('/activate/{id}', [JadwalIbadahController::class, 'activate'])->name('mapping_activate');
+    });
 });
 
 Route::prefix('user')->middleware(['role:1'])->group(function(){
     Route::get('/index', [UserController::class, 'index']);
-});
-// cabang
-Route::prefix('cabang')->group(function(){
-    Route::get('/', [CabangController::class, 'cabang'])->name('cabang');
-});
-
-// tag
-Route::prefix('tag')->group(function(){
-    Route::get('/', [TagController::class, 'tag'])->name('tag');
 });

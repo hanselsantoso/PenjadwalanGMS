@@ -14,6 +14,10 @@ class Cabang extends Model
      *
      * @var array<int, string>
      */
+
+
+    protected $table = 'cabang';
+
     protected $fillable = [
         'id_cabang',
         'nama_cabang',
