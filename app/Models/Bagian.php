@@ -5,17 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Jadwal_H extends Model
+class Bagian extends Model
 {
     use HasFactory;
 
-    protected $table = 'jadwal_h';
-    protected $primaryKey = 'id_jadwal_h';
+    protected $table = 'bagian';
+    protected $primaryKey = 'id_bagian';
     protected $fillable = [
-        'id_cabang',
-        'id_jadwal_ibadah',
-        'pic',
-        'status_jadwal_h',
+        'nama_bagian',
+        'status_bagian',
     ];
 
     /**
@@ -26,6 +24,6 @@ class Jadwal_H extends Model
 
      public function detail()
     {
-        return $this->hasMany(Jadwal_D::class);
+        return $this->belongsTo(Jadwal_D::class);
     }
 }

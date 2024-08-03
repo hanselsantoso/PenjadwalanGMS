@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\aturanController;
 use App\Http\Controllers\aturanPinjamanController;
+use App\Http\Controllers\BagianController;
 use App\Http\Controllers\BungaController;
 use App\Http\Controllers\bungaPinjamanController;
 use App\Http\Controllers\cicilanController;
@@ -79,11 +80,20 @@ Route::prefix('admin')->middleware(['role:0'])->group(function(){
     });
 
     Route::prefix('jadwal_ibadah')->group(function(){
-        Route::get('/', [JadwalIbadahController::class, 'mapping'])->name('mapping_index');
-        Route::post('/', [JadwalIbadahController::class, 'store'])->name('mapping_store');
-        Route::put('/', [JadwalIbadahController::class, 'update'])->name('mapping_update');
-        Route::post('/deactivate/{id}', [JadwalIbadahController::class, 'deactivate'])->name('mapping_deactivate');
-        Route::post('/activate/{id}', [JadwalIbadahController::class, 'activate'])->name('mapping_activate');
+        Route::get('/', [JadwalIbadahController::class, 'jadwalIbadah'])->name('jadwal_ibadah_index');
+        Route::post('/', [JadwalIbadahController::class, 'store'])->name('jadwal_ibadah_store');
+        Route::put('/', [JadwalIbadahController::class, 'update'])->name('jadwal_ibadah_update');
+        Route::post('/deactivate/{id}', [JadwalIbadahController::class, 'deactivate'])->name('jadwal_ibadah_deactivate');
+        Route::post('/activate/{id}', [JadwalIbadahController::class, 'activate'])->name('jadwal_ibadah_activate');
+    });
+
+
+    Route::prefix('bagian')->group(function(){
+        Route::get('/', [BagianController::class, 'bagian'])->name('bagian_index');
+        Route::post('/', [BagianController::class, 'store'])->name('bagian_store');
+        Route::put('/', [BagianController::class, 'update'])->name('bagian_update');
+        Route::post('/deactivate/{id}', [BagianController::class, 'deactivate'])->name('bagian_deactivate');
+        Route::post('/activate/{id}', [BagianController::class, 'activate'])->name('bagian_activate');
     });
 });
 

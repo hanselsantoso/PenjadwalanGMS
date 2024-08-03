@@ -14,7 +14,6 @@ class JadwalIbadah extends Model
     protected $primaryKey = 'id_jadwal_ibadah';
 
     protected $fillable = [
-        'id_cabang',
         'jam_stand_by',
         'jam_mulai',
         'jam_akhir',
