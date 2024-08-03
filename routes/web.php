@@ -14,6 +14,7 @@ use App\Http\Controllers\simpananController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CabangController;
+use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\JadwalIbadahController;
 use App\Http\Controllers\MappingController;
 use App\Http\Controllers\TagController;
@@ -94,6 +95,14 @@ Route::prefix('admin')->middleware(['role:0'])->group(function(){
         Route::put('/', [BagianController::class, 'update'])->name('bagian_update');
         Route::post('/deactivate/{id}', [BagianController::class, 'deactivate'])->name('bagian_deactivate');
         Route::post('/activate/{id}', [BagianController::class, 'activate'])->name('bagian_activate');
+    });
+
+    Route::prefix('jadwal')->group(function(){
+        Route::get('/', [JadwalController::class, 'jadwal'])->name('jadwal_index');
+        Route::post('/', [JadwalController::class, 'store'])->name('jadwal_store');
+        Route::put('/', [JadwalController::class, 'update'])->name('jadwal_update');
+        Route::post('/deactivate/{id}', [JadwalController::class, 'deactivate'])->name('jadwal_deactivate');
+        Route::post('/activate/{id}', [JadwalController::class, 'activate'])->name('jadwal_activate');
     });
 });
 

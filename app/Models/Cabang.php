@@ -49,4 +49,9 @@ class Cabang extends Model
     {
         return $this->status_cabang === 1;
     }
+
+    public function jadwal()
+    {
+        return $this->hasMany(Jadwal_H::class, 'id_cabang', 'id_cabang');
+    }
 }

@@ -10,7 +10,7 @@ class TagController extends Controller
 {
     public function tag()
     {
-        $tag = Tag::all();
+        $tag = Tag::where('status_tag', 1)->get();
         return view('tag', compact('tag'));
     }
 

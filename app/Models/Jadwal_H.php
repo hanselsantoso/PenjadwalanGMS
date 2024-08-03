@@ -14,6 +14,7 @@ class Jadwal_H extends Model
     protected $fillable = [
         'id_cabang',
         'id_jadwal_ibadah',
+        'tanggal_ibadah',
         'pic',
         'status_jadwal_h',
     ];
@@ -27,5 +28,20 @@ class Jadwal_H extends Model
      public function detail()
     {
         return $this->hasMany(Jadwal_D::class);
+    }
+
+    public function cabang()
+    {
+        return $this->belongsTo(Cabang::class, 'id_cabang', 'id_cabang');
+    }
+
+    public function jadwalIbadah()
+    {
+        return $this->belongsTo(JadwalIbadah::class, 'id_jadwal_ibadah', 'id_jadwal_ibadah');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'pic', 'id');
     }
 }

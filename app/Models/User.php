@@ -72,4 +72,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserTag::class);
     }
+
+    public function jadwal()
+    {
+        return $this->hasMany(Jadwal_H::class, 'pic', 'id');
+    }
 }

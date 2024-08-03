@@ -19,4 +19,10 @@ class JadwalIbadah extends Model
         'jam_akhir',
         'status_jadwal_ibadah',
     ];
+
+
+    public function jadwal()
+    {
+        return $this->hasMany(Jadwal_H::class, 'id_jadwal_ibadah', 'id_jadwal_ibadah');
+    }
 }
