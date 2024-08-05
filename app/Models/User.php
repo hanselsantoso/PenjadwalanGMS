@@ -77,4 +77,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Jadwal_H::class, 'pic', 'id');
     }
+
+    public function jadwalDetail()
+    {
+        return $this->hasMany(Jadwal_D::class, 'id_user', 'id');
+    }
 }

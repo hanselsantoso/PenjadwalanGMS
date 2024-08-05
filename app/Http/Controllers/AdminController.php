@@ -37,6 +37,9 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'email' => 'unique:users,email',
+        ]);
         try {
             $id_tags = $request->id_tag;
             // Create a new User with role 1

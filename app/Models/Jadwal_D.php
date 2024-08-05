@@ -26,11 +26,16 @@ class Jadwal_D extends Model
 
      public function detail()
     {
-        return $this->belongsTo(Jadwal_H::class);
+        return $this->belongsTo(Jadwal_H::class, 'id_jadwal_h', 'id_jadwal_h');
     }
 
     public function bagian()
     {
-        return $this->hasMany(Bagian::class);
+        return $this->belongsTo(Bagian::class, 'id_bagian', 'id_bagian');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user', 'id');
     }
 }

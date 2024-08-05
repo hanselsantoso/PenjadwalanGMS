@@ -57,6 +57,8 @@
                                         <a class="dropdown-item" href="/admin/cabang">{{ __('Cabang') }}</a>
                                         <a class="dropdown-item" href="/admin/tag">{{ __('Tag') }}</a>
                                         <a class="dropdown-item" href="/admin/mapping">{{ __('Mapping') }}</a>
+                                        <a class="dropdown-item" href="/admin/bagian">{{ __('Bagian') }}</a>
+                                        <a class="dropdown-item" href="/admin/jadwal">{{ __('Jadwal') }}</a>
                                     </div>
                                 </li>
                                 </li>

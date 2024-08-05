@@ -31,7 +31,7 @@
 
                         <td>
                             <a href="#" class="btn btn-warning buttonEdit" data-toggle="modal" data-target="#updateBagian">Update</a>
-                            @if ($item->status_tag == 1)
+                            @if ($item->status_bagian == 1)
                                 <form action="/admin/bagian/deactivate/{{ $item["id_bagian"] }}" method="post">
                                     @csrf
                                     <button type="submit" class="btn btn-danger">Suspend</button>

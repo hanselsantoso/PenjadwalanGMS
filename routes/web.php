@@ -8,6 +8,7 @@ use App\Http\Controllers\BungaController;
 use App\Http\Controllers\bungaPinjamanController;
 use App\Http\Controllers\cicilanController;
 use App\Http\Controllers\iuranController;
+use App\Http\Controllers\JadwalDetailController;
 use App\Http\Controllers\pinjamanController;
 use App\Http\Controllers\SHUController;
 use App\Http\Controllers\simpananController;
@@ -103,6 +104,14 @@ Route::prefix('admin')->middleware(['role:0'])->group(function(){
         Route::put('/', [JadwalController::class, 'update'])->name('jadwal_update');
         Route::post('/deactivate/{id}', [JadwalController::class, 'deactivate'])->name('jadwal_deactivate');
         Route::post('/activate/{id}', [JadwalController::class, 'activate'])->name('jadwal_activate');
+
+        Route::prefix('detail')->group(function(){
+            Route::get('/{id}', [JadwalDetailController::class, 'jadwal_detail'])->name('jadwal_detail_index');
+            Route::post('/', [JadwalDetailController::class, 'store'])->name('jadwal_detail_store');
+            Route::put('/', [JadwalDetailController::class, 'update'])->name('jadwal_detail_update');
+            Route::post('/deactivate/{id}', [JadwalDetailController::class, 'deactivate'])->name('jadwal_detail_deactivate');
+            Route::post('/activate/{id}', [JadwalDetailController::class, 'activate'])->name('jadwal_detail_activate');
+        });
     });
 });
 

@@ -9,7 +9,8 @@ use Illuminate\Http\Request;
 class BagianController extends Controller
 {
     function bagian() {
-        $bagian = Bagian::where('status_bagian', 1)->get();
+        // $bagian = Bagian::where('status_bagian', 1)->get();
+        $bagian = Bagian::all();
         return view('bagian', compact('bagian'));
     }
 

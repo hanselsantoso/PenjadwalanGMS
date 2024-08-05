@@ -24,6 +24,6 @@ class Bagian extends Model
 
      public function detail()
     {
-        return $this->belongsTo(Jadwal_D::class);
+        return $this->hasOne(Jadwal_D::class, 'id_bagian', 'id_bagian');
     }
 }

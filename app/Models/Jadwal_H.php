@@ -27,7 +27,7 @@ class Jadwal_H extends Model
 
      public function detail()
     {
-        return $this->hasMany(Jadwal_D::class);
+        return $this->hasMany(Jadwal_D::class, 'id_jadwal_h', 'id_jadwal_h');
     }
 
     public function cabang()

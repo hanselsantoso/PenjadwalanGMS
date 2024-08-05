@@ -27,36 +27,36 @@
                 <tbody>
 
                     @foreach ($jadwal as $item)
-                    <tr>
-                        <input type="hidden" name="id_jadwal_h" value="{{$item["id_jadwal_h"] }}">
-                        <input type="hidden" name="nama_bagian" value="{{$item["id_cabang"] }}">
-                        <input type="hidden" name="nama_bagian" value="{{ date('d-m-Y', strtotime($item["tanggal_jadwal"])) }}">
-                        <input type="hidden" name="nama_bagian" value="{{$item["id_jadwal_ibadah"] }}">
-                        <input type="hidden" name="nama_bagian" value="{{$item["pic"] }}">
-                        <td>{{ $loop->index + 1 }}</td>
-                        <td> {{$item->cabang->nama_cabang }}</td>
-                        <td> {{ date('d-m-Y', strtotime($item["tanggal_jadwal"])) }}</td>
-                        <td> {{$item->jadwalIbadah->jam_stand_by }}</td>
-                        <td> {{$item->jadwalIbadah->jam_mulai }} - {{$item->jadwalIbadah->jam_akhir }}</td>
-                        <td> {{$item->user->nama_lengkap }}</td>
+                        <tr>
+                            <input type="hidden" name="id_jadwal_h" value="{{$item["id_jadwal_h"] }}">
+                            <input type="hidden" name="nama_bagian" value="{{$item["id_cabang"] }}">
+                            <input type="hidden" name="nama_bagian" value="{{ date('d-m-Y', strtotime($item["tanggal_jadwal"])) }}">
+                            <input type="hidden" name="nama_bagian" value="{{$item["id_jadwal_ibadah"] }}">
+                            <input type="hidden" name="nama_bagian" value="{{$item["pic"] }}">
+                            <td>{{ $loop->index + 1 }}</td>
+                            <td> {{$item->cabang->nama_cabang }}</td>
+                            <td> {{ date('d-m-Y', strtotime($item["tanggal_jadwal"])) }}</td>
+                            <td> {{$item->jadwalIbadah->jam_stand_by }}</td>
+                            <td> {{$item->jadwalIbadah->jam_mulai }} - {{$item->jadwalIbadah->jam_akhir }}</td>
+                            <td> {{$item->user->nama_lengkap }}</td>
 
-                        <td>
-                            <a href="#" class="btn btn-primary">Detail</a>
-                            <a href="#" class="btn btn-warning buttonEdit" data-toggle="modal" data-target="#updateJadwal">Update</a>
-                            @if ($item->status_tag == 1)
-                                <form action="/admin/bagian/deactivate/{{ $item["id_bagian"] }}" method="post">
-                                    @csrf
-                                    <button type="submit" class="btn btn-danger">Suspend</button>
-                                </form>
-                            @else
-                                <form action="/admin/bagian/activate/{{ $item["id_bagian"] }}" method="post">
-                                    @csrf
-                                    <button type="submit" class="btn btn-success">Aktifkan</button>
-                                </form>
-                            @endif
-                        </td>
-                    </tr>
-                @endforeach
+                            <td>
+                                <a href="/admin/jadwal/detail/{{$item["id_jadwal_h"] }}" class="btn btn-primary">Detail</a>
+                                <a href="#" class="btn btn-warning buttonEdit" data-toggle="modal" data-target="#updateJadwal">Update</a>
+                                @if ($item->status_tag == 1)
+                                    <form action="/admin/jadwal/deactivate/{{ $item["id_jadwal_h"] }}" method="post">
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger">Suspend</button>
+                                    </form>
+                                @else
+                                    <form action="/admin/jadwal/activate/{{ $item["id_jadwal_h"] }}" method="post">
+                                        @csrf
+                                        <button type="submit" class="btn btn-success">Aktifkan</button>
+                                    </form>
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
 
                 </tbody>
               </table>
@@ -128,7 +128,7 @@
                     <h4 class="modal-title">Ubah Bagian</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <form action="{{ route('bagian_update') }}" method="post">
+                <form action="{{ route('jadwal_update') }}" method="post">
                     @method('PUT')
                     @csrf
                     <input type="hidden" name="id_jadwal_h">
