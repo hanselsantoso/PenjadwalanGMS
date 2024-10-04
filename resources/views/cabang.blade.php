@@ -4,11 +4,11 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-10">
-                    <h2>Daftar Cabang</h2>
+                    <h2>Daftar Lokasi</h2>
                 </div>
                 <div class="col-md-2">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createCabang">
-                        Tambah Cabang
+                        Tambah Lokasi
                     </button>
                 </div>
             </div>
@@ -16,7 +16,7 @@
                 <thead>
                   <tr>
                     <th>No</th>
-                    <th>Nama Cabang </th>
+                    <th>Nama Lokasi </th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -29,7 +29,7 @@
                             <td> {{$item["nama_cabang"] }}</td>
 
                             <td>
-                                <a href="" class="btn btn-primary">View</a>
+                                {{-- <a href="" class="btn btn-primary">View</a> --}}
                                 <a href="#" class="btn btn-warning buttonEdit" data-toggle="modal" data-target="#updateCabang">Update</a>
                                 @if ($item->status_cabang == 1)
                                     <form action="/admin/cabang/deactivate/{{ $item["id_cabang"] }}" method="post">

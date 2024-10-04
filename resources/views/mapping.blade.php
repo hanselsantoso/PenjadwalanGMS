@@ -32,7 +32,7 @@
                             <td> {{$item->tag->nama_tag }}</td>
 
                             <td>
-                                <a href="" class="btn btn-primary">View</a>
+                                {{-- <a href="" class="btn btn-primary">View</a> --}}
                                 <a href="#" class="btn btn-warning buttonEdit" data-toggle="modal" data-target="#updateMapping">Update</a>
                                 @if ($item->status_user_tag == 1)
                                     <form action="/admin/mapping/deactivate/{{ $item["id_user_tag"] }}" method="post">

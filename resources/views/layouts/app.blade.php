@@ -53,12 +53,13 @@
                                         {{ __('Admin') }}
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="/admin/user">{{ __('User') }}</a>
-                                        <a class="dropdown-item" href="/admin/cabang">{{ __('Cabang') }}</a>
+                                        <a class="dropdown-item" href="/admin/user">{{ __('Volunteer') }}</a>
+                                        <a class="dropdown-item" href="/admin/cabang">{{ __('Lokasi') }}</a>
                                         <a class="dropdown-item" href="/admin/tag">{{ __('Tag') }}</a>
-                                        <a class="dropdown-item" href="/admin/mapping">{{ __('Mapping') }}</a>
-                                        <a class="dropdown-item" href="/admin/bagian">{{ __('Bagian') }}</a>
-                                        <a class="dropdown-item" href="/admin/jadwal">{{ __('Jadwal') }}</a>
+                                        <a class="dropdown-item" href="/admin/mapping">{{ __('Grading') }}</a>
+                                        <a class="dropdown-item" href="/admin/bagian">{{ __('Position') }}</a>
+                                        <a class="dropdown-item" href="/admin/jadwal_ibadah">{{ __('Service Time') }}</a>
+                                        <a class="dropdown-item" href="/admin/jadwal">{{ __('Schedule') }}</a>
                                     </div>
                                 </li>
                                 </li>

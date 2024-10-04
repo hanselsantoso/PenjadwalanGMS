@@ -76,7 +76,7 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="tanggal_jadwal">Tanggal Jadwal</label>
-                            <input type="text" class="form-control datepicker"  name="tanggal_jadwal" required>
+                            <input type="text" class="form-control datepicker" id="tanggal_jadwal"  name="tanggal_jadwal" required>
                         </div>
                         <div class="form-group">
                             <label for="cabang">Cabang</label>

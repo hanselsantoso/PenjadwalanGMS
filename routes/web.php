@@ -19,7 +19,7 @@ use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\JadwalIbadahController;
 use App\Http\Controllers\MappingController;
 use App\Http\Controllers\TagController;
-
+use App\Http\Controllers\TimPelayananController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -96,6 +96,14 @@ Route::prefix('admin')->middleware(['role:0'])->group(function(){
         Route::put('/', [BagianController::class, 'update'])->name('bagian_update');
         Route::post('/deactivate/{id}', [BagianController::class, 'deactivate'])->name('bagian_deactivate');
         Route::post('/activate/{id}', [BagianController::class, 'activate'])->name('bagian_activate');
+    });
+
+    Route::prefix('tim_pelayanan')->group(function(){
+        Route::get('/', [TimPelayananController::class, 'tim'])->name('tim_index');
+        Route::post('/', [TimPelayananController::class, 'store'])->name('tim_store');
+        Route::put('/', [TimPelayananController::class, 'update'])->name('tim_update');
+        Route::post('/deactivate/{id}', [TimPelayananController::class, 'deactivate'])->name('tim_deactivate');
+        Route::post('/activate/{id}', [TimPelayananController::class, 'activate'])->name('tim_activate');
     });
 
     Route::prefix('jadwal')->group(function(){

@@ -30,7 +30,7 @@
                         <td> {{$item["nama_tag"] }}</td>
 
                         <td>
-                            <a href="" class="btn btn-primary">View</a>
+                            {{-- <a href="" class="btn btn-primary">View</a> --}}
                             <a href="#" class="btn btn-warning buttonEdit" data-toggle="modal" data-target="#updateTag">Update</a>
                             @if ($item->status_tag == 1)
                                 <form action="/admin/tag/deactivate/{{ $item["id_tag"] }}" method="post">

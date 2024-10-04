@@ -4,11 +4,11 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-10">
-                    <h2>Daftar User</h2>
+                    <h2>Data Volunteer</h2>
                 </div>
                 <div class="col-md-2">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createUser">
-                        Tambah User
+                        Tambah Volunteer
                     </button>
                 </div>
             </div>
@@ -47,7 +47,7 @@
                             <td> {{$item["email"] }}</td>
                             <td> {{$item["telp"] }}</td>
                             <td>
-                                <a href="" class="btn btn-primary">View</a>
+                                {{-- <a href="" class="btn btn-primary">View</a> --}}
                                 <a href="#" class="btn btn-warning buttonEdit" data-toggle="modal" data-target="#updateUser">Update</a>
                                 @if ($item->status_user == 1)
                                     <form action="/admin/user/deactivate/{{ $item["id"] }}" method="post">
