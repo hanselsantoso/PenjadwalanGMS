@@ -54,4 +54,9 @@ class Cabang extends Model
     {
         return $this->hasMany(Jadwal_H::class, 'id_cabang', 'id_cabang');
     }
+
+    public function tim()
+    {
+        return $this->hasMany(TimPelayanan_H::class, 'id_cabang', 'id_cabang');
+    }
 }

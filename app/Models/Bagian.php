@@ -26,4 +26,8 @@ class Bagian extends Model
     {
         return $this->hasOne(Jadwal_D::class, 'id_bagian', 'id_bagian');
     }
+
+    public function tim_pelayanan_d() {
+        return $this->hasOne(TimPelayanan_D::class, 'id_bagian', 'id_bagian');
+    }
 }

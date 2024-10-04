@@ -102,6 +102,7 @@ Route::prefix('admin')->middleware(['role:0'])->group(function(){
         Route::get('/', [TimPelayananController::class, 'tim'])->name('tim_index');
         Route::post('/', [TimPelayananController::class, 'store'])->name('tim_store');
         Route::put('/', [TimPelayananController::class, 'update'])->name('tim_update');
+        Route::put('/', [TimPelayananController::class, 'updatePIC'])->name('tim_update_pic');
         Route::post('/deactivate/{id}', [TimPelayananController::class, 'deactivate'])->name('tim_deactivate');
         Route::post('/activate/{id}', [TimPelayananController::class, 'activate'])->name('tim_activate');
     });

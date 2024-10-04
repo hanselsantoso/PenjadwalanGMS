@@ -82,4 +82,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Jadwal_D::class, 'id_user', 'id');
     }
+
+    public function tim_pelayanan_h() {
+        return $this->hasOne(TimPelayanan_H::class, 'id_user', 'id');
+    }
+
+    public function tim_pelayanan_d() {
+        return $this->hasOne(TimPelayanan_D::class, 'id_user', 'id');
+    }
 }
