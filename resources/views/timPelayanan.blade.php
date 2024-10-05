@@ -41,6 +41,7 @@
                                                         <input type="hidden" id="nama_tim_pelayanan_h" name="nama_tim_pelayanan_h" value="{{$team["nama_tim_pelayanan_h"]}}">
                                                         <input type="hidden" id="id_user" name="id_user" value="{{$team["id_user"]}}">
                                                         <input type="hidden" id="id_cabang" name="id_cabang" value="{{$team["id_cabang"]}}">
+                                                        <button class="btn btn-success buttonAddMember" data-id="{{ $team->id_pelayanan_h }}" data-toggle="modal" data-target="#addMember">Add</button>
                                                         <button class="btn btn-info buttonView" data-id="{{ $team->id }}" data-toggle="collapse" data-target="#collapseTeam{{ $team->id }}" aria-expanded="true" aria-controls="collapseTeam{{ $team->id }}">View</button>
                                                         <button class="btn btn-warning buttonEditPic" data-id="{{ $team->id }}" data-toggle="modal" data-target="#updatePIC">Edit</button>
                                                         <button type="submit" class="btn btn-danger">Delete</button>
@@ -59,19 +60,20 @@
                                                             <tr>
                                                                 <th>No</th>
                                                                 <th>Nama Volunteer</th>
-                                                                <th>Status</th>
                                                                 <th>Action</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             @foreach ($team->tim_pelayanan_d as $member)
                                                                 <tr>
+                                                                    <input type="hidden" name="id_pelayanan_d" value="{{$member["id_pelayanan_d"]}}">
+                                                                    <input type="hidden" name="id_user" value="{{$member["id_user"]}}">
+
                                                                     <td>{{ $loop->iteration }}</td>
                                                                     <td>{{ $member->user["nama_lengkap"] }}</td>
-                                                                    <td>{{ $member->status_tim_pelayanan_d }}</td>
                                                                     <td>
-                                                                        <button class="btn btn-warning buttonEdit" data-id="{{ $member->id_pelayanan_d }}">Edit</button>
-                                                                        <form action="{{ route('tim_deactivate', $member->id_pelayanan_d) }}" method="POST" style="display:inline;">
+                                                                        <button class="btn btn-warning buttonEdit" data-id="{{ $member->id_pelayanan_d }}" data-toggle="modal" data-target="#updateMember">Edit</button>
+                                                                        <form action="{{ route('tim_deactivate', ['id' => $member->id_pelayanan_d, 'id_user' => $member->id_user]) }}" method="POST" style="display:inline;">
                                                                             @csrf
                                                                             @method('DELETE')
                                                                             <button type="submit" class="btn btn-danger">Delete</button>
@@ -146,6 +148,42 @@
         </div>
     </div>
 
+    <!-- Create User Modal -->
+    <div class="modal fade" id="addMember">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Tambah Tim Pelayanan</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <form action="{{ route('tim_store_member') }}" method="post">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="user">Volunteer</label>
+                            <input type="hidden" name="id_header" id="id_header">
+                            <select class="form-control" id="update_volunteer" name="volunteer" required>
+                                <option value="0">Pilih Volunteer</option>
+                                @foreach ($users as $item)
+                                    @if ($item->role == 1)
+                                        <option value="{{ $item->id }}">{{ $item->nama_lengkap }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
+
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Update User Modal -->
     <div class="modal fade" id="updatePIC">
         <div class="modal-dialog">
@@ -194,6 +232,40 @@
         </div>
     </div>
 
+    <!-- Update User Modal -->
+    <div class="modal fade" id="updateMember">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Ubah Member</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <form action="{{ route('tim_update') }}" method="post">
+                    @method('PUT')
+                    @csrf
+                    <input type="hidden" name="id_pelayanan_d" id="id_pelayanan_d_member">
+                    <input type="hidden" name="id_user" id="id_user_member">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="user">Volunteer</label>
+                            <select class="form-control" id="update_volunteer" name="volunteer" required>
+                                <option value="0">Pilih PIC</option>
+                                @foreach ($users as $item)
+                                    <option value="{{ $item->id }}">{{ $item->nama_lengkap }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 @endsection
 
@@ -225,13 +297,13 @@
         });
 
         // Edit button functionality placeholder
-        document.querySelectorAll('.buttonEdit').forEach(button => {
-            button.addEventListener('click', function() {
-                let id = this.getAttribute('data-id');
-                // Trigger the modal or do the necessary action, here using alert as a placeholder
-                alert(`Edit volunteer with ID: ${id}`);
-            });
-        });
+        // document.querySelectorAll('.buttonEdit').forEach(button => {
+        //     button.addEventListener('click', function() {
+        //         let id = this.getAttribute('data-id');
+        //         // Trigger the modal or do the necessary action, here using alert as a placeholder
+        //         alert(`Edit volunteer with ID: ${id}`);
+        //     });
+        // });
     });
 
     document.getElementById('addVolunteer').addEventListener('click', function() {
@@ -242,7 +314,9 @@
                 <select class="form-control" name="user[]" required>
                     <option value="0">Pilih Volunteer</option>
                     @foreach ($users as $item)
-                        <option value="{{ $item->id }}">{{ $item->nama_lengkap }}</option>
+                        @if ($item->role == 1)
+                            <option value="{{ $item->id }}">{{ $item->nama_lengkap }}</option>
+                        @endif
                     @endforeach
                 </select>
             </div>
@@ -258,14 +332,13 @@
                 var value = $(this).val();
                 data.push(value);
             });
-            console.log(data);
+            // console.log(data);
             let id = data[0];
-            let nama_user = data[1];
-            let nama_tag = data[2];
+            let id_user = data[1];
 
-            $('#updateMapping').find('input[name="id_user_tag"]').val(id);
-            $('#updateMapping').find('select[name="user"]').val(nama_user);
-            $('#updateMapping').find('select[name="tags"]').val(nama_tag);
+            $('#updateMember').find('input[name="id_pelayanan_d"]').val(id);
+            $('#updateMember').find('input[name="id_user"]').val(id_user);
+            $('#updateMember').find('select[name="volunteer"]').val(id_user);
         });
 
         $('.buttonEditPic').on('click', function() {
@@ -283,6 +356,11 @@
             $('#updatePIC').find('#update_cabang').val(id_cabang);
             $('#updatePIC').find('#update_pic').val(id_user);
 
+        });
+
+        $('.buttonAddMember').on('click', function() {
+            var id = $(this).attr('data-id');
+            $('#addMember').find('#id_header').val(id);
         });
     });
 

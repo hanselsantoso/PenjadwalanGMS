@@ -60,6 +60,7 @@
                                         <a class="dropdown-item" href="/admin/bagian">{{ __('Position') }}</a>
                                         <a class="dropdown-item" href="/admin/jadwal_ibadah">{{ __('Service Time') }}</a>
                                         <a class="dropdown-item" href="/admin/jadwal">{{ __('Schedule') }}</a>
+                                        <a class="dropdown-item" href="/admin/tim_pelayanan">{{ __('Tim Pelayanan') }}</a>
                                     </div>
                                 </li>
                                 </li>

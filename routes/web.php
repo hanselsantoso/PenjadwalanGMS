@@ -15,6 +15,7 @@ use App\Http\Controllers\simpananController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CabangController;
+use App\Http\Controllers\GradingController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\JadwalIbadahController;
 use App\Http\Controllers\MappingController;
@@ -98,12 +99,18 @@ Route::prefix('admin')->middleware(['role:0'])->group(function(){
         Route::post('/activate/{id}', [BagianController::class, 'activate'])->name('bagian_activate');
     });
 
+    Route::prefix('grading')->group(function(){
+        Route::get('/', [GradingController::class, 'grading'])->name('grading_index');
+        Route::put('/', [GradingController::class, 'update'])->name('grading_update');
+    });
+
     Route::prefix('tim_pelayanan')->group(function(){
         Route::get('/', [TimPelayananController::class, 'tim'])->name('tim_index');
         Route::post('/', [TimPelayananController::class, 'store'])->name('tim_store');
-        Route::put('/', [TimPelayananController::class, 'update'])->name('tim_update');
-        Route::put('/', [TimPelayananController::class, 'updatePIC'])->name('tim_update_pic');
-        Route::post('/deactivate/{id}', [TimPelayananController::class, 'deactivate'])->name('tim_deactivate');
+        Route::post('/member', [TimPelayananController::class, 'store_member'])->name('tim_store_member');
+        Route::put('/updatePIC', [TimPelayananController::class, 'updatePIC'])->name('tim_update_pic');
+        Route::put('/', [TimPelayananController::class, 'updateMember'])->name('tim_update');
+        Route::delete('/deactivate/{id}/{id_user}', [TimPelayananController::class, 'deactivate'])->name('tim_deactivate');
         Route::post('/activate/{id}', [TimPelayananController::class, 'activate'])->name('tim_activate');
     });
 

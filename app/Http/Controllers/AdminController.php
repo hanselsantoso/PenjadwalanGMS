@@ -17,7 +17,8 @@ class AdminController extends Controller
 {
     //
     public function index(Request $request) {
-        $user = User::where('role',1)->get();
+        $user = User::where('role', '!=', 0)->get();
+
         $tag = Tag::where('status_tag',1)->get();
         return view('Admin.dashboard',with([
             'user' => $user,

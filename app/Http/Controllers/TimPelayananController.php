@@ -17,7 +17,7 @@ class TimPelayananController extends Controller
     function tim() {
         // $bagian = Bagian::where('status_bagian', 1)->get();
         $teams = TimPelayanan_H::all();
-        $users = User::where('status_user', 1)->where('role',1)->get();
+        $users = User::where('status_user', 1)->where('role', '!=', 0)->get();
         // $users = User::where('status_user', 1)->get();
         $cabang = Cabang::where('status_cabang', 1)->get();
 
@@ -65,27 +65,82 @@ class TimPelayananController extends Controller
         return redirect()->route('tim_index')->with('success', 'Tim created.');
     }
 
-    function update(Request $request) {
+    function store_member(Request $request) {
+        $request->validate([
+            'volunteer' => 'required',
+            'id_header' => 'required',
+        ]);
+
+        try {
+            $timPelayananD = TimPelayanan_D::create([
+                'id_pelayanan_h' => $request->id_header,
+                'id_user' => $request->volunteer,
+            ]);
+
+            User::where('id', $request->volunteer)->update(['role' => 3]);
+        }
+
+        catch (\Exception $e) {
+            return redirect()->route('tim_index')->with('error', 'Failed to create Tim: ' . $e->getMessage());
+        }
+
+
+        return redirect()->route('tim_index')->with('success', 'Member added.');
+    }
+
+    function updateMember(Request $request) {
+        // dd($request->all());
         //update dulu role pic lama dengan 1, yang baru diganti 2
         // update id_user baru
         $request->validate([
-            'id_bagian' => 'required|integer',
-            'nama_bagian' => 'required|string|max:255',
+            'id_user' => 'required|integer',
         ]);
 
-        // $bagian = Bagian::findOrFail($request->id_bagian);
-        // $bagian->nama_bagian = $request->nama_bagian;
-        // $bagian->save();
+        $volunteerLama = $request->id_user;
+        $volunteerBaru = $request->volunteer;
 
-        return redirect()->route('bagian_index')->with('success', 'Bagian updated.');
+        $data = TimPelayanan_D::find($request->id_pelayanan_d)
+        ->update([
+            'id_user' => $request->volunteer,
+        ]);
+
+        User::where('id', $volunteerLama)->update(['role' => 1]);
+        User::where('id', $volunteerBaru)->update(['role' => 3]);
+
+        return redirect()->route('tim_index')->with('success', 'Header updated.');
     }
 
-    function deactivate($id) {
-        // $bagian = Bagian::findOrFail($id);
-        // $bagian->status_bagian = false;
-        // $bagian->save();
+    function updatePIC(Request $request) {
+        // dd($request->all());
+        //update dulu role pic lama dengan 1, yang baru diganti 2
+        // update id_user baru
+        $request->validate([
+            'nama_tim_pelayanan_h' => 'required',
+            'id_user' => 'required|integer',
+            'cabang' => 'required',
+        ]);
 
-        return redirect()->route('bagian_index')->with('success', 'Bagian deactivated.');
+        $picLama = $request->id_user;
+        $picBaru = $request->pic;
+
+        $data = TimPelayanan_H::find($request->id_pelayanan_h)
+        ->update([
+            'nama_tim_pelayanan_h' => $request->nama_tim_pelayanan_h,
+            'id_cabang' => $request->cabang,
+            'id_user' => $request->pic,
+        ]);
+
+        User::where('id', $picLama)->update(['role' => 3]);
+        User::where('id', $picBaru)->update(['role' => 2]);
+
+        return redirect()->route('tim_index')->with('success', 'Header updated.');
+    }
+
+    function deactivate($id, $id_user) {
+        TimPelayanan_D::where('id_pelayanan_d', $id)->delete();
+        User::where('id', $id_user)->update(['role' => 1]);
+
+        return redirect()->route('tim_index')->with('success', 'Member deactivated.');
     }
 
     function activate($id) {
