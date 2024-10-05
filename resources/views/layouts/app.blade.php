@@ -41,7 +41,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-
+                        {{-- {{Auth::user()->name}} --}}
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -61,8 +61,8 @@
                                         <a class="dropdown-item" href="/admin/jadwal_ibadah">{{ __('Service Time') }}</a>
                                         <a class="dropdown-item" href="/admin/jadwal">{{ __('Schedule') }}</a>
                                         <a class="dropdown-item" href="/admin/tim_pelayanan">{{ __('Tim Pelayanan') }}</a>
+                                        <a class="dropdown-item" href="/admin/grading">{{ __('Grading') }}</a>
                                     </div>
-                                </li>
                                 </li>
                                 {{-- <li class="nav-item">
                                     <a class="nav-link" href="/admin/index">{{ __('Nasabah') }}</a>
@@ -75,7 +75,7 @@
                                 </li> --}}
                                 <li class="nav-item dropdown">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                        {{ Auth::user()->name }}
+                                       {{ Auth::user()->nama_lengkap }}
                                     </a>
 
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -93,7 +93,7 @@
                             @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
+                                 {{ Auth::user()->nama_lengkap }}
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">

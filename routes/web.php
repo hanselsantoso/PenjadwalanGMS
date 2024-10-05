@@ -131,6 +131,14 @@ Route::prefix('admin')->middleware(['role:0'])->group(function(){
     });
 });
 
-Route::prefix('user')->middleware(['role:1'])->group(function(){
-    Route::get('/index', [UserController::class, 'index']);
+Route::prefix('servo')->middleware(['role:1'])->group(function(){
+    Route::get('/index', [UserController::class, 'servo']);
+});
+
+Route::prefix('volunteer')->middleware(['role:3'])->group(function(){
+    Route::get('/index', [UserController::class, 'volunteer']);
+});
+
+Route::prefix('pic')->middleware(['role:2'])->group(function(){
+    Route::get('/index', [UserController::class, 'pic']);
 });

@@ -8,10 +8,28 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function index(){
+    public function pic(){
 
         // dd($info);
-        return view('User.index',with([
+        return view('Pic.index',with([
+            // 'user'=> $user,
+            // 'info'=> $info,
+        ]));
+    }
+
+    public function volunteer(){
+
+        // dd($info);
+        return view('Volunteer.index',with([
+            // 'user'=> $user,
+            // 'info'=> $info,
+        ]));
+    }
+
+    public function servo(){
+
+        // dd($info);
+        return view('Servo.index',with([
             // 'user'=> $user,
             // 'info'=> $info,
         ]));
