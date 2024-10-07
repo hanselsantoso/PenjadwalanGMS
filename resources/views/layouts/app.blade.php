@@ -58,9 +58,9 @@
                                         <a class="dropdown-item" href="/admin/tag">{{ __('Tag') }}</a>
                                         <a class="dropdown-item" href="/admin/mapping">{{ __('Grading') }}</a>
                                         <a class="dropdown-item" href="/admin/bagian">{{ __('Position') }}</a>
-                                        <a class="dropdown-item" href="/admin/jadwal_ibadah">{{ __('Service Time') }}</a>
+                                        <a class="dropdown-item" href="/admin/jadwal_ibadah">{{ __('Services') }}</a>
                                         <a class="dropdown-item" href="/admin/jadwal">{{ __('Schedule') }}</a>
-                                        <a class="dropdown-item" href="/admin/tim_pelayanan">{{ __('Tim Pelayanan') }}</a>
+                                        <a class="dropdown-item" href="/admin/tim_pelayanan">{{ __('Team') }}</a>
                                         <a class="dropdown-item" href="/admin/grading">{{ __('Grading') }}</a>
                                     </div>
                                 </li>
