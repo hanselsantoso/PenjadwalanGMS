@@ -59,7 +59,7 @@
                                                         <thead>
                                                             <tr>
                                                                 <th>No</th>
-                                                                <th>Nama Volunteer</th>
+                                                                <th>Nama Anggota</th>
                                                                 <th>Action</th>
                                                             </tr>
                                                         </thead>
@@ -124,16 +124,16 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="user">PIC</label>
+                            <label for="user">Team Leader</label>
                             <select class="form-control" name="pic" required>
-                                <option value="0">Pilih PIC</option>
+                                <option value="0">Pilih Team Leader</option>
                                 @foreach ($users as $item)
                                     <option value="{{ $item->id }}">{{ $item->nama_lengkap }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group">
-                            <button type="button" class="btn btn-secondary" id="addVolunteer">Tambah Volunteer</button>
+                            <button type="button" class="btn btn-secondary" id="addVolunteer">Tambah Anggota</button>
                         </div>
                         <div id="additionalVolunteers"></div>
 
@@ -161,10 +161,10 @@
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="user">Volunteer</label>
+                            <label for="user">Anggota</label>
                             <input type="hidden" name="id_header" id="id_header">
                             <select class="form-control" id="update_volunteer" name="volunteer" required>
-                                <option value="0">Pilih Volunteer</option>
+                                <option value="0">Pilih Anggota</option>
                                 @foreach ($users as $item)
                                     @if ($item->role == 1)
                                         <option value="{{ $item->id }}">{{ $item->nama_lengkap }}</option>
@@ -213,9 +213,9 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="user">PIC</label>
+                            <label for="user">Team Leader</label>
                             <select class="form-control" id="update_pic" name="pic" required>
-                                <option value="0">Pilih PIC</option>
+                                <option value="0">Pilih Team Leader</option>
                                 @foreach ($users as $item)
                                     <option value="{{ $item->id }}">{{ $item->nama_lengkap }}</option>
                                 @endforeach
@@ -238,7 +238,7 @@
             <div class="modal-content">
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 class="modal-title">Ubah Member</h4>
+                    <h4 class="modal-title">Ubah Anggota</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <form action="{{ route('tim_update') }}" method="post">
@@ -248,9 +248,9 @@
                     <input type="hidden" name="id_user" id="id_user_member">
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="user">Volunteer</label>
+                            <label for="user">Anggota</label>
                             <select class="form-control" id="update_volunteer" name="volunteer" required>
-                                <option value="0">Pilih PIC</option>
+                                <option value="0">Pilih Anggota</option>
                                 @foreach ($users as $item)
                                     <option value="{{ $item->id }}">{{ $item->nama_lengkap }}</option>
                                 @endforeach
@@ -310,9 +310,9 @@
         var container = document.getElementById('additionalVolunteers');
         var volunteerForm = `
             <div class="form-group">
-                <label for="user">Volunteer</label>
+                <label for="user">Anggota</label>
                 <select class="form-control" name="user[]" required>
-                    <option value="0">Pilih Volunteer</option>
+                    <option value="0">Pilih Anggota</option>
                     @foreach ($users as $item)
                         @if ($item->role == 1)
                             <option value="{{ $item->id }}">{{ $item->nama_lengkap }}</option>

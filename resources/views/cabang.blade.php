@@ -56,14 +56,14 @@
             <div class="modal-content">
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 class="modal-title">Tambah Cabang</h4>
+                    <h4 class="modal-title">Tambah Lokasi</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <form action="{{ route('cabang_store') }}" method="post">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="nama_cabang">Nama Cabang</label>
+                            <label for="nama_cabang">Nama Lokasi</label>
                             <input type="text" class="form-control" name="nama_cabang" required>
                         </div>
 
