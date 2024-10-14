@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Jadwal_D;
 use App\Models\Pinjaman_H;
 use App\Models\TimPelayanan_H;
 use App\Models\User;
@@ -23,7 +24,7 @@ class UserController extends Controller
 
     public function volunteer(Request $request, ){
 
-        // dd($info);
+        $jadwal = Jadwal_D::where('id_user',auth()->user()->id)->get();
         return view('Volunteer.index',with([
             'jadwal'=> $jadwal,
         ]));
