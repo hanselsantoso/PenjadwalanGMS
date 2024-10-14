@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Jadwal_D;
+use App\Models\Jadwal_H;
 use App\Models\Pinjaman_H;
+use App\Models\TimPelayanan_H;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -10,19 +13,20 @@ class UserController extends Controller
 {
     public function pic(){
 
-        // dd($info);
+        $jadwal = Jadwal_D::where('id_user',auth()->user()->id)->get();
+        $team = TimPelayanan_H::where('id_user', auth()->user()->id)->first();
+        dd($team->tim_pelayanan_d);
         return view('Pic.index',with([
-            // 'user'=> $user,
-            // 'info'=> $info,
+            'jadwals'=> $jadwal,
+            'team' => $team,
         ]));
     }
 
     public function volunteer(){
 
-        // dd($info);
+        $jadwal = Jadwal_D::where('id_user',auth()->user()->id)->get();
         return view('Volunteer.index',with([
-            // 'user'=> $user,
-            // 'info'=> $info,
+            'jadwal'=> $jadwal,
         ]));
     }
 

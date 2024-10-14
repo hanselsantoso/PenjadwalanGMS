@@ -19,8 +19,10 @@ use App\Http\Controllers\GradingController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\JadwalIbadahController;
 use App\Http\Controllers\MappingController;
+use App\Http\Controllers\PicController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TimPelayananController;
+use App\Http\Controllers\VolunteerController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -136,9 +138,11 @@ Route::prefix('servo')->middleware(['role:1'])->group(function(){
 });
 
 Route::prefix('volunteer')->middleware(['role:3'])->group(function(){
-    Route::get('/index', [UserController::class, 'volunteer']);
+    Route::get('/', [UserController::class, 'volunteer']);
+    Route::get('/detail/{id}', [VolunteerController::class, 'detail'])->name('volunteer_detail');
 });
 
 Route::prefix('pic')->middleware(['role:2'])->group(function(){
-    Route::get('/index', [UserController::class, 'pic']);
+    Route::get('/', [UserController::class, 'pic']);
+    Route::get('/detail/{id}', [PicController::class, 'detail'])->name('pic_detail');
 });
