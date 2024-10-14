@@ -15,7 +15,7 @@ class UserController extends Controller
 
         $jadwal = Jadwal_D::where('id_user',auth()->user()->id)->get();
         $team = TimPelayanan_H::where('id_user', auth()->user()->id)->first();
-        dd($team->tim_pelayanan_d);
+        // dd($team->tim_pelayanan_d);
         return view('Pic.index',with([
             'jadwals'=> $jadwal,
             'team' => $team,

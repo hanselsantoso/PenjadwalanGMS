@@ -29,8 +29,8 @@
                     <td>{{ $jadwal->detail->jadwalIbadah["jam_mulai"] }} - {{ $jadwal->detail->jadwalIbadah["jam_akhir"] }}</td>
                     <td>
                     <a href="{{ route('pic_detail', $jadwal->id_jadwal_h) }}" class="btn btn-success">Detail</a>
-                    <a href="asdasd" class="btn btn-warning">Tukar</a>
-                    <a href="asdasd" class="btn btn-danger">Tolak</a>
+                    <a href="asdasd" class="btn btn-warning">Tukar / Ganti</a>
+                    {{-- <a href="asdasd" class="btn btn-danger">Tolak</a> --}}
                     </td>
                 </tr>
                 @endforeach
@@ -40,28 +40,29 @@
 
         <hr>
 
-        <div class="container mt-4">
-            <h2>{{$team["nama_tim_pelayanan_h"]}}</h2>
-            <table id="teamTable" class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Nama</th>
-                    <th>No Telp.</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($team->tim_pelayanan_d as $item)
-                    {{ dd($team->tim_pelayanan_d) }}
-                <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $item->user["nama_lengkap"] }}</td>
-                    <td>{{ $item->user["telp"] }}</td>
-                </tr>
-                @endforeach
-            </tbody>
-            </table>
-        </div>
+        @if(isset($team))
+            <div class="container mt-4">
+                <h2>{{$team["nama_tim_pelayanan_h"]}}</h2>
+                <table id="teamTable" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>No Telp.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($team->tim_pelayanan_d as $item)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $item->user["nama_lengkap"] }}</td>
+                            <td>{{ $item->user["telp"] }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+                </table>
+            </div>
+        @endif
     </div>
 
 @endsection

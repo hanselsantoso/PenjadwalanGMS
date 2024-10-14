@@ -15,7 +15,7 @@ class JadwalDetailController extends Controller
     {
         $detail = Jadwal_H::find($id);
         $bagian = Bagian::where('status_bagian', 1)->get();
-        $user = User::where('status_user', 1)->where('role',1)->get();
+        $user = User::where('status_user', 1)->where('role', '!=', 0)->get();
         return view ('jadwal_detail', compact('detail', 'bagian', 'user'));
     }
 

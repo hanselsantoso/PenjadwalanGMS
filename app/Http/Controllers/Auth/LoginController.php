@@ -46,11 +46,11 @@ class LoginController extends Controller
         if (Auth::user()->role == 0) {
             return '/admin/index';
         } elseif (Auth::user()->role == 1) {
-            return '/servo/index';
+            return '/servo';
         }elseif (Auth::user()->role == 2) {
-            return '/pic/index';
+            return '/pic';
         }elseif (Auth::user()->role == 3) {
-            return '/volunteer/index';
+            return '/volunteer';
         }else{
             return '/home';
         }

@@ -166,7 +166,7 @@
                             <select class="form-control" id="update_volunteer" name="volunteer" required>
                                 <option value="0">Pilih Anggota</option>
                                 @foreach ($users as $item)
-                                    @if ($item->role == 1)
+                                    @if ($item->role == 1 || $item->role == 3)
                                         <option value="{{ $item->id }}">{{ $item->nama_lengkap }}</option>
                                     @endif
                                 @endforeach
@@ -314,7 +314,7 @@
                 <select class="form-control" name="user[]" required>
                     <option value="0">Pilih Anggota</option>
                     @foreach ($users as $item)
-                        @if ($item->role == 1)
+                        @if ($item->role == 1 || $item->role == 3)
                             <option value="{{ $item->id }}">{{ $item->nama_lengkap }}</option>
                         @endif
                     @endforeach

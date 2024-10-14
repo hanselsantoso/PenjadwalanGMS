@@ -16,7 +16,7 @@ class JadwalController extends Controller
     {
         $jadwalIbadah = JadwalIbadah::where('status_jadwal_ibadah', 1)->get();
         $cabang = Cabang::where('status_cabang', 1)->get();
-        $user = User::where('status_user', 1)->where('role', 1)->get();
+        $user = User::where('status_user', 1)->where('role', '!=', 0)->get();
         $jadwal = Jadwal_H::where('status_jadwal_h', 1)->get();
 
         return view('jadwal', compact('jadwal','jadwalIbadah', 'cabang', 'user'));
