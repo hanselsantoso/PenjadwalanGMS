@@ -56,7 +56,7 @@
                                         <a class="dropdown-item" href="/admin/user">{{ __('Volunteer') }}</a>
                                         <a class="dropdown-item" href="/admin/cabang">{{ __('Lokasi') }}</a>
                                         <a class="dropdown-item" href="/admin/tag">{{ __('Tag') }}</a>
-                                        <a class="dropdown-item" href="/admin/mapping">{{ __('Grading') }}</a>
+                                        {{-- <a class="dropdown-item" href="/admin/mapping">{{ __('Grading') }}</a> --}}
                                         <a class="dropdown-item" href="/admin/bagian">{{ __('Position') }}</a>
                                         <a class="dropdown-item" href="/admin/jadwal_ibadah">{{ __('Services') }}</a>
                                         <a class="dropdown-item" href="/admin/jadwal">{{ __('Schedule') }}</a>
