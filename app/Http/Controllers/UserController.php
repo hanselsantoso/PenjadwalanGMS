@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Jadwal_D;
 use App\Models\Pinjaman_H;
+use App\Models\TimPelayanan_H;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,20 +13,20 @@ class UserController extends Controller
 {
     public function pic(){
 
-        // dd($info);
+        $jadwal = Jadwal_D::where('id_user',auth()->user()->id)->get();
+        $team = TimPelayanan_H::where('id_user', auth()->user()->id)->first();
+        dd($team->tim_pelayanan_d);
         return view('Pic.index',with([
-            // 'user'=> $user,
-            // 'info'=> $info,
+            'jadwals'=> $jadwal,
+            'team' => $team,
         ]));
     }
 
     public function volunteer(Request $request, ){
 
-        $jadwal = Jadwal_D::where('id_user',Auth::user()->id_user);
-        dd($jadwal);
+        $jadwal = Jadwal_D::where('id_user',auth()->user()->id)->get();
         return view('Volunteer.index',with([
-            // 'user'=> $user,
-            // 'info'=> $info,
+            'jadwal'=> $jadwal,
         ]));
     }
 
