@@ -3,9 +3,23 @@
     <div class="main">
         <div class="container">
             <div class="row">
-                <div class="col-md-10">
+                <div class="col-md-6">
                     <h2>Daftar Jadwal</h2>
                 </div>
+                <div class="col-md-4">
+                    <form action="{{ route('jadwal.download') }}" method="GET">
+                        @csrf
+                        <label for="start_date">Start Date:</label>
+                        <input type="date" id="start_date" name="start_date" required>
+
+                        <label for="end_date">End Date:</label>
+                        <input type="date" id="end_date" name="end_date" required>
+
+                        <button type="submit">Download Schedule</button>
+                    </form>
+                </div>
+
+
                 <div class="col-md-2">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createJadwal">
                         Tambah Jadwal

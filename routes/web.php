@@ -124,6 +124,8 @@ Route::prefix('admin')->middleware(['role:0'])->group(function(){
         Route::put('/', [JadwalController::class, 'update'])->name('jadwal_update');
         Route::post('/deactivate/{id}', [JadwalController::class, 'deactivate'])->name('jadwal_deactivate');
         Route::post('/activate/{id}', [JadwalController::class, 'activate'])->name('jadwal_activate');
+        Route::get('/download', [JadwalController::class, 'downloadSchedule'])->name('jadwal.download');
+
 
         Route::prefix('detail')->group(function(){
             Route::get('/{id}', [JadwalDetailController::class, 'jadwal_detail'])->name('jadwal_detail_index');

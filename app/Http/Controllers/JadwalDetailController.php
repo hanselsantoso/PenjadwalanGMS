@@ -79,17 +79,17 @@ class JadwalDetailController extends Controller
         // Retrieve necessary data from the request
         $jadwalId = $request->jadwal;
         $jadwalHeader = Jadwal_H::findOrFail($jadwalId);
-        dd($jadwalHeader);
+
         // Define the slots needed for each day
         $slots = [];
-        if (Carbon::parse($jadwalHeader->tanggal_ibadah)->isSaturday()) {
+        if (Carbon::parse($jadwalHeader->tanggal_jadwal)->isSaturday()) {
             // Saturday schedule
             $slots = [
                 'F.O.H' => 1,
                 'Monitor' => 2,
                 'Stage' => 2,
             ];
-        } elseif (Carbon::parse($jadwalHeader->tanggal_ibadah)->isSunday()) {
+        } elseif (Carbon::parse($jadwalHeader->tanggal_jadwal)->isSunday()) {
             // Sunday schedule
             $slots = [
                 'F.O.H' => 2,
@@ -97,21 +97,28 @@ class JadwalDetailController extends Controller
                 'Monitor' => 2,
                 'Stage' => 2,
                 'Super Trooper' => 2,
-                'All Star dan Little Eagle' => 1,
+                'All star dan Little Eagle' => 1,
             ];
         }
 
         // Get volunteers grouped by grade
         $grade1to4 = User::whereBetween('grade', [1, 4])->get()->shuffle();
         $grade5to7 = User::whereBetween('grade', [5, 7])->get()->shuffle();
-        $gradeAbove7 = User::where('grade', '>=', 10)->get()->shuffle();
+        $gradeAbove7 = User::where('grade', '=', 10)->get()->shuffle();
 
         // Retrieve `Bagian` IDs based on names
-        $bagianIds = Bagian::whereIn('nama_bagian', ['Stage', 'All Star dan Little Eagle', 'Super Trooper', 'Monitor', 'B.C', 'F.O.H'])
+        $bagianIds = Bagian::where('status_bagian', 1)
                         ->pluck('id_bagian', 'nama_bagian');
 
+        // Get all user IDs already assigned on the same day
+        $assignedUserIds = Jadwal_D::whereHas('detail', function ($query) use ($jadwalHeader) {
+                $query->whereDate('tanggal_jadwal', $jadwalHeader->tanggal_jadwal);
+            })
+            ->pluck('id_user')
+            ->unique();
+
         // Track assigned users for each slot
-        $assignedUsers = collect();
+        $assignedUsers = collect($assignedUserIds); // Start with users already assigned
 
         // Loop through the slots and assign volunteers
         foreach ($slots as $bagianName => $numSlots) {
@@ -121,19 +128,22 @@ class JadwalDetailController extends Controller
                 $user = null;
 
                 // Choose volunteers based on grade and section requirements
-                if (in_array($bagianName, ['Stage', 'All Star and Little Eagle', 'Super Trooper'])) {
-                    $user = $grade1to4->pop();
-                } elseif (in_array($bagianName, ['Monitor', 'BC'])) {
-                    $user = $grade5to7->pop();
-                } elseif ($bagianName === 'FOH') {
-                    $user = $gradeAbove7->pop();
+                if (in_array($bagianName, ['Stage', 'All star dan Little Eagle', 'Super Trooper'])) {
+                    $user = $grade1to4->reject(function ($u) use ($assignedUsers) {
+                        return $assignedUsers->contains($u->id);
+                    })->pop();
+                } elseif (in_array($bagianName, ['Monitor', 'B.C'])) {
+                    $user = $grade5to7->reject(function ($u) use ($assignedUsers) {
+                        return $assignedUsers->contains($u->id);
+                    })->pop();
+                } elseif ($bagianName === 'F.O.H') {
+                    $user = $gradeAbove7->reject(function ($u) use ($assignedUsers) {
+                        return $assignedUsers->contains($u->id);
+                    })->pop();
                 }
 
-                // Skip if no volunteer is available for the slot
+                // Skip if no volunteer is available for the slot or already assigned
                 if (!$user) continue;
-
-                // Prevent double-scheduling the same user on the same day
-                if ($assignedUsers->contains($user->id)) continue;
 
                 // Create new detail schedule entry
                 Jadwal_D::create([
@@ -150,6 +160,7 @@ class JadwalDetailController extends Controller
 
         return redirect()->route('jadwal_detail_index', $jadwalId)->with('success', 'Schedule automated with random assignments.');
     }
+
 
 
 
