@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\UsersImport;
 use App\Models\Aturan;
 use App\Models\simpanan;
 use App\Models\Simpanan_H;
@@ -12,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminController extends Controller
 {
@@ -73,6 +75,22 @@ class AdminController extends Controller
             return redirect()->back()->with('success', 'User berhasil ditambahkan.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menambahkan user.');
+        }
+    }
+
+    public function excel_store(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv',
+        ]);
+
+        try {
+            Excel::import(new UsersImport, $request->file('file'));
+
+            return redirect()->back()->with('success', 'Users have been successfully imported.');
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            return redirect()->back()->with('error', 'There was an error during the import: ' . $e->getMessage());
         }
     }
 

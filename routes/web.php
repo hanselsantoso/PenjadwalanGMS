@@ -58,6 +58,8 @@ Route::prefix('admin')->middleware(['role:0'])->group(function(){
         Route::put('/', [AdminController::class, 'update'])->name('user_update');
         Route::post('/deactivate/{id}', [AdminController::class, 'deactivate'])->name('user_deactivate');
         Route::post('/activate/{id}', [AdminController::class, 'activate'])->name('user_activate');
+
+        Route::post('/users/excel-store', [AdminController::class, 'excel_store'])->name('user.excel_store');
     });
 
     Route::prefix('cabang')->group(function(){
@@ -129,6 +131,7 @@ Route::prefix('admin')->middleware(['role:0'])->group(function(){
             Route::put('/', [JadwalDetailController::class, 'update'])->name('jadwal_detail_update');
             Route::post('/deactivate/{id}', [JadwalDetailController::class, 'deactivate'])->name('jadwal_detail_deactivate');
             Route::post('/activate/{id}', [JadwalDetailController::class, 'activate'])->name('jadwal_detail_activate');
+            Route::post('/automation', [JadwalDetailController::class, 'automation'])->name('jadwal_automation');
         });
     });
 });

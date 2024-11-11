@@ -4,11 +4,16 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-10">
-                    <h2>Jadwal {{$detail->cabang->nama_cabang}}</h2>
+                    <h2>Jadwal {{$detail->cabang->nama_cabang}} - {{ \Carbon\Carbon::parse($detail->tanggal_jadwal)->format('d-m-Y') }}</h2>
                     <h4>Jam {{$detail->jadwalIbadah->jam_mulai}} - {{$detail->jadwalIbadah->jam_akhir}}</h4>
                     <h5>Stand By: {{$detail->jadwalIbadah->jam_stand_by}}</h5>
                 </div>
                 <div class="col-md-2">
+                    <form action="{{ route('jadwal_automation') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="jadwal" value="{{ $id_H }}">
+                        <button type="submit">Automate Schedule</button>
+                    </form>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createJadwal">
                         Tambah Jadwal
                     </button>
@@ -77,7 +82,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="bagian">Bagian</label>
                             <select class="form-control" name="bagian" required>
@@ -124,7 +129,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="bagian">Bagian</label>
                             <select class="form-control" name="bagian" required>

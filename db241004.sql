@@ -12,9 +12,9 @@ MySQL - 10.4.32-MariaDB : Database - jadwal
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`jadwal` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`Jadwal_GMS` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */;
 
-USE `jadwal`;
+USE `Jadwal_GMS`;
 
 /*Table structure for table `bagian` */
 
@@ -32,7 +32,7 @@ CREATE TABLE `bagian` (
 
 /*Data for the table `bagian` */
 
-insert  into `bagian`(`id_bagian`,`nama_bagian`,`status_bagian`,`created_at`,`updated_at`,`deleted_at`) values 
+insert  into `bagian`(`id_bagian`,`nama_bagian`,`status_bagian`,`created_at`,`updated_at`,`deleted_at`) values
 (1,'Stage',1,'2024-09-30 21:23:38','2024-09-30 14:23:38',NULL),
 (2,'E.K',1,'2024-08-03 08:53:20','2024-08-03 08:53:20',NULL);
 
@@ -52,7 +52,7 @@ CREATE TABLE `cabang` (
 
 /*Data for the table `cabang` */
 
-insert  into `cabang`(`id_cabang`,`nama_cabang`,`status_cabang`,`created_at`,`updated_at`,`deleted_at`) values 
+insert  into `cabang`(`id_cabang`,`nama_cabang`,`status_cabang`,`created_at`,`updated_at`,`deleted_at`) values
 (1,'Timur',1,'2024-09-30 21:24:06','2024-09-30 14:24:06',NULL),
 (2,'Rooftop',0,'2024-08-02 10:58:03','2024-08-02 03:58:03',NULL);
 
@@ -74,7 +74,7 @@ CREATE TABLE `jadwal_d` (
 
 /*Data for the table `jadwal_d` */
 
-insert  into `jadwal_d`(`id_jadwal_d`,`id_jadwal_h`,`id_bagian`,`id_user`,`status_jadwal_d`,`created_at`,`updated_at`,`deleted_at`) values 
+insert  into `jadwal_d`(`id_jadwal_d`,`id_jadwal_h`,`id_bagian`,`id_user`,`status_jadwal_d`,`created_at`,`updated_at`,`deleted_at`) values
 (1,1,2,6,1,'2024-08-04 11:02:54','2024-08-04 04:02:54',NULL),
 (2,1,2,10,1,'2024-08-04 11:01:09','2024-08-04 04:01:09',NULL);
 
@@ -97,7 +97,7 @@ CREATE TABLE `jadwal_h` (
 
 /*Data for the table `jadwal_h` */
 
-insert  into `jadwal_h`(`id_jadwal_h`,`id_cabang`,`id_jadwal_ibadah`,`tanggal_jadwal`,`pic`,`status_jadwal_h`,`created_at`,`updated_at`,`deleted_at`) values 
+insert  into `jadwal_h`(`id_jadwal_h`,`id_cabang`,`id_jadwal_ibadah`,`tanggal_jadwal`,`pic`,`status_jadwal_h`,`created_at`,`updated_at`,`deleted_at`) values
 (1,1,1,'2024-08-15',6,1,'2024-08-03 17:18:55','2024-08-03 17:18:55',NULL);
 
 /*Table structure for table `jadwal_ibadah` */
@@ -118,7 +118,7 @@ CREATE TABLE `jadwal_ibadah` (
 
 /*Data for the table `jadwal_ibadah` */
 
-insert  into `jadwal_ibadah`(`id_jadwal_ibadah`,`jam_stand_by`,`jam_mulai`,`jam_akhir`,`status_jadwal_ibadah`,`created_at`,`updated_at`,`deleted_at`) values 
+insert  into `jadwal_ibadah`(`id_jadwal_ibadah`,`jam_stand_by`,`jam_mulai`,`jam_akhir`,`status_jadwal_ibadah`,`created_at`,`updated_at`,`deleted_at`) values
 (1,'05:00','06:00','08:00',1,'2024-08-04 00:36:05','2024-08-03 17:36:05',NULL);
 
 /*Table structure for table `tag` */
@@ -137,7 +137,7 @@ CREATE TABLE `tag` (
 
 /*Data for the table `tag` */
 
-insert  into `tag`(`id_tag`,`nama_tag`,`status_tag`,`created_at`,`updated_at`,`deleted_at`) values 
+insert  into `tag`(`id_tag`,`nama_tag`,`status_tag`,`created_at`,`updated_at`,`deleted_at`) values
 (1,'PIc',1,'2024-08-02 14:03:47','2024-08-02 07:03:47',NULL),
 (2,'Anggota',1,'2024-08-02 07:03:37','2024-08-02 07:03:37',NULL);
 
@@ -193,7 +193,7 @@ CREATE TABLE `user_tag` (
 
 /*Data for the table `user_tag` */
 
-insert  into `user_tag`(`id_user_tag`,`id_user`,`id_tag`,`status_user_tag`,`created_at`,`updated_at`,`deleted_at`) values 
+insert  into `user_tag`(`id_user_tag`,`id_user`,`id_tag`,`status_user_tag`,`created_at`,`updated_at`,`deleted_at`) values
 (1,6,1,0,'2024-09-30 21:23:25','2024-09-30 14:23:25',NULL),
 (2,6,2,1,'2024-08-02 16:45:27','2024-08-02 09:45:27',NULL);
 
@@ -230,7 +230,7 @@ CREATE TABLE `users` (
 
 /*Data for the table `users` */
 
-insert  into `users`(`id`,`nama_lengkap`,`email`,`alamat`,`jenis_kelamin`,`tempat_lahir`,`tanggal_lahir`,`nij`,`telp`,`kesibukan`,`nomor_cg`,`posisi_cg`,`status_user`,`nama_pemimpin`,`telp_pemimpin`,`role`,`email_verified_at`,`password`,`remember_token`,`created_at`,`updated_at`,`deleted_at`) values 
+insert  into `users`(`id`,`nama_lengkap`,`email`,`alamat`,`jenis_kelamin`,`tempat_lahir`,`tanggal_lahir`,`nij`,`telp`,`kesibukan`,`nomor_cg`,`posisi_cg`,`status_user`,`nama_pemimpin`,`telp_pemimpin`,`role`,`email_verified_at`,`password`,`remember_token`,`created_at`,`updated_at`,`deleted_at`) values
 (1,'Super Admin','super@super.com',NULL,0,NULL,NULL,'','','','0',NULL,1,NULL,NULL,0,NULL,'$2y$10$MFbjuLrLhokQspUhbG.Sh.G0X5DLkAU8xTdlrmT9fwe327.9/MwLS',NULL,NULL,NULL,NULL),
 (6,'Hansul Santusu','a@a.com','Jl. Ngagel',1,'Semarang','1999-03-12','12380971203','+6276128312','Kuliah','12312312','Pemimpin',1,'Tokek','+6276128312',1,NULL,'$2y$10$rLHyqP6L03fcE82ofQtSo.juluP0bI6LW6KKRu/ifGc.gGdeEQkeG',NULL,'2024-07-06 09:05:34','2024-08-02 03:01:06',NULL),
 (10,'Tokek 123','b@b.com','oaisjdoasdj',0,NULL,'2024-04-23','198273102370','01283192381238','Bekerja','99','Anggota',1,'LEad a','08231928312',1,NULL,'$2y$10$z4sLIFFYk3.bJtPi5ASHe.RMgWE0fX6byKYfqu6a1fBhejp5Hbq8S',NULL,'2024-08-04 03:57:51','2024-08-04 03:57:51',NULL);

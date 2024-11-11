@@ -3,7 +3,7 @@
     <div class="main">
         <div class="container">
             <div class="row">
-                <div class="col-md-10">
+                <div class="col-md-8">
                     <h2>Data Volunteer</h2>
                 </div>
                 <div class="col-md-2">
@@ -11,6 +11,15 @@
                         Tambah Volunteer
                     </button>
                 </div>
+                <div class="col-md-2">
+                    <form action="{{ route('user.excel_store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <label for="file">Upload User Excel File</label>
+                        <input type="file" name="file" required>
+                        <button type="submit">Import Users</button>
+                    </form>
+                </div>
+
             </div>
             <table id="tabelUser" class="table table-striped table-bordered">
                 <thead>
