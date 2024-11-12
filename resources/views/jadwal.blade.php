@@ -31,6 +31,7 @@
                   <tr>
                     <th>No.</th>
                     <th>Cabang</th>
+                    <th>Nama Ibadah</th>
                     <th>Tanggal</th>
                     <th>Stand By</th>
                     <th>Jam</th>
@@ -49,6 +50,7 @@
                             <input type="hidden" name="nama_bagian" value="{{$item["pic"] }}">
                             <td>{{ $loop->index + 1 }}</td>
                             <td> {{$item->cabang->nama_cabang }}</td>
+                            <td> {{$item->jadwalIbadah->nama_ibadah }}</td>
                             <td> {{ date('d-m-Y', strtotime($item["tanggal_jadwal"])) }}</td>
                             <td> {{$item->jadwalIbadah->jam_stand_by }}</td>
                             <td> {{$item->jadwalIbadah->jam_mulai }} - {{$item->jadwalIbadah->jam_akhir }}</td>

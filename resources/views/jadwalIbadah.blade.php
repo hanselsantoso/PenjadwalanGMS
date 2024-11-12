@@ -16,6 +16,7 @@
                 <thead>
                   <tr>
                     <th>No.</th>
+                    <th>Nama Ibadah</th>
                     <th>Jam Stand By</th>
                     <th>Jam Mulai</th>
                     <th>Jam Akhir</th>
@@ -30,6 +31,7 @@
                         <input type="hidden" name="jadwal_mulai" value="{{$item["jam_mulai"] }}">
                         <input type="hidden" name="jadwal_akhir" value="{{$item["jam_akhir"] }}">
                         <td>{{ $loop->index + 1 }}</td>
+                        <td> {{$item["nama_ibadah"] }}</td>
                         <td> {{$item["jam_stand_by"] }}</td>
                         <td> {{$item["jam_mulai"] }}</td>
                         <td> {{$item["jam_akhir"] }}</td>
