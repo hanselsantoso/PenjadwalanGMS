@@ -11,7 +11,6 @@
 /.env.development
 /.env.testing
 /.env.production
-/.env.example
 Homestead.yaml
 Homestead.json
 npm-debug.log
