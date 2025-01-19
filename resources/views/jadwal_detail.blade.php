@@ -22,7 +22,7 @@
             <table id="tabelUser" class="table table-striped table-bordered">
                 <thead>
                   <tr>
-                    <th>No.</th>
+                    <th>No</th>
                     <th>Nama Anggota</th>
                     <th>Bagian</th>
                     <th>Action</th>

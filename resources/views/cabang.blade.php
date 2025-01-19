@@ -1,23 +1,24 @@
 @extends('layouts.app')
 @section('content')
     <div class="main">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-10">
+    <div class="container">
+            <div class="row align-items-center mb-2">
+                <div class="col-md-6">
                     <h2>Daftar Lokasi</h2>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-6 text-end">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createCabang">
-                        Tambah Lokasi
+                        Tambah Lokasi 
                     </button>
                 </div>
             </div>
+
             <table id="tabelUser" class="table table-striped table-bordered">
                 <thead>
                   <tr>
-                    <th>No</th>
-                    <th>Nama Lokasi </th>
-                    <th>Action</th>
+                    <th width="10%">No</th>
+                    <th width="70%">Nama Lokasi</th>
+                    <th width="20%">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -30,16 +31,19 @@
 
                             <td>
                                 {{-- <a href="" class="btn btn-primary">View</a> --}}
-                                <a href="#" class="btn btn-warning buttonEdit" data-toggle="modal" data-target="#updateCabang">Update</a>
+                                <a href="#" class="btn btn-warning buttonEdit w-100 mb-2" data-toggle="modal" data-target="#updateCabang">
+                                    Update
+                                </a>
+
                                 @if ($item->status_cabang == 1)
                                     <form action="/admin/cabang/deactivate/{{ $item["id_cabang"] }}" method="post">
                                         @csrf
-                                        <button type="submit" class="btn btn-danger">Suspend</button>
+                                        <button type="submit" class="btn btn-danger w-100">Suspend</button>
                                     </form>
                                 @else
                                     <form action="/admin/cabang/activate/{{ $item["id_cabang"] }}" method="post">
                                         @csrf
-                                        <button type="submit" class="btn btn-success">Aktifkan</button>
+                                        <button type="submit" class="btn btn-success w-100">Aktifkan</button>
                                     </form>
                                 @endif
                             </td>

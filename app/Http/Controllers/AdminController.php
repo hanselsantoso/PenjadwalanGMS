@@ -129,7 +129,7 @@ class AdminController extends Controller
         $user->status_user = 0;
         $user->save();
 
-        return redirect()->back()->with('success', 'Nasabah berhasil di-suspend.');
+        return redirect()->back()->with('success', 'User berhasil di-suspend.');
     }
 
     public function activate(Request $request, $id)
@@ -139,6 +139,6 @@ class AdminController extends Controller
         $user->status_user = 1;
         $user->save();
 
-        return redirect()->back()->with('success', 'Nasabah berhasil di-aktifkan.');
+        return redirect()->back()->with('success', 'User berhasil di-aktifkan.');
     }
 }

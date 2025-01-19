@@ -10,6 +10,7 @@ class TagController extends Controller
 {
     public function tag()
     {
+        // TODO: IDK WHY KOK CUMA STATUS 1 YG DIMUNCULIN
         $tag = Tag::where('status_tag', 1)->get();
         return view('tag', compact('tag'));
     }

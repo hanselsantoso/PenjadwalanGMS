@@ -10,7 +10,7 @@
             <table id="tabelUser" class="table table-striped table-bordered">
                 <thead>
                   <tr>
-                    <th>No.</th>
+                    <th>No</th>
                     <th>NIJ</th>
                     <th>Nama</th>
                     <th>No. Telp</th>

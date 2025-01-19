@@ -2,23 +2,24 @@
 @section('content')
     <div class="main">
         <div class="container">
-            <div class="row">
-                <div class="col-md-10">
+            <div class="row align-items-center mb-2">
+                <div class="col-md-6">
                     <h2>Daftar Tag</h2>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-6 text-end">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createTag">
-                        Tambah Tag
+                        Tambah Tag 
                     </button>
                 </div>
             </div>
+        
             <table id="tabelUser" class="table table-striped table-bordered">
                 <thead>
-                  <tr>
-                    <th>ID Tag</th>
-                    <th>Nama</th>
-                    <th>Action</th>
-                  </tr>
+                    <tr>
+                        <th width="10%">ID Tag</th>
+                        <th width="70%">Nama</th>
+                        <th width="20%">Action</th>
+                    </tr>
                 </thead>
                 <tbody>
 
@@ -31,16 +32,19 @@
 
                         <td>
                             {{-- <a href="" class="btn btn-primary">View</a> --}}
-                            <a href="#" class="btn btn-warning buttonEdit" data-toggle="modal" data-target="#updateTag">Update</a>
+                            <a href="#" class="btn btn-warning buttonEdit w-100 mb-2" data-toggle="modal" data-target="#updateTag">
+                                Update
+                            </a>
+
                             @if ($item->status_tag == 1)
                                 <form action="/admin/tag/deactivate/{{ $item["id_tag"] }}" method="post">
                                     @csrf
-                                    <button type="submit" class="btn btn-danger">Suspend</button>
+                                    <button type="submit" class="btn btn-danger w-100">Suspend</button>
                                 </form>
                             @else
                                 <form action="/admin/tag/activate/{{ $item["id_tag"] }}" method="post">
                                     @csrf
-                                    <button type="submit" class="btn btn-success">Aktifkan</button>
+                                    <button type="submit" class="btn btn-success w-100">Aktifkan</button>
                                 </form>
                             @endif
                         </td>

@@ -2,38 +2,43 @@
 @section('content')
     <div class="main">
         <div class="container">
-            <div class="row">
-                <div class="col-md-8">
-                    <h2>Data Volunteer</h2>
+            <div class="">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h2>Data Volunteer</h2>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createUser">
+                            Tambah Volunteer 
+                        </button>
+                    </div>
                 </div>
-                <div class="col-md-2">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createUser">
-                        Tambah Volunteer
-                    </button>
-                </div>
-                <div class="col-md-2">
+                <div class="col-md-6 mt-2">
                     <form action="{{ route('user.excel_store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <label for="file">Upload User Excel File</label>
-                        <input type="file" name="file" required>
-                        <button type="submit">Import Users</button>
+                        <div class="mb-2">
+                            <label for="file" class="form-label fs-4">Upload User Excel File</label>
+                            <input type="file" class="form-control" name="file" required>
+                        </div>
+                        <div class="mb-4">
+                            <button type="submit" class="btn btn-success">Import Users</button>
+                        </div>
                     </form>
                 </div>
 
             </div>
             <table id="tabelUser" class="table table-striped table-bordered">
                 <thead>
-                  <tr>
-                    <th>No.</th>
-                    <th>NIJ</th>
-                    <th>Nama</th>
-                    <th>Email</th>
-                    <th>No. Telp</th>
-                    <th>Action</th>
-                  </tr>
+                    <tr>
+                        <th>No</th>
+                        <th>NIJ</th>
+                        <th>Nama</th>
+                        <th>Email</th>
+                        <th>No. Telp</th>
+                        <th>Action</th>
+                    </tr>
                 </thead>
                 <tbody>
-
                     @foreach ($user as $item)
                         <tr>
                             <input type="hidden" name="idUser" value="{{$item["id"] }}">
@@ -50,23 +55,26 @@
                             <input type="hidden" name="posisi_cg" value="{{$item["posisi_cg"] }}">
                             <input type="hidden" name="nama_pemimpin" value="{{$item["nama_pemimpin"] }}">
                             <input type="hidden" name="telp_pemimpin" value="{{$item["telp_pemimpin"] }}">
-                            <td>{{ $loop->index + 1 }}</td>
+                            <td> {{ $loop->index + 1 }}</td>
                             <td> {{$item["nij"] }}</td>
                             <td> {{$item["nama_lengkap"] }}</td>
                             <td> {{$item["email"] }}</td>
                             <td> {{$item["telp"] }}</td>
                             <td>
                                 {{-- <a href="" class="btn btn-primary">View</a> --}}
-                                <a href="#" class="btn btn-warning buttonEdit" data-toggle="modal" data-target="#updateUser">Update</a>
+                                <a href="#" class="btn btn-warning buttonEdit w-100 mb-2" data-toggle="modal" data-target="#updateUser">
+                                    Update
+                                </a>
+
                                 @if ($item->status_user == 1)
                                     <form action="/admin/user/deactivate/{{ $item["id"] }}" method="post">
                                         @csrf
-                                        <button type="submit" class="btn btn-danger">Suspend</button>
+                                        <button type="submit" class="btn btn-danger w-100">Suspend</button>
                                     </form>
                                 @else
                                     <form action="/admin/user/activate/{{ $item["id"] }}" method="post">
                                         @csrf
-                                        <button type="submit" class="btn btn-success">Aktifkan</button>
+                                        <button type="submit" class="btn btn-success w-100">Aktifkan</button>
                                     </form>
                                 @endif
                             </td>
@@ -74,7 +82,7 @@
                     @endforeach
 
                 </tbody>
-              </table>
+            </table>
         </div>
     </div>
 
@@ -90,66 +98,66 @@
                 <form action="{{ route('user_store') }}" method="post">
                     @csrf
                     <div class="modal-body">
-                        <div class="form-group">
-                            <label for="nij">NIJ</label>
+                        <div class="form-group mb-1">
+                            <label for="nij">NIJ*</label>
                             <input type="text" class="form-control" name="nij" required>
                         </div>
-                        <div class="form-group">
-                            <label for="nama_lengkap">Nama Lengkap</label>
+                        <div class="form-group mb-1">
+                            <label for="nama_lengkap">Nama Lengkap*</label>
                             <input type="text" class="form-control" name="nama_lengkap" required>
                         </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
+                        <div class="form-group mb-1">
+                            <label for="email">Email*</label>
                             <input type="email" class="form-control" name="email" required>
                         </div>
-                        <div class="form-group">
-                            <label for="alamat">Alamat</label>
+                        <div class="form-group mb-1">
+                            <label for="alamat">Alamat*</label>
                             <input type="text" class="form-control" name="alamat" required>
                         </div>
-                        <div class="form-group">
-                            <label for="jenis_kelamin">Jenis Kelamin</label>
+                        <div class="form-group mb-1">
+                            <label for="jenis_kelamin">Jenis Kelamin*</label>
                             <select class="form-control" name="jenis_kelamin" required>
                                 <option value="0">Laki-laki</option>
                                 <option value="1">Perempuan</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label for="tempat_lahir">Tempat Lahir</label>
+                        <div class="form-group mb-1">
+                            <label for="tempat_lahir">Tempat Lahir*</label>
                             <input type="text" class="form-control" name="tempat_lahir" required>
                         </div>
-                        <div class="form-group">
-                            <label for="tanggal_lahir">Tanggal Lahir [bug]</label>
+                        <div class="form-group mb-1">
+                            <label for="tanggal_lahir">Tanggal Lahir* [bug]</label>
                             <input type="text" class="form-control datepicker" id="tglLahir" name="tanggal_lahir" required>
                         </div>
-                        <div class="form-group">
-                            <label for="telp">No. Telp</label>
+                        <div class="form-group mb-1">
+                            <label for="telp">No. Telp*</label>
                             <input type="text" class="form-control" name="telp" required>
                         </div>
-                        <div class="form-group">
-                            <label for="kesibukan">Kesibukan</label>
+                        <div class="form-group mb-1">
+                            <label for="kesibukan">Kesibukan*</label>
                             <select class="form-control" name="kesibukan" required>
                                 <option value="Bekerja">Bekerja</option>
                                 <option value="Kuliah">Kuliah</option>
                                 <option value="Lainnya">Lainnya</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label for="nomor_cg">Nomor CG</label>
+                        <div class="form-group mb-1">
+                            <label for="nomor_cg">Nomor CG*</label>
                             <input type="text" class="form-control" name="nomor_cg" required>
                         </div>
-                        <div class="form-group">
-                            <label for="posisi_cg">Posisi CG</label>
+                        <div class="form-group mb-1">
+                            <label for="posisi_cg">Posisi CG*</label>
                             <select class="form-control" name="posisi_cg" required>
                                 <option value="Anggota">Anggota</option>
                                 <option value="Pemimpin">Pemimpin</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label for="nama_pemimpin">Nama Pemimpin</label>
+                        <div class="form-group mb-1">
+                            <label for="nama_pemimpin">Nama Pemimpin*</label>
                             <input type="text" class="form-control" name="nama_pemimpin" required>
                         </div>
-                        <div class="form-group">
-                            <label for="telp_pemimpin">No. Telp Pemimpin</label>
+                        <div class="form-group mb-1">
+                            <label for="telp_pemimpin">No. Telp Pemimpin*</label>
                             <input type="text" class="form-control" name="telp_pemimpin" required>
                         </div>
                     </div>
@@ -177,42 +185,42 @@
                     @csrf
                     <input type="hidden" name="idUser">
                     <div class="modal-body">
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="nij">NIJ</label>
                             <input type="text" class="form-control" name="nij" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="nama_lengkap">Nama Lengkap</label>
                             <input type="text" class="form-control" name="nama_lengkap" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="email">Email</label>
                             <input type="email" class="form-control" name="email" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="alamat">Alamat</label>
                             <input type="text" class="form-control" name="alamat" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="jenis_kelamin">Jenis Kelamin</label>
                             <select class="form-control" name="jenis_kelamin" required>
                                 <option value="0">Laki-laki</option>
                                 <option value="1">Perempuan</option>
                             </select>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="tempat_lahir">Tempat Lahir</label>
                             <input type="text" class="form-control" name="tempat_lahir" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="tanggal_lahir">Tanggal Lahir</label>
                             <input type="text" class="form-control" id="tglLahirUpdate" name="tanggal_lahir" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="telp">No. Telp</label>
                             <input type="text" class="form-control" name="telp" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="kesibukan">Kesibukan</label>
                             <select class="form-control" name="kesibukan" required>
                                 <option value="Bekerja">Bekerja</option>
@@ -220,22 +228,22 @@
                                 <option value="Lainnya">Lainnya</option>
                             </select>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="nomor_cg">Nomor CG</label>
                             <input type="text" class="form-control" name="nomor_cg" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="posisi_cg">Posisi CG</label>
                             <select class="form-control" name="posisi_cg" required>
                                 <option value="Anggota">Anggota</option>
                                 <option value="Pemimpin">Pemimpin</option>
                             </select>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="nama_pemimpin">Nama Pemimpin</label>
                             <input type="text" class="form-control" name="nama_pemimpin" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="telp_pemimpin">No. Telp Pemimpin</label>
                             <input type="text" class="form-control" name="telp_pemimpin" required>
                         </div>
