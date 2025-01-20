@@ -23,6 +23,6 @@ class GradingController extends Controller
         $user->grade = $request->grade;
         $user->save();
 
-        return redirect()->route('grading_index')->with('success', 'User grade updated.');
+        return redirect()->route('grading_index')->with('success', 'Grade user berhasil diperbarui.');
     }
 }

@@ -13,14 +13,15 @@
                         </button>
                     </div>
                 </div>
-                <div class="col-md-6 mt-2">
+
+                <div class="col-md p-2 px-3 mt-2 mb-3 shadow-sm rounded bg-light">                    
                     <form action="{{ route('user.excel_store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-2">
                             <label for="file" class="form-label fs-4">Upload User Excel File</label>
                             <input type="file" class="form-control" name="file" required>
                         </div>
-                        <div class="mb-4">
+                        <div class="mb-2">
                             <button type="submit" class="btn btn-success">Import Users</button>
                         </div>
                     </form>
@@ -35,6 +36,7 @@
                         <th>Nama</th>
                         <th>Email</th>
                         <th>No. Telp</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -60,6 +62,7 @@
                             <td> {{$item["nama_lengkap"] }}</td>
                             <td> {{$item["email"] }}</td>
                             <td> {{$item["telp"] }}</td>
+                            <td> {{$item["status_user"] == 1 ? 'Aktif' : 'Tidak Aktif' }}</td>
                             <td>
                                 {{-- <a href="" class="btn btn-primary">View</a> --}}
                                 <a href="#" class="btn btn-warning buttonEdit w-100 mb-2" data-toggle="modal" data-target="#updateUser">
@@ -186,42 +189,42 @@
                     <input type="hidden" name="idUser">
                     <div class="modal-body">
                         <div class="form-group mb-1">
-                            <label for="nij">NIJ</label>
+                            <label for="nij">NIJ*</label>
                             <input type="text" class="form-control" name="nij" required>
                         </div>
                         <div class="form-group mb-1">
-                            <label for="nama_lengkap">Nama Lengkap</label>
+                            <label for="nama_lengkap">Nama Lengkap*</label>
                             <input type="text" class="form-control" name="nama_lengkap" required>
                         </div>
                         <div class="form-group mb-1">
-                            <label for="email">Email</label>
+                            <label for="email">Email*</label>
                             <input type="email" class="form-control" name="email" required>
                         </div>
                         <div class="form-group mb-1">
-                            <label for="alamat">Alamat</label>
+                            <label for="alamat">Alamat*</label>
                             <input type="text" class="form-control" name="alamat" required>
                         </div>
                         <div class="form-group mb-1">
-                            <label for="jenis_kelamin">Jenis Kelamin</label>
+                            <label for="jenis_kelamin">Jenis Kelamin*</label>
                             <select class="form-control" name="jenis_kelamin" required>
                                 <option value="0">Laki-laki</option>
                                 <option value="1">Perempuan</option>
                             </select>
                         </div>
                         <div class="form-group mb-1">
-                            <label for="tempat_lahir">Tempat Lahir</label>
+                            <label for="tempat_lahir">Tempat Lahir*</label>
                             <input type="text" class="form-control" name="tempat_lahir" required>
                         </div>
                         <div class="form-group mb-1">
-                            <label for="tanggal_lahir">Tanggal Lahir</label>
+                            <label for="tanggal_lahir">Tanggal Lahir*</label>
                             <input type="text" class="form-control" id="tglLahirUpdate" name="tanggal_lahir" required>
                         </div>
                         <div class="form-group mb-1">
-                            <label for="telp">No. Telp</label>
+                            <label for="telp">No. Telp*</label>
                             <input type="text" class="form-control" name="telp" required>
                         </div>
                         <div class="form-group mb-1">
-                            <label for="kesibukan">Kesibukan</label>
+                            <label for="kesibukan">Kesibukan*</label>
                             <select class="form-control" name="kesibukan" required>
                                 <option value="Bekerja">Bekerja</option>
                                 <option value="Kuliah">Kuliah</option>
@@ -229,22 +232,22 @@
                             </select>
                         </div>
                         <div class="form-group mb-1">
-                            <label for="nomor_cg">Nomor CG</label>
+                            <label for="nomor_cg">Nomor CG*</label>
                             <input type="text" class="form-control" name="nomor_cg" required>
                         </div>
                         <div class="form-group mb-1">
-                            <label for="posisi_cg">Posisi CG</label>
+                            <label for="posisi_cg">Posisi CG*</label>
                             <select class="form-control" name="posisi_cg" required>
                                 <option value="Anggota">Anggota</option>
                                 <option value="Pemimpin">Pemimpin</option>
                             </select>
                         </div>
                         <div class="form-group mb-1">
-                            <label for="nama_pemimpin">Nama Pemimpin</label>
+                            <label for="nama_pemimpin">Nama Pemimpin*</label>
                             <input type="text" class="form-control" name="nama_pemimpin" required>
                         </div>
                         <div class="form-group mb-1">
-                            <label for="telp_pemimpin">No. Telp Pemimpin</label>
+                            <label for="telp_pemimpin">No. Telp Pemimpin*</label>
                             <input type="text" class="form-control" name="telp_pemimpin" required>
                         </div>
                     </div>

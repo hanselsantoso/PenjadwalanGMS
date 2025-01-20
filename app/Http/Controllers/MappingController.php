@@ -41,7 +41,7 @@ class MappingController extends Controller
         //     $mapping->save();
         // }
 
-        return redirect()->route('mapping_index')->with('success', 'Mapping created.');
+        return redirect()->route('mapping_index')->with('success', 'Mapping berhasil dibuat.');
     }
 
     public function update(Request $request)
@@ -58,11 +58,9 @@ class MappingController extends Controller
             $mapping->id_user = $request->user;
             $mapping->id_tag = $request->tags;
             $mapping->save();
-            // dd($mapping);
-
-            return redirect()->route('mapping_index')->with('success', 'Mapping updated.');
+            return redirect()->route('mapping_index')->with('success', 'Mapping berhasil diperbarui.');
         // } catch (\Exception $e) {
-        //     return redirect()->route('mapping_index')->with('error', 'An error occurred while updating the mapping.');
+        //     return redirect()->route('mapping_index')->with('error', 'Terjadi kesalahan saat memperbarui mapping.');
         // }
     }
 
@@ -73,9 +71,9 @@ class MappingController extends Controller
             $mapping->status_user_tag = 0;
             $mapping->save();
 
-            return redirect()->route('mapping_index')->with('success', 'Mapping deactivated.');
+            return redirect()->route('mapping_index')->with('success', 'Mapping berhasil dinonaktifkan.');
         } catch (\Exception $e) {
-            return redirect()->route('mapping_index')->with('error', 'An error occurred while deactivating the mapping.');
+            return redirect()->route('mapping_index')->with('error', 'Terjadi kesalahan saat menonaktifkan mapping.');
         }
     }
 
@@ -86,9 +84,9 @@ class MappingController extends Controller
             $mapping->status_user_tag = 1;
             $mapping->save();
 
-            return redirect()->route('mapping_index')->with('success', 'Mapping activated.');
+            return redirect()->route('mapping_index')->with('success', 'Mapping berhasil diaktifkan.');
         } catch (\Exception $e) {
-            return redirect()->route('mapping_index')->with('error', 'An error occurred while activating the mapping.');
+            return redirect()->route('mapping_index')->with('error', 'Terjadi kesalahan saat mengaktifkan mapping.');
         }
     }
 

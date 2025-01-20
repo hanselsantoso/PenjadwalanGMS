@@ -13,7 +13,8 @@
                 </div>
             </div>
         
-            <table id="tabelUser" class="table table-striped table-bordered">
+            <h4>Tag Aktif</h4>
+            <table id="tabelUserActive" class="table table-striped table-bordered">
                 <thead>
                     <tr>
                         <th width="10%">ID Tag</th>
@@ -22,8 +23,8 @@
                     </tr>
                 </thead>
                 <tbody>
-
                     @foreach ($tag as $item)
+                    @if ($item->status_tag == 1)
                     <tr>
                         <input type="hidden" name="id_tag" value="{{$item["id_tag"] }}">
                         <input type="hidden" name="nama_tag" value="{{$item["nama_tag"] }}">
@@ -36,23 +37,53 @@
                                 Update
                             </a>
 
-                            @if ($item->status_tag == 1)
-                                <form action="/admin/tag/deactivate/{{ $item["id_tag"] }}" method="post">
-                                    @csrf
-                                    <button type="submit" class="btn btn-danger w-100">Suspend</button>
-                                </form>
-                            @else
-                                <form action="/admin/tag/activate/{{ $item["id_tag"] }}" method="post">
-                                    @csrf
-                                    <button type="submit" class="btn btn-success w-100">Aktifkan</button>
-                                </form>
-                            @endif
+                            <form action="/admin/tag/deactivate/{{ $item["id_tag"] }}" method="post">
+                                @csrf
+                                <button type="submit" class="btn btn-danger w-100">Suspend</button>
+                            </form>
                         </td>
                     </tr>
-                @endforeach
-
+                    @endif
+                    @endforeach
                 </tbody>
-              </table>
+            </table>
+
+            <br>
+            <hr/>
+            <h4>Tag Deaktif</h4>
+            <table id="tabelUserDeactive" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th width="10%">ID Tag</th>
+                        <th width="70%">Nama</th>
+                        <th width="20%">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($tag as $item)
+                    @if ($item->status_tag == 0)
+                    <tr>
+                        <input type="hidden" name="id_tag" value="{{$item["id_tag"] }}">
+                        <input type="hidden" name="nama_tag" value="{{$item["nama_tag"] }}">
+                        <td>{{ $loop->index + 1 }}</td>
+                        <td> {{$item["nama_tag"] }}</td>
+
+                        <td>
+                            {{-- <a href="" class="btn btn-primary">View</a> --}}
+                            <a href="#" class="btn btn-warning buttonEdit w-100 mb-2" data-toggle="modal" data-target="#updateTag">
+                                Update
+                            </a>
+
+                            <form action="/admin/tag/activate/{{ $item["id_tag"] }}" method="post">
+                                @csrf
+                                <button type="submit" class="btn btn-success w-100">Aktifkan</button>
+                            </form>
+                        </td>
+                    </tr>
+                    @endif
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
     <!-- Create User Modal -->
@@ -118,7 +149,12 @@
 
 @section('script')
 <script>
-    $('#tabelUser').DataTable({
+    $('#tabelUserActive').DataTable({
+        "paging": true,
+        "pageLength": 10,
+    });
+
+    $('#tabelUserDeactive').DataTable({
         "paging": true,
         "pageLength": 10,
     });

@@ -41,7 +41,7 @@ class JadwalController extends Controller
         $jadwal->status_jadwal_h = 1;
         $jadwal->save();
 
-        return redirect()->route('jadwal_index')->with('success', 'Jadwal created.');
+        return redirect()->route('jadwal_index')->with('success', 'Jadwal berhasil dibuat.');
     }
 
     public function downloadSchedule(Request $request)

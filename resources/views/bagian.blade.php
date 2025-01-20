@@ -15,20 +15,19 @@
 
             <table id="tabelUser" class="table table-striped table-bordered">
                 <thead>
-                  <tr>
-                    <th width="10%">No</th>
-                    <th width="70%">Nama Bagian</th>
-                    <th width="20%">Action</th>
-                  </tr>
+                    <tr>
+                        <th width="10%">No</th>
+                        <th width="70%">Nama Bagian</th>
+                        <th width="20%">Action</th>
+                    </tr>
                 </thead>
                 <tbody>
-
                     @foreach ($bagian as $item)
                     <tr>
                         <input type="hidden" name="id_bagian" value="{{$item["id_bagian"] }}">
                         <input type="hidden" name="nama_bagian" value="{{$item["nama_bagian"] }}">
-                        <td>{{ $loop->index + 1 }}</td>
-                        <td> {{$item["nama_bagian"] }}</td>
+                        <td> {{ $loop->index + 1 }}</td>
+                        <td> {{ $item["nama_bagian"] }}</td>
 
                         <td>
                             <a href="#" class="btn btn-warning buttonEdit w-100 mb-2" data-toggle="modal" data-target="#updateBagian">
@@ -51,7 +50,7 @@
                 @endforeach
 
                 </tbody>
-              </table>
+            </table>
         </div>
     </div>
     <!-- Create User Modal -->

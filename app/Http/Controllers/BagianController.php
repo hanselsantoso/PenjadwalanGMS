@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 class BagianController extends Controller
 {
     function bagian() {
-        // $bagian = Bagian::where('status_bagian', 1)->get();
         $bagian = Bagian::all();
         return view('bagian', compact('bagian'));
     }
@@ -23,8 +22,7 @@ class BagianController extends Controller
         $bagian->nama_bagian = $request->nama_bagian;
         $bagian->status_bagian = 1;
         $bagian->save();
-
-        return redirect()->route('bagian_index')->with('success', 'Bagian created.');
+        return redirect()->route('bagian_index')->with('success', 'Bagian berhasil ditambahkan.');
     }
 
     function update(Request $request) {
@@ -37,7 +35,7 @@ class BagianController extends Controller
         $bagian->nama_bagian = $request->nama_bagian;
         $bagian->save();
 
-        return redirect()->route('bagian_index')->with('success', 'Bagian updated.');
+        return redirect()->route('bagian_index')->with('success', 'Bagian berhasil diperbarui.');
     }
 
     function deactivate($id) {
@@ -45,7 +43,7 @@ class BagianController extends Controller
         $bagian->status_bagian = false;
         $bagian->save();
 
-        return redirect()->route('bagian_index')->with('success', 'Bagian deactivated.');
+        return redirect()->route('bagian_index')->with('success', 'Bagian berhasil dinonaktifkan.');
     }
 
     function activate($id) {
@@ -53,6 +51,6 @@ class BagianController extends Controller
         $bagian->status_bagian = true;
         $bagian->save();
 
-        return redirect()->route('bagian_index')->with('success', 'Bagian activated.');
+        return redirect()->route('bagian_index')->with('success', 'Bagian berhasil diaktifkan.');
     }
 }

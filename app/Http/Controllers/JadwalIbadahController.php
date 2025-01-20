@@ -25,7 +25,7 @@ class JadwalIbadahController extends Controller
         $jadwalIbadah->jam_akhir = $request->jam_akhir;
         $jadwalIbadah->status_jadwal_ibadah = 1;
         $jadwalIbadah->save();
-        return redirect()->route('jadwal_ibadah_index')->with('success', 'Jadwal Ibadah created.');
+        return redirect()->route('jadwal_ibadah_index')->with('success', 'Jadwal Ibadah berhasil ditambahkan.');
     }
 
     public function update(Request $request)
@@ -37,7 +37,7 @@ class JadwalIbadahController extends Controller
         $jadwalIbadah->jam_mulai = $request->jam_mulai;
         $jadwalIbadah->jam_akhir = $request->jam_akhir;
         $jadwalIbadah->save();
-        return redirect()->route('jadwal_ibadah_index')->with('success', 'Jadwal Ibadah updated.');
+        return redirect()->route('jadwal_ibadah_index')->with('success', 'Jadwal Ibadah berhasil diperbarui.');
     }
 
     public function deactivate($id)
@@ -45,7 +45,7 @@ class JadwalIbadahController extends Controller
         $jadwalIbadah = JadwalIbadah::find($id);
         $jadwalIbadah->status_jadwal_ibadah = 0;
         $jadwalIbadah->save();
-        return redirect()->route('jadwal_ibadah_index')->with('success', 'Jadwal Ibadah deactivated.');
+        return redirect()->route('jadwal_ibadah_index')->with('success', 'Jadwal Ibadah berhasil dinonaktifkan.');
     }
 
     public function activate($id)
@@ -53,6 +53,6 @@ class JadwalIbadahController extends Controller
         $jadwalIbadah = JadwalIbadah::find($id);
         $jadwalIbadah->status_jadwal_ibadah = 1;
         $jadwalIbadah->save();
-        return redirect()->route('jadwal_ibadah_index')->with('success', 'Jadwal Ibadah activated.');
+        return redirect()->route('jadwal_ibadah_index')->with('success', 'Jadwal Ibadah berhasil diaktifkan.');
     }
 }

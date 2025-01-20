@@ -38,11 +38,55 @@ class AdminController extends Controller
         ]));
     }
 
+    public function doValidate(Request $request, String $type) {
+        $request->validate([
+            'email' => $type == 'UPDATE' ? 'required' : 'required|unique:users,email',
+            'nij' => 'required|string|max:255',
+            'nama_lengkap' => 'required|string|max:255', 
+            'alamat' => 'required|string|max:255',
+            'jenis_kelamin' => 'required|boolean',
+            'tempat_lahir' => 'required|string|max:255',
+            'tanggal_lahir' => 'required|date_format:d-m-Y',
+            'telp' => 'required|string|max:50',
+            'kesibukan' => 'required|string|in:Bekerja,Kuliah,Lainnya',
+            'nomor_cg' => 'required|string|max:10',
+            'posisi_cg' => 'required|string|in:Anggota,Pemimpin', 
+            'nama_pemimpin' => 'required|string|max:255',
+            'telp_pemimpin' => 'required|string|max:50',
+        ], [
+            'email.required' => 'Email wajib diisi',
+            'email.unique' => 'Email sudah terdaftar',
+            'nij.required' => 'NIJ wajib diisi', 
+            'nij.max' => 'NIJ maksimal 255 karakter',
+            'nama_lengkap.required' => 'Nama lengkap wajib diisi',
+            'nama_lengkap.max' => 'Nama lengkap maksimal 255 karakter',
+            'alamat.required' => 'Alamat wajib diisi',
+            'alamat.max' => 'Alamat maksimal 255 karakter',
+            'jenis_kelamin.required' => 'Jenis kelamin wajib diisi',
+            'jenis_kelamin.boolean' => 'Jenis kelamin tidak valid',
+            'tempat_lahir.required' => 'Tempat lahir wajib diisi',
+            'tempat_lahir.max' => 'Tempat lahir maksimal 255 karakter', 
+            'tanggal_lahir.required' => 'Tanggal lahir wajib diisi',
+            'tanggal_lahir.date_format' => 'Format tanggal lahir tidak valid (dd-mm-yyyy)',
+            'telp.required' => 'No telepon wajib diisi',
+            'telp.max' => 'No telepon maksimal 50 karakter',
+            'kesibukan.required' => 'Kesibukan wajib diisi',
+            'kesibukan.in' => 'Kesibukan tidak valid',
+            'nomor_cg.required' => 'Nomor CG wajib diisi',
+            'nomor_cg.numeric' => 'Nomor CG harus berupa angka',
+            'nomor_cg.max' => 'Nomor CG maksimal 50',
+            'posisi_cg.required' => 'Posisi CG wajib diisi',
+            'posisi_cg.in' => 'Posisi CG tidak valid',
+            'nama_pemimpin.required' => 'Nama pemimpin wajib diisi',
+            'nama_pemimpin.max' => 'Nama pemimpin maksimal 255 karakter',
+            'telp_pemimpin.required' => 'No telepon pemimpin wajib diisi',
+            'telp_pemimpin.max' => 'No telepon pemimpin maksimal 50 karakter'
+        ]);
+    }
+
     public function store(Request $request)
     {
-        $request->validate([
-            'email' => 'unique:users,email',
-        ]);
+        $this->doValidate($request);
         try {
             $id_tags = $request->id_tag;
             // Create a new User with role 1
@@ -52,8 +96,8 @@ class AdminController extends Controller
             $user->alamat = $request->input('alamat');
             $user->kesibukan = $request->input('kesibukan');
             $user->email = $request->input('email');
-            $user->tempat_lahir = $request->input('tempatLahir');
-            $user->tanggal_lahir =  Carbon::createFromFormat('d-m-Y', $request->tanggal_lahir)->format('Y-m-d');
+            $user->tempat_lahir = $request->input('tempat_lahir');
+            $user->tanggal_lahir = Carbon::createFromFormat('d-m-Y', $request->tanggal_lahir)->format('Y-m-d');
             $user->jenis_kelamin = $request->input('jenis_kelamin');
             $user->telp = $request->input('telp');
             $user->nomor_cg = $request->input('nomor_cg');
@@ -87,7 +131,7 @@ class AdminController extends Controller
         try {
             Excel::import(new UsersImport, $request->file('file'));
 
-            return redirect()->back()->with('success', 'Users have been successfully imported.');
+            return redirect()->back()->with('success', 'Data user berhasil diimport.');
         } catch (\Exception $e) {
             dd($e->getMessage());
             return redirect()->back()->with('error', 'There was an error during the import: ' . $e->getMessage());
@@ -96,6 +140,7 @@ class AdminController extends Controller
 
     public function update(Request $request)
     {
+        $this->doValidate($request, 'UPDATE');
         // dd($request->all());
         // Update user data
         try {
@@ -105,7 +150,7 @@ class AdminController extends Controller
             $user->alamat = $request->input('alamat');
             $user->kesibukan = $request->input('kesibukan');
             $user->email = $request->input('email');
-            $user->tempat_lahir = $request->input('tempatLahir');
+            $user->tempat_lahir = $request->input('tempat_lahir');
             $user->tanggal_lahir =  Carbon::createFromFormat('d-m-Y', $request->tanggal_lahir)->format('Y-m-d');
             $user->jenis_kelamin = $request->input('jenis_kelamin');
             $user->telp = $request->input('telp');

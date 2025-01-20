@@ -52,17 +52,17 @@ class TimPelayananController extends Controller
                     ]);
                 }
 
-                return redirect()->route('tim_index')->with('success', 'Tim created.');
+                return redirect()->route('tim_index')->with('success', 'Tim berhasil dibuat.');
             });
 
         }
 
         catch (\Exception $e) {
-            return redirect()->route('tim_index')->with('error', 'Failed to create Tim: ' . $e->getMessage());
+            return redirect()->route('tim_index')->with('error', 'Gagal membuat Tim: ' . $e->getMessage());
         }
 
 
-        return redirect()->route('tim_index')->with('success', 'Tim created.');
+        return redirect()->route('tim_index')->with('success', 'Tim berhasil dibuat.');
     }
 
     function store_member(Request $request) {
@@ -81,11 +81,11 @@ class TimPelayananController extends Controller
         }
 
         catch (\Exception $e) {
-            return redirect()->route('tim_index')->with('error', 'Failed to create Tim: ' . $e->getMessage());
+            return redirect()->route('tim_index')->with('error', 'Gagal membuat Tim: ' . $e->getMessage());
         }
 
 
-        return redirect()->route('tim_index')->with('success', 'Member added.');
+        return redirect()->route('tim_index')->with('success', 'Anggota berhasil ditambahkan.');
     }
 
     function updateMember(Request $request) {
@@ -107,7 +107,7 @@ class TimPelayananController extends Controller
         User::where('id', $volunteerLama)->update(['role' => 1]);
         User::where('id', $volunteerBaru)->update(['role' => 3]);
 
-        return redirect()->route('tim_index')->with('success', 'Header updated.');
+        return redirect()->route('tim_index')->with('success', 'Header berhasil diperbarui.');
     }
 
     function updatePIC(Request $request) {
@@ -133,14 +133,14 @@ class TimPelayananController extends Controller
         User::where('id', $picLama)->update(['role' => 3]);
         User::where('id', $picBaru)->update(['role' => 2]);
 
-        return redirect()->route('tim_index')->with('success', 'Header updated.');
+        return redirect()->route('tim_index')->with('success', 'Header berhasil diperbarui.');
     }
 
     function deactivate($id, $id_user) {
         TimPelayanan_D::where('id_pelayanan_d', $id)->delete();
         User::where('id', $id_user)->update(['role' => 1]);
 
-        return redirect()->route('tim_index')->with('success', 'Member deactivated.');
+        return redirect()->route('tim_index')->with('success', 'Anggota berhasil dinonaktifkan.');
     }
 
     function activate($id) {
@@ -148,6 +148,6 @@ class TimPelayananController extends Controller
         // $bagian->status_bagian = true;
         // $bagian->save();
 
-        return redirect()->route('bagian_index')->with('success', 'Bagian activated.');
+        return redirect()->route('bagian_index')->with('success', 'Bagian berhasil diaktifkan.');
     }
 }

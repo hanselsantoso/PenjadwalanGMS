@@ -21,20 +21,19 @@ class SiteController extends Controller
         ]);
 
         $user = User::where('email', $request->email)->first();
-
         if (!$user) {
-            return redirect()->back()->withErrors(['email' => 'Email does not exist.']);
+            return redirect()->back()->withErrors(['email' => 'Email tidak ditemukan.']);
         }
 
         $user->password = bcrypt($request->password);
         $user->save();
 
-        return redirect()->back()->with('success', 'Password reset successfully.');
+        return redirect()->back()->with('success', 'Password berhasil direset.');
 
         $user = User::find($request->id);
         $user->password = bcrypt($request->password);
         $user->save();
 
-        return redirect()->back()->with('success', 'Password reset successfully.');
+        return redirect()->back()->with('success', 'Password berhasil direset.');
     }
 }

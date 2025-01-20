@@ -25,7 +25,7 @@ class CabangController extends Controller
         $cabang->status_cabang = 1;
         $cabang->save();
 
-        return redirect()->route('cabang_index')->with('success', 'Cabang created.');
+        return redirect()->route('cabang_index')->with('success', 'Lokasi berhasil ditambahkan.');
     }
 
     public function update(Request $request)
@@ -39,7 +39,7 @@ class CabangController extends Controller
         $cabang->nama_cabang = $request->nama_cabang;
         $cabang->save();
 
-        return redirect()->route('cabang_index')->with('success', 'Cabang updated.');
+        return redirect()->route('cabang_index')->with('success', 'Lokasi berhasil diperbarui.');
     }
 
     public function deactivate($id)
@@ -48,7 +48,7 @@ class CabangController extends Controller
         $cabang->status_cabang = false;
         $cabang->save();
 
-        return redirect()->route('cabang_index')->with('success', 'Cabang deactivated.');
+        return redirect()->route('cabang_index')->with('success', 'Lokasi berhasil dinonaktifkan.');
     }
 
     public function activate($id)
@@ -57,6 +57,6 @@ class CabangController extends Controller
         $cabang->status_cabang = true;
         $cabang->save();
 
-        return redirect()->route('cabang_index')->with('success', 'Cabang activated.');
+        return redirect()->route('cabang_index')->with('success', 'Lokasi berhasil diaktifkan.');
     }
 }

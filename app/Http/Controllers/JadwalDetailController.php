@@ -36,8 +36,7 @@ class JadwalDetailController extends Controller
         $jadwal->id_user = $request->user;
         $jadwal->status_jadwal_d = 1;
         $jadwal->save();
-
-        return redirect()->route('jadwal_detail_index', $request->jadwal)->with('success', 'Jadwal created.');
+        return redirect()->route('jadwal_detail_index', $request->jadwal)->with('success', 'Jadwal berhasil dibuat.');
     }
 
     public function update(Request $request)
@@ -55,7 +54,7 @@ class JadwalDetailController extends Controller
         $jadwal->id_user = $request->user;
         $jadwal->save();
 
-        return redirect()->back()->with('success', 'Jadwal updated.');
+        return redirect()->back()->with('success', 'Jadwal berhasil diperbarui.');
     }
 
     public function activate($id)
@@ -64,7 +63,7 @@ class JadwalDetailController extends Controller
         $jadwal->status_jadwal_d = 1;
         $jadwal->save();
 
-        return redirect()->route('jadwal_detail_index', $jadwal->id_jadwal_h)->with('success', 'Jadwal activated.');
+        return redirect()->route('jadwal_detail_index', $jadwal->id_jadwal_h)->with('success', 'Jadwal berhasil diaktifkan.');
     }
 
     public function deactivate($id)
@@ -73,7 +72,7 @@ class JadwalDetailController extends Controller
         $jadwal->status_jadwal_d = 0;
         $jadwal->save();
 
-        return redirect()->route('jadwal_detail_index', $jadwal->id_jadwal_h)->with('success', 'Jadwal deactivated.');
+        return redirect()->route('jadwal_detail_index', $jadwal->id_jadwal_h)->with('success', 'Jadwal berhasil dinonaktifkan.');
     }
 
     public function automation(Request $request)
@@ -159,8 +158,7 @@ class JadwalDetailController extends Controller
                 $assignedUsers->push($user->id);
             }
         }
-
-        return redirect()->route('jadwal_detail_index', $jadwalId)->with('success', 'Schedule automated with random assignments.');
+        return redirect()->route('jadwal_detail_index', $jadwalId)->with('success', 'Jadwal telah dibuat secara otomatis dengan penugasan acak.');
     }
 
 

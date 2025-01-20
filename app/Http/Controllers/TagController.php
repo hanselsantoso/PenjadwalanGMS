@@ -10,8 +10,7 @@ class TagController extends Controller
 {
     public function tag()
     {
-        // TODO: IDK WHY KOK CUMA STATUS 1 YG DIMUNCULIN
-        $tag = Tag::where('status_tag', 1)->get();
+        $tag = Tag::all();
         return view('tag', compact('tag'));
     }
 
@@ -25,8 +24,7 @@ class TagController extends Controller
         $tag->nama_tag = $request->nama_tag;
         $tag->status_tag = 1;
         $tag->save();
-
-        return redirect()->route('tag_index')->with('success', 'Tag created.');
+        return redirect()->route('tag_index')->with('success', 'Tag berhasil ditambahkan.');
     }
 
     public function update(Request $request)
@@ -40,7 +38,7 @@ class TagController extends Controller
         $tag->nama_tag = $request->nama_tag;
         $tag->save();
 
-        return redirect()->route('tag_index')->with('success', 'Tag updated.');
+        return redirect()->route('tag_index')->with('success', 'Tag berhasil diperbarui.');
     }
 
     public function deactivate($id)
@@ -49,7 +47,7 @@ class TagController extends Controller
         $tag->status_tag = false;
         $tag->save();
 
-        return redirect()->route('tag_index')->with('success', 'Tag deactivated.');
+        return redirect()->route('tag_index')->with('success', 'Tag berhasil dinonaktifkan.');
     }
 
     public function activate($id)
@@ -58,7 +56,7 @@ class TagController extends Controller
         $tag->status_tag = true;
         $tag->save();
 
-        return redirect()->route('tag_index')->with('success', 'Tag activated.');
+        return redirect()->route('tag_index')->with('success', 'Tag berhasil diaktifkan.');
     }
 
 }

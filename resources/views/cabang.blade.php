@@ -15,19 +15,21 @@
 
             <table id="tabelUser" class="table table-striped table-bordered">
                 <thead>
-                  <tr>
-                    <th width="10%">No</th>
-                    <th width="70%">Nama Lokasi</th>
-                    <th width="20%">Action</th>
-                  </tr>
+                    <tr>
+                        <th width="10%">No</th>
+                        <th width="60%">Nama Lokasi</th>
+                        <th width="10%">Status</th>
+                        <th width="20%">Action</th>
+                    </tr>
                 </thead>
                 <tbody>
                     @foreach ($cabang as $item)
                         <tr>
                             <input type="hidden" name="id_cabang" value="{{$item["id_cabang"] }}">
                             <input type="hidden" name="nama_cabang" value="{{$item["nama_cabang"] }}">
-                            <td>{{ $loop->index + 1 }}</td>
+                            <td> {{ $loop->index + 1 }}</td>
                             <td> {{$item["nama_cabang"] }}</td>
+                            <td> {{$item["status_cabang"] == 1 ? 'Aktif' : 'Tidak Aktif' }}</td>
 
                             <td>
                                 {{-- <a href="" class="btn btn-primary">View</a> --}}
@@ -51,7 +53,7 @@
                     @endforeach
 
                 </tbody>
-              </table>
+            </table>
         </div>
     </div>
     <!-- Create User Modal -->

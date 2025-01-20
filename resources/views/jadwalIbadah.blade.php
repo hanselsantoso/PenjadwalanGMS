@@ -61,7 +61,21 @@
             </table>
         </div>
     </div>
+
     <!-- Create User Modal -->
+    @php
+    function generateTimeOptions() {
+        $options = [];
+        for ($hour = 0; $hour < 24; $hour++) {
+            $time1 = sprintf("%02d:00", $hour);
+            $time2 = sprintf("%02d:30", $hour);
+            $options[] = "<option value=\"{$time1}\">{$time1}</option>";
+            $options[] = "<option value=\"{$time2}\">{$time2}</option>";
+        }
+        $options[] = "<option value=\"24:00\">24:00</option>";
+        return implode("\n", $options);
+    }
+    @endphp
     <div class="modal fade" id="createJadwalIbadah">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -80,92 +94,20 @@
                         <div class="form-group mb-1">
                             <label for="nama_tag">Jam Stand By</label>
                             <select class="form-control" name="jam_stand_by" id="jam_stand_by">
-                                <option value="00:00">00:00</option>
-                                <option value="01:00">01:00</option>
-                                <option value="02:00">02:00</option>
-                                <option value="03:00">03:00</option>
-                                <option value="04:00">04:00</option>
-                                <option value="05:00">05:00</option>
-                                <option value="06:00">06:00</option>
-                                <option value="07:00">07:00</option>
-                                <option value="08:00">08:00</option>
-                                <option value="09:00">09:00</option>
-                                <option value="10:00">10:00</option>
-                                <option value="11:00">11:00</option>
-                                <option value="12:00">12:00</option>
-                                <option value="13:00">13:00</option>
-                                <option value="14:00">14:00</option>
-                                <option value="15:00">15:00</option>
-                                <option value="16:00">16:00</option>
-                                <option value="17:00">17:00</option>
-                                <option value="18:00">18:00</option>
-                                <option value="19:00">19:00</option>
-                                <option value="20:00">20:00</option>
-                                <option value="21:00">21:00</option>
-                                <option value="22:00">22:00</option>
-                                <option value="23:00">23:00</option>
-                                <option value="24:00">24:00</option>
+                                {!! generateTimeOptions() !!}
                             </select>
                         </div>
                         <div class="form-group mb-1">
                             <label for="nama_tag">Jam Ibadah Mulai</label>
                             <select class="form-control" name="jam_mulai" id="jam_mulai">
-                                <option value="00:00">00:00</option>
-                                <option value="01:00">01:00</option>
-                                <option value="02:00">02:00</option>
-                                <option value="03:00">03:00</option>
-                                <option value="04:00">04:00</option>
-                                <option value="05:00">05:00</option>
-                                <option value="06:00">06:00</option>
-                                <option value="07:00">07:00</option>
-                                <option value="08:00">08:00</option>
-                                <option value="09:00">09:00</option>
-                                <option value="10:00">10:00</option>
-                                <option value="11:00">11:00</option>
-                                <option value="12:00">12:00</option>
-                                <option value="13:00">13:00</option>
-                                <option value="14:00">14:00</option>
-                                <option value="15:00">15:00</option>
-                                <option value="16:00">16:00</option>
-                                <option value="17:00">17:00</option>
-                                <option value="18:00">18:00</option>
-                                <option value="19:00">19:00</option>
-                                <option value="20:00">20:00</option>
-                                <option value="21:00">21:00</option>
-                                <option value="22:00">22:00</option>
-                                <option value="23:00">23:00</option>
-                                <option value="24:00">24:00</option>
+                                {!! generateTimeOptions() !!}
                             </select>
                         </div>
 
                         <div class="form-group mb-1">
                             <label for="nama_tag">Jam Ibadah Selesai</label>
                             <select class="form-control" name="jam_akhir" id="jam_akhir">
-                                <option value="00:00">00:00</option>
-                                <option value="01:00">01:00</option>
-                                <option value="02:00">02:00</option>
-                                <option value="03:00">03:00</option>
-                                <option value="04:00">04:00</option>
-                                <option value="05:00">05:00</option>
-                                <option value="06:00">06:00</option>
-                                <option value="07:00">07:00</option>
-                                <option value="08:00">08:00</option>
-                                <option value="09:00">09:00</option>
-                                <option value="10:00">10:00</option>
-                                <option value="11:00">11:00</option>
-                                <option value="12:00">12:00</option>
-                                <option value="13:00">13:00</option>
-                                <option value="14:00">14:00</option>
-                                <option value="15:00">15:00</option>
-                                <option value="16:00">16:00</option>
-                                <option value="17:00">17:00</option>
-                                <option value="18:00">18:00</option>
-                                <option value="19:00">19:00</option>
-                                <option value="20:00">20:00</option>
-                                <option value="21:00">21:00</option>
-                                <option value="22:00">22:00</option>
-                                <option value="23:00">23:00</option>
-                                <option value="24:00">24:00</option>
+                                {!! generateTimeOptions() !!}
                             </select>
                         </div>
 
@@ -202,92 +144,20 @@
                             <div class="form-group mb-1">
                                 <label for="nama_tag">Jam Stand By</label>
                                 <select class="form-control" name="jam_stand_by" id="jam_stand_by">
-                                    <option value="00:00">00:00</option>
-                                    <option value="01:00">01:00</option>
-                                    <option value="02:00">02:00</option>
-                                    <option value="03:00">03:00</option>
-                                    <option value="04:00">04:00</option>
-                                    <option value="05:00">05:00</option>
-                                    <option value="06:00">06:00</option>
-                                    <option value="07:00">07:00</option>
-                                    <option value="08:00">08:00</option>
-                                    <option value="09:00">09:00</option>
-                                    <option value="10:00">10:00</option>
-                                    <option value="11:00">11:00</option>
-                                    <option value="12:00">12:00</option>
-                                    <option value="13:00">13:00</option>
-                                    <option value="14:00">14:00</option>
-                                    <option value="15:00">15:00</option>
-                                    <option value="16:00">16:00</option>
-                                    <option value="17:00">17:00</option>
-                                    <option value="18:00">18:00</option>
-                                    <option value="19:00">19:00</option>
-                                    <option value="20:00">20:00</option>
-                                    <option value="21:00">21:00</option>
-                                    <option value="22:00">22:00</option>
-                                    <option value="23:00">23:00</option>
-                                    <option value="24:00">24:00</option>
+                                    {!! generateTimeOptions() !!}
                                 </select>
                             </div>
                             <div class="form-group mb-1">
                                 <label for="nama_tag">Jam Ibadah Mulai</label>
                                 <select class="form-control" name="jam_mulai" id="jam_mulai">
-                                    <option value="00:00">00:00</option>
-                                    <option value="01:00">01:00</option>
-                                    <option value="02:00">02:00</option>
-                                    <option value="03:00">03:00</option>
-                                    <option value="04:00">04:00</option>
-                                    <option value="05:00">05:00</option>
-                                    <option value="06:00">06:00</option>
-                                    <option value="07:00">07:00</option>
-                                    <option value="08:00">08:00</option>
-                                    <option value="09:00">09:00</option>
-                                    <option value="10:00">10:00</option>
-                                    <option value="11:00">11:00</option>
-                                    <option value="12:00">12:00</option>
-                                    <option value="13:00">13:00</option>
-                                    <option value="14:00">14:00</option>
-                                    <option value="15:00">15:00</option>
-                                    <option value="16:00">16:00</option>
-                                    <option value="17:00">17:00</option>
-                                    <option value="18:00">18:00</option>
-                                    <option value="19:00">19:00</option>
-                                    <option value="20:00">20:00</option>
-                                    <option value="21:00">21:00</option>
-                                    <option value="22:00">22:00</option>
-                                    <option value="23:00">23:00</option>
-                                    <option value="24:00">24:00</option>
+                                    {!! generateTimeOptions() !!}
                                 </select>
                             </div>
 
                             <div class="form-group mb-1">
                                 <label for="nama_tag">Jam Ibadah Selesai</label>
                                 <select class="form-control" name="jam_akhir" id="jam_akhir">
-                                    <option value="00:00">00:00</option>
-                                    <option value="01:00">01:00</option>
-                                    <option value="02:00">02:00</option>
-                                    <option value="03:00">03:00</option>
-                                    <option value="04:00">04:00</option>
-                                    <option value="05:00">05:00</option>
-                                    <option value="06:00">06:00</option>
-                                    <option value="07:00">07:00</option>
-                                    <option value="08:00">08:00</option>
-                                    <option value="09:00">09:00</option>
-                                    <option value="10:00">10:00</option>
-                                    <option value="11:00">11:00</option>
-                                    <option value="12:00">12:00</option>
-                                    <option value="13:00">13:00</option>
-                                    <option value="14:00">14:00</option>
-                                    <option value="15:00">15:00</option>
-                                    <option value="16:00">16:00</option>
-                                    <option value="17:00">17:00</option>
-                                    <option value="18:00">18:00</option>
-                                    <option value="19:00">19:00</option>
-                                    <option value="20:00">20:00</option>
-                                    <option value="21:00">21:00</option>
-                                    <option value="22:00">22:00</option>
-                                    <option value="23:00">23:00</option>
-                                    <option value="24:00">24:00</option>
+                                    {!! generateTimeOptions() !!}
                                 </select>
                             </div>
 
