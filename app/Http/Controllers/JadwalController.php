@@ -26,6 +26,7 @@ class JadwalController extends Controller
 
     public function store(Request $request)
     {
+        // TODO: PENGECEKAN NULLABLE
         $request->validate([
             'cabang' => 'required|integer',
             'user' => 'required|integer',

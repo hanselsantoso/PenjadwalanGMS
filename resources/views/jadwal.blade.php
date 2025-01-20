@@ -2,11 +2,12 @@
 @section('content')
     <div class="main">
         <div class="container">
-            <div class="row">
+            <div class="row align-items-center mb-2">
                 <div class="col-md-6">
                     <h2>Daftar Jadwal</h2>
                 </div>
-                <div class="col-md-4">
+
+                <!-- <div class="col-md-6">
                     <form action="{{ route('jadwal.download') }}" method="GET">
                         @csrf
                         <label for="start_date">Start Date:</label>
@@ -17,27 +18,27 @@
 
                         <button type="submit">Download Schedule</button>
                     </form>
-                </div>
+                </div> -->
 
-
-                <div class="col-md-2">
+                <div class="col-md-6 text-end">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createJadwal">
                         Tambah Jadwal
                     </button>
                 </div>
             </div>
+
             <table id="tabelUser" class="table table-striped table-bordered">
                 <thead>
-                  <tr>
-                    <th>No.</th>
-                    <th>Cabang</th>
-                    <th>Nama Ibadah</th>
-                    <th>Tanggal</th>
-                    <th>Stand By</th>
-                    <th>Jam</th>
-                    <th>PIC</th>
-                    <th>Action</th>
-                  </tr>
+                    <tr>
+                        <th width="5%">No.</th>
+                        <th width="10%">Cabang</th>
+                        <th width="20%">Nama Ibadah</th>
+                        <th width="10%">Tanggal</th>
+                        <th width="10%">Stand By</th>
+                        <th width="10%">Jam</th>
+                        <th width="10%">PIC</th>
+                        <th width="15%">Action</th>
+                    </tr>
                 </thead>
                 <tbody>
 
@@ -48,26 +49,32 @@
                             <input type="hidden" name="nama_bagian" value="{{ date('d-m-Y', strtotime($item["tanggal_jadwal"])) }}">
                             <input type="hidden" name="nama_bagian" value="{{$item["id_jadwal_ibadah"] }}">
                             <input type="hidden" name="nama_bagian" value="{{$item["pic"] }}">
-                            <td>{{ $loop->index + 1 }}</td>
-                            <td> {{$item->cabang->nama_cabang }}</td>
-                            <td> {{$item->jadwalIbadah->nama_ibadah }}</td>
+                            <td> {{ $loop->index + 1 }}</td>
+                            <td> {{ $item->cabang->nama_cabang ?? "-" }}</td>
+                            <td> {{ $item->jadwalIbadah->nama_ibadah ?? "-" }}</td>
                             <td> {{ date('d-m-Y', strtotime($item["tanggal_jadwal"])) }}</td>
-                            <td> {{$item->jadwalIbadah->jam_stand_by }}</td>
-                            <td> {{$item->jadwalIbadah->jam_mulai }} - {{$item->jadwalIbadah->jam_akhir }}</td>
-                            <td> {{$item->user->nama_lengkap }}</td>
+                            <td> {{ $item->jadwalIbadah->jam_stand_by ?? "-" }}</td>
+                            <td> {{ $item->jadwalIbadah->jam_mulai ?? "-" }} - {{$item->jadwalIbadah->jam_akhir ?? "-" }}</td>
+                            <td> {{ $item->user->nama_lengkap ?? "-" }}</td>
 
                             <td>
-                                <a href="/admin/jadwal/detail/{{$item["id_jadwal_h"] }}" class="btn btn-primary">Detail</a>
-                                <a href="#" class="btn btn-warning buttonEdit" data-toggle="modal" data-target="#updateJadwal">Update</a>
-                                @if ($item->status_tag == 1)
+                                <a href="/admin/jadwal/detail/{{$item["id_jadwal_h"] }}" class="btn btn-primary w-100 mb-2">
+                                    Detail
+                                </a>
+
+                                <a href="#" class="btn btn-warning buttonEdit w-100 mb-2" data-toggle="modal" data-target="#updateJadwal">
+                                    Update
+                                </a>
+
+                                @if ($item->status_jadwal_h == 1)
                                     <form action="/admin/jadwal/deactivate/{{ $item["id_jadwal_h"] }}" method="post">
                                         @csrf
-                                        <button type="submit" class="btn btn-danger">Suspend</button>
+                                        <button type="submit" class="btn btn-danger w-100">Suspend</button>
                                     </form>
                                 @else
                                     <form action="/admin/jadwal/activate/{{ $item["id_jadwal_h"] }}" method="post">
                                         @csrf
-                                        <button type="submit" class="btn btn-success">Aktifkan</button>
+                                        <button type="submit" class="btn btn-success w-100">Aktifkan</button>
                                     </form>
                                 @endif
                             </td>
@@ -75,7 +82,7 @@
                     @endforeach
 
                 </tbody>
-              </table>
+            </table>
         </div>
     </div>
     <!-- Create User Modal -->
@@ -90,11 +97,11 @@
                 <form action="{{ route('jadwal_store') }}" method="post">
                     @csrf
                     <div class="modal-body">
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="tanggal_jadwal">Tanggal Jadwal</label>
                             <input type="text" class="form-control datepicker" id="tanggal_jadwal"  name="tanggal_jadwal" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="cabang">Cabang</label>
                             <select class="form-control" name="cabang" required>
                                 <option value="0">Pilih Cabang</option>
@@ -104,7 +111,7 @@
                             </select>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="jadwal_ibadah">Slot Jadwal</label>
                             <select class="form-control" name="jadwal_ibadah" required>
                                 <option value="0">Pilih Jam</option>
@@ -114,7 +121,7 @@
                             </select>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="user">PIC</label>
                             <select class="form-control" name="user" required>
                                 <option value="0">Pilih User</option>
@@ -149,11 +156,11 @@
                     @csrf
                     <input type="hidden" name="id_jadwal_h">
                     <div class="modal-body">
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="tanggal_jadwal">Tanggal Jadwal</label>
                             <input type="text" class="form-control datepicker" id="tanggal_jadwal" name="tanggal_jadwal" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="cabang">Cabang</label>
                             <select class="form-control" name="cabang" required>
                                 <option value="0">Pilih Cabang</option>
@@ -163,7 +170,7 @@
                             </select>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="jadwal_ibadah">Slot Jadwal</label>
                             <select class="form-control" name="jadwal_ibadah" required>
                                 <option value="0">Pilih Jam</option>
@@ -173,7 +180,7 @@
                             </select>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="user">PIC</label>
                             <select class="form-control" name="user" required>
                                 <option value="0">Pilih User</option>

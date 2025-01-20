@@ -2,24 +2,24 @@
 @section('content')
     <div class="main">
         <div class="container">
-            <div class="row">
-                <div class="col-md-10">
-                    <h2>Data Grade Volunteer</h2>
+            <div class="row align-items-center mb-2">
+                <div class="col-md-6">
+                    <h2>Daftar Grade Volunteer</h2>
                 </div>
             </div>
+
             <table id="tabelUser" class="table table-striped table-bordered">
                 <thead>
-                  <tr>
-                    <th>No</th>
-                    <th>NIJ</th>
-                    <th>Nama</th>
-                    <th>No. Telp</th>
-                    <th>Grade</th>
-                    <th>Action</th>
-                  </tr>
+                    <tr>
+                        <th width="5%">No</th>
+                        <th width="15%">NIJ</th>
+                        <th width="30%">Nama</th>
+                        <th width="10%">No. Telp</th>
+                        <th width="10%">Grade</th>
+                        <th width="10%">Action</th>
+                    </tr>
                 </thead>
                 <tbody>
-
                     @foreach ($user as $item)
                         <tr>
                             <input type="hidden" name="idUser" value="{{$item["id"] }}">
@@ -31,13 +31,12 @@
                             <td> {{$item["grade"] }}</td>
                             <td>
                                 {{-- <a href="" class="btn btn-primary">View</a> --}}
-                                <a href="#" class="btn btn-warning buttonEdit" data-toggle="modal" data-target="#updateUser">Update</a>
+                                <a href="#" class="btn btn-warning buttonEdit w-100" data-toggle="modal" data-target="#updateUser">Update</a>
                             </td>
                         </tr>
                     @endforeach
-
                 </tbody>
-              </table>
+            </table>
         </div>
     </div>
 

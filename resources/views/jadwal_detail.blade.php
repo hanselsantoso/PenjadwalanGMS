@@ -2,31 +2,35 @@
 @section('content')
     <div class="main">
         <div class="container">
-            <div class="row">
-                <div class="col-md-10">
-                    <h2>Jadwal {{$detail->cabang->nama_cabang}} - {{ \Carbon\Carbon::parse($detail->tanggal_jadwal)->format('d-m-Y') }}</h2>
-                    <h4>Jam {{$detail->jadwalIbadah->jam_mulai}} - {{$detail->jadwalIbadah->jam_akhir}}</h4>
-                    <h5>Stand By: {{$detail->jadwalIbadah->jam_stand_by}}</h5>
+            <div class="row align-items-center mb-2 shadow-sm rounded bg-light">
+                <div class="col-md px-4 pt-4">
+                    <h2 class="text-primary fw-bold mb-3">
+                        Jadwal {{$detail->cabang->nama_cabang}}: {{ \Carbon\Carbon::parse($detail->tanggal_jadwal)->format('d-m-Y') }}
+                    </h2>
+                    <h4 class="text-secondary mb-2">
+                        <i class="bi bi-clock-fill"></i> Jam {{$detail->jadwalIbadah->jam_mulai}} - {{$detail->jadwalIbadah->jam_akhir}}
+                    </h4>
+                    <h4 class="text-muted">
+                        <i class="bi bi-bell-fill"></i> Stand By: {{$detail->jadwalIbadah->jam_stand_by}}
+                    </h4>
                 </div>
-                <div class="col-md-2">
-                    <form action="{{ route('jadwal_automation') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="jadwal" value="{{ $id_H }}">
-                        <button type="submit">Automate Schedule</button>
-                    </form>
+
+                <div class="text-start px-4 pb-4">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createJadwal">
                         Tambah Jadwal
                     </button>
                 </div>
             </div>
+
             <table id="tabelUser" class="table table-striped table-bordered">
                 <thead>
-                  <tr>
-                    <th>No</th>
-                    <th>Nama Anggota</th>
-                    <th>Bagian</th>
-                    <th>Action</th>
-                  </tr>
+                    <tr>
+                        <th width="10%">No</th>
+                        <th width="45%">Nama Anggota</th>
+                        <th width="20%">Bagian</th>
+                        <th width="10%">Status</th>
+                        <th width="15%">Action</th>
+                    </tr>
                 </thead>
                 <tbody>
                     @foreach ($detail->detail as $item)
@@ -38,18 +42,22 @@
                             <td>{{ $loop->index + 1 }}</td>
                             <td> {{$item->user->nama_lengkap }}</td>
                             <td> {{$item->bagian->nama_bagian }}</td>
+                            <td> {{$item->status_jadwal_d == 1 ? "Aktif" : "Tidak Aktif" }}</td>
 
                             <td>
-                                <a href="#" class="btn btn-warning buttonEdit" data-toggle="modal" data-target="#updateJadwal">Update</a>
-                                @if ($item->status_tag == 1)
+                                <a href="#" class="btn btn-warning buttonEdit w-100 mb-2" data-toggle="modal" data-target="#updateJadwal">
+                                    Update
+                                </a>
+
+                                @if ($item->status_jadwal_d == 1)
                                     <form action="/admin/jadwal/detail/deactivate/{{ $item["id_jadwal_d"] }}" method="post">
                                         @csrf
-                                        <button type="submit" class="btn btn-danger">Suspend</button>
+                                        <button type="submit" class="btn btn-danger w-100">Suspend</button>
                                     </form>
                                 @else
                                     <form action="/admin/jadwal/detail/activate/{{ $item["id_jadwal_d"] }}" method="post">
                                         @csrf
-                                        <button type="submit" class="btn btn-success">Aktifkan</button>
+                                        <button type="submit" class="btn btn-success w-100">Aktifkan</button>
                                     </form>
                                 @endif
                             </td>
@@ -57,7 +65,7 @@
                     @endforeach
 
                 </tbody>
-              </table>
+            </table>
         </div>
     </div>
     <!-- Create User Modal -->
@@ -73,7 +81,7 @@
                     @csrf
                     <input type="hidden" name="jadwal" value="{{$detail["id_jadwal_h"]}}">
                     <div class="modal-body">
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="user">Anggota</label>
                             <select class="form-control" name="user" required>
                                 <option value="0">Pilih Anggota</option>
@@ -83,7 +91,7 @@
                             </select>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="bagian">Bagian</label>
                             <select class="form-control" name="bagian" required>
                                 <option value="0">Pilih Bagian</option>
@@ -120,7 +128,7 @@
                     <input type="hidden" name="id_jadwal_h">
                     <input type="hidden" name="jadwal">
                     <div class="modal-body">
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="user">Anggota</label>
                             <select class="form-control" name="user" required>
                                 <option value="0">Pilih Anggota</option>
@@ -130,7 +138,7 @@
                             </select>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="bagian">Bagian</label>
                             <select class="form-control" name="bagian" required>
                                 <option value="0">Pilih Jam</option>
