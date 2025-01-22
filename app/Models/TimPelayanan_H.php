@@ -15,7 +15,6 @@ class TimPelayanan_H extends Model
     protected $fillable = [
         'nama_tim_pelayanan_h',
         'id_user',
-        'id_cabang',
         'status_tim_pelayanan_h',
     ];
 

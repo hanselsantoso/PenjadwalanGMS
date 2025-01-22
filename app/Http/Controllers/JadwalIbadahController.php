@@ -12,7 +12,7 @@ class JadwalIbadahController extends Controller
     {
         // TODO: IDK WHY KOK CUMA STATUS 1 YG DIMUNCULIN
         $jadwal = JadwalIbadah::where('status_jadwal_ibadah', 1)->get();
-        return view('jadwalIbadah', compact('jadwal'));
+        return view('jadwal_ibadah', compact('jadwal'));
     }
 
     public function store(Request $request)

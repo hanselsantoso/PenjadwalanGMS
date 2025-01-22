@@ -21,7 +21,7 @@ class TimPelayananController extends Controller
         // $users = User::where('status_user', 1)->get();
         $cabang = Cabang::where('status_cabang', 1)->get();
 
-        return view('timPelayanan', [
+        return view('tim_pelayanan', [
             'teams' => $teams,
             'cabangs' => $cabang,
             'users' => $users,
@@ -31,6 +31,12 @@ class TimPelayananController extends Controller
     function store(Request $request) {
         $request->validate([
             'nama_tim_pelayanan_h' => 'required|string|max:255',
+            'user' => 'required',
+        ], [
+            'nama_tim_pelayanan_h.required' => 'Nama tim pelayanan wajib diisi',
+            'nama_tim_pelayanan_h.string' => 'Nama tim pelayanan harus berupa teks',
+            'nama_tim_pelayanan_h.max' => 'Nama tim pelayanan maksimal 255 karakter',
+            'user.required' => 'Anggota tim wajib diisi'
         ]);
 
         try {

@@ -18,8 +18,8 @@
                     <div class="card">
                         <div class="card-header" id="headingCabang{{ $cabang->id }}">
                             <h2 class="mb-0">
-                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseCabang{{ $cabang->id }}" aria-expanded="true" aria-controls="collapseCabang{{ $cabang->id }}">
-                                    {{ $cabang->nama_cabang }}  <!-- Display cabang name -->
+                                <button class="btn fs-4 fw-bold" type="button" data-toggle="collapse" data-target="#collapseCabang{{ $cabang->id }}" aria-expanded="true" aria-controls="collapseCabang{{ $cabang->id }}">
+                                    <i class="fas fa-caret-down mr-2"></i> {{ $cabang->nama_cabang }}
                                 </button>
                             </h2>
                         </div>
@@ -31,19 +31,20 @@
                                     @foreach ($cabang->tim as $team)  <!-- Assuming each cabang has multiple teams -->
                                         <div class="card">
                                             <div class="card-header" id="headingTeam{{ $team->id }}">
-                                                <div class="row">
-                                                    <div class="col-9">
-                                                        <h3 class="mb-0">
-                                                            {{ $team->nama_tim_pelayanan_h }} - {{ $team->user["nama_lengkap"] }} <!-- Team name and leader -->
-                                                        </h3>
-                                                    </div>
-                                                    <div class="col-3">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <h3 class="mb-0 col-9">
+                                                        <button class="btn fs-5 fw-bold" type="button" data-toggle="collapse" data-target="#collapseTeam{{ $team->id }}" aria-expanded="true" aria-controls="collapseTeam{{ $team->id }}">
+                                                            <i class="fas fa-caret-down mr-2"></i> {{ $team->nama_tim_pelayanan_h }} - {{ $team->user["nama_lengkap"] }} <!-- Team name and leader -->
+                                                        </button>
+                                                    </h3>
+
+                                                    <div id="collapseTeam{{ $team->id }}" class="collapse" aria-labelledby="headingTeam{{ $team->id }}">
                                                         <input type="hidden" id="id_pelayanan_h" name="id_pelayanan_h" value="{{$team["id_pelayanan_h"]}}">
                                                         <input type="hidden" id="nama_tim_pelayanan_h" name="nama_tim_pelayanan_h" value="{{$team["nama_tim_pelayanan_h"]}}">
                                                         <input type="hidden" id="id_user" name="id_user" value="{{$team["id_user"]}}">
                                                         <input type="hidden" id="id_cabang" name="id_cabang" value="{{$team["id_cabang"]}}">
+
                                                         <button class="btn btn-success buttonAddMember" data-id="{{ $team->id_pelayanan_h }}" data-toggle="modal" data-target="#addMember">Add</button>
-                                                        <button class="btn btn-info buttonView" data-id="{{ $team->id }}" data-toggle="collapse" data-target="#collapseTeam{{ $team->id }}" aria-expanded="true" aria-controls="collapseTeam{{ $team->id }}">View</button>
                                                         <button class="btn btn-warning buttonEditPic" data-id="{{ $team->id }}" data-toggle="modal" data-target="#updatePIC">Edit</button>
                                                         <button type="submit" class="btn btn-danger">Delete</button>
                                                         {{-- <form action="{{ route('tim_deactivate', $team->id) }}" method="POST" style="display:inline;">
@@ -99,6 +100,7 @@
 
         </div>
     </div>
+
     <!-- Create User Modal -->
     <div class="modal fade" id="createTimPelayanan">
         <div class="modal-dialog">
@@ -108,32 +110,35 @@
                     <h4 class="modal-title">Tambah Tim Pelayanan</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
+
                 <form action="{{ route('tim_store') }}" method="post">
                     @csrf
                     <div class="modal-body">
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="nama_tag">Nama Tim Pelayanan</label>
                             <input type="text" class="form-control" name="nama_tim_pelayanan_h" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="user">Cabang</label>
                             <select class="form-control" name="cabang" required>
-                                <option value="0">Pilih Cabang</option>
+                                <option value="" disabled selected>Pilih Cabang</option>
                                 @foreach ($cabangs as $item)
                                     <option value="{{ $item->id_cabang }}">{{ $item->nama_cabang }}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group">
+                        
+                        <div class="form-group mb-1">
                             <label for="user">Team Leader</label>
                             <select class="form-control" name="pic" required>
-                                <option value="0">Pilih Team Leader</option>
+                                <option value="" disabled selected>Pilih Team Leader</option>
                                 @foreach ($users as $item)
                                     <option value="{{ $item->id }}">{{ $item->nama_lengkap }}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group">
+
+                        <div class="form-group mb-1">
                             <button type="button" class="btn btn-secondary" id="addVolunteer">Tambah Anggota</button>
                         </div>
                         <div id="additionalVolunteers"></div>
@@ -161,11 +166,11 @@
                 <form action="{{ route('tim_store_member') }}" method="post">
                     @csrf
                     <div class="modal-body">
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="user">Anggota</label>
                             <input type="hidden" name="id_header" id="id_header">
                             <select class="form-control" id="update_volunteer" name="volunteer" required>
-                                <option value="0">Pilih Anggota</option>
+                                <option value="" disabled selected>Pilih Anggota</option>
                                 @foreach ($users as $item)
                                     @if ($item->role == 1 || $item->role == 3)
                                         <option value="{{ $item->id }}">{{ $item->nama_lengkap }}</option>
@@ -200,23 +205,23 @@
                     <input type="hidden" name="id_pelayanan_h" id="id_pelayanan_h_pic">
                     <input type="hidden" name="id_user" id="id_user_pic">
                     <div class="modal-body">
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="nama_tag">Nama Tim Pelayanan</label>
                             <input type="text" class="form-control" id="update_nama_tim_pelayanan_h" name="nama_tim_pelayanan_h" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="user">Cabang</label>
                             <select class="form-control" id="update_cabang" name="cabang" required>
-                                <option value="0">Pilih Cabang</option>
+                                <option value="" disabled selected>Pilih Cabang</option>
                                 @foreach ($cabangs as $item)
                                     <option value="{{ $item->id_cabang }}">{{ $item->nama_cabang }}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="user">Team Leader</label>
                             <select class="form-control" id="update_pic" name="pic" required>
-                                <option value="0">Pilih Team Leader</option>
+                                <option value="" disabled selected>Pilih Team Leader</option>
                                 @foreach ($users as $item)
                                     <option value="{{ $item->id }}">{{ $item->nama_lengkap }}</option>
                                 @endforeach
@@ -248,10 +253,10 @@
                     <input type="hidden" name="id_pelayanan_d" id="id_pelayanan_d_member">
                     <input type="hidden" name="id_user" id="id_user_member">
                     <div class="modal-body">
-                        <div class="form-group">
+                        <div class="form-group mb-1">
                             <label for="user">Anggota</label>
                             <select class="form-control" id="update_volunteer" name="volunteer" required>
-                                <option value="0">Pilih Anggota</option>
+                                <option value="" disabled selected>Pilih Anggota</option>
                                 @foreach ($users as $item)
                                     <option value="{{ $item->id }}">{{ $item->nama_lengkap }}</option>
                                 @endforeach
@@ -310,10 +315,10 @@
     document.getElementById('addVolunteer').addEventListener('click', function() {
         var container = document.getElementById('additionalVolunteers');
         var volunteerForm = `
-            <div class="form-group">
+            <div class="form-group mb-1">
                 <label for="user">Anggota</label>
                 <select class="form-control" name="user[]" required>
-                    <option value="0">Pilih Anggota</option>
+                    <option value="" disabled selected>Pilih Anggota</option>
                     @foreach ($users as $item)
                         @if ($item->role == 1 || $item->role == 3)
                             <option value="{{ $item->id }}">{{ $item->nama_lengkap }}</option>
