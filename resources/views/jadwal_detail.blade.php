@@ -3,22 +3,30 @@
     <div class="main">
         <div class="container">
             <div class="row align-items-center mb-2 shadow-sm rounded bg-light">
-                <div class="col-md px-4 pt-4">
+                <div class="col-md px-4 pt-4 mb-2">
                     <h2 class="text-primary fw-bold mb-3">
                         Jadwal {{$detail->cabang->nama_cabang}}: {{ \Carbon\Carbon::parse($detail->tanggal_jadwal)->format('d-m-Y') }}
                     </h2>
-                    <h4 class="text-secondary mb-2">
-                        <i class="bi bi-clock-fill"></i> Jam {{$detail->jadwalIbadah->jam_mulai}} - {{$detail->jadwalIbadah->jam_akhir}}
+                    <h4 class="text-secondary mb-2 d-flex align-items-center">
+                        <i class="bi bi-clock-fill"></i> 
+                        <p class="mb-0 ms-2">Jam {{$detail->jadwalIbadah->jam_mulai}} - {{$detail->jadwalIbadah->jam_akhir}}</p>
                     </h4>
-                    <h4 class="text-muted">
-                        <i class="bi bi-bell-fill"></i> Stand By: {{$detail->jadwalIbadah->jam_stand_by}}
+                    <h4 class="text-muted d-flex align-items-center">
+                        <i class="bi bi-bell-fill"></i> 
+                        <p class="mb-0 ms-2">Stand By: {{$detail->jadwalIbadah->jam_stand_by}}</p>
                     </h4>
                 </div>
 
-                <div class="text-start px-4 pb-4">
+                <div class="d-flex gap-2 text-start px-4 pb-4">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createJadwal">
                         Tambah Jadwal
                     </button>
+
+                    <form action="{{ route('jadwal_automation') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="jadwal" value="{{ $id_H }}">
+                        <button type="submit" class="btn btn-success">Automate Schedule</button>
+                    </form>
                 </div>
             </div>
 
