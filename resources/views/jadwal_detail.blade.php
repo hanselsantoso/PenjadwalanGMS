@@ -50,9 +50,9 @@
                                 </a>
 
                                 @if ($item->status_jadwal_d == 1)
-                                    <form action="/admin/jadwal/detail/deactivate/{{ $item["id_jadwal_d"] }}" method="post">
+                                    <form action="/admin/jadwal/detail/delete/{{ $item["id_jadwal_d"] }}" method="post">
                                         @csrf
-                                        <button type="submit" class="btn btn-danger w-100">Suspend</button>
+                                        <button type="submit" class="btn btn-danger w-100">Remove</button>
                                     </form>
                                 @else
                                     <form action="/admin/jadwal/detail/activate/{{ $item["id_jadwal_d"] }}" method="post">
@@ -84,7 +84,7 @@
                         <div class="form-group mb-1">
                             <label for="user">Anggota</label>
                             <select class="form-control" name="user" required>
-                                <option value="0">Pilih Anggota</option>
+                                <option value="" disabled selected>Pilih Anggota</option>
                                 @foreach ($user as $item)
                                     <option value="{{ $item->id }}">{{ $item->nama_lengkap }}</option>
                                 @endforeach
@@ -94,7 +94,7 @@
                         <div class="form-group mb-1">
                             <label for="bagian">Bagian</label>
                             <select class="form-control" name="bagian" required>
-                                <option value="0">Pilih Bagian</option>
+                                <option value="" disabled selected>Pilih Bagian</option>
                                 @foreach ($bagian as $item)
                                     <option value="{{ $item->id_bagian }}">{{ $item->nama_bagian }}</option>
                                 @endforeach

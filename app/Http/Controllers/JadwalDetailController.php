@@ -23,12 +23,20 @@ class JadwalDetailController extends Controller
 
     public function store(Request $request)
     {
-        // TODO: PENGECEKAN NULLABLE
         $request->validate([
             'bagian' => 'required|integer',
             'user' => 'required|integer',
             'jadwal' => 'required|integer',
         ]);
+
+        // Check for existing schedule with same jadwal_h and user
+        $existingJadwal = Jadwal_D::where('id_jadwal_h', $request->jadwal)
+            ->where('id_user', $request->user)
+            ->first();
+
+        if ($existingJadwal) {
+            return redirect()->route('jadwal_detail_index', $request->jadwal)->with('error', 'User sudah ada di jadwal.');
+        }
 
         $jadwal = new Jadwal_D();
         $jadwal->id_jadwal_h = $request->jadwal;
@@ -73,6 +81,15 @@ class JadwalDetailController extends Controller
         $jadwal->save();
 
         return redirect()->route('jadwal_detail_index', $jadwal->id_jadwal_h)->with('success', 'Jadwal berhasil dinonaktifkan.');
+    }
+
+    public function delete($id)
+    {
+        $jadwal = Jadwal_D::find($id);
+        $jadwalId = $jadwal->id_jadwal_h;
+        $jadwal->delete();
+
+        return redirect()->route('jadwal_detail_index', $jadwalId)->with('success', 'Jadwal berhasil dihapus.');
     }
 
     public function automation(Request $request)

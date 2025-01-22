@@ -7,6 +7,7 @@
                     <h2>Daftar Jadwal</h2>
                 </div>
 
+                <!-- TODO: ADD DOWNLOAD SCHEDULE BUTTON -->
                 <!-- <div class="col-md-6">
                     <form action="{{ route('jadwal.download') }}" method="GET">
                         @csrf
@@ -94,6 +95,7 @@
                     <h4 class="modal-title">Tambah Jadwal</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
+
                 <form action="{{ route('jadwal_store') }}" method="post">
                     @csrf
                     <div class="modal-body">
@@ -104,7 +106,7 @@
                         <div class="form-group mb-1">
                             <label for="cabang">Cabang</label>
                             <select class="form-control" name="cabang" required>
-                                <option value="0">Pilih Cabang</option>
+                                <option value="" disabled selected>Pilih Cabang</option>
                                 @foreach ($cabang as $item)
                                     <option value="{{ $item->id_cabang }}">{{ $item->nama_cabang }}</option>
                                 @endforeach
@@ -114,7 +116,7 @@
                         <div class="form-group mb-1">
                             <label for="jadwal_ibadah">Slot Jadwal</label>
                             <select class="form-control" name="jadwal_ibadah" required>
-                                <option value="0">Pilih Jam</option>
+                                <option value="" disabled selected>Pilih Jam</option>
                                 @foreach ($jadwalIbadah as $item)
                                     <option value="{{ $item->id_jadwal_ibadah }}">{{ $item->jam_mulai }} - {{ $item->jam_akhir }}</option>
                                 @endforeach
@@ -124,7 +126,7 @@
                         <div class="form-group mb-1">
                             <label for="user">PIC</label>
                             <select class="form-control" name="user" required>
-                                <option value="0">Pilih User</option>
+                                <option value="" disabled selected>Pilih User</option>
                                 @foreach ($user as $item)
                                     <option value="{{ $item->id }}">{{ $item->nama_lengkap }}</option>
                                 @endforeach

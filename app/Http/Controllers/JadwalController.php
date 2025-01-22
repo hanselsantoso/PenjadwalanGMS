@@ -19,19 +19,29 @@ class JadwalController extends Controller
         $jadwalIbadah = JadwalIbadah::where('status_jadwal_ibadah', 1)->get();
         $cabang = Cabang::where('status_cabang', 1)->get();
         $user = User::where('status_user', 1)->where('role', '!=', 0)->get();
-        $jadwal = Jadwal_H::where('status_jadwal_h', 1)->get();
+        $jadwal = Jadwal_H::where('status_jadwal_h', 1)->orderBy('tanggal_jadwal', 'desc')->get();
 
         return view('jadwal', compact('jadwal','jadwalIbadah', 'cabang', 'user'));
     }
 
     public function store(Request $request)
     {
-        // TODO: PENGECEKAN NULLABLE
         $request->validate([
             'cabang' => 'required|integer',
             'user' => 'required|integer',
             'jadwal_ibadah' => 'required|integer',
         ]);
+
+        // Check for existing schedule with same cabang, jadwal_ibadah and date
+        $existingJadwal = Jadwal_H::where('id_cabang', $request->cabang)
+            ->where('id_jadwal_ibadah', $request->jadwal_ibadah)
+            ->where('tanggal_jadwal', date('Y-m-d', strtotime($request->tanggal_jadwal)))
+            ->first();
+
+        if ($existingJadwal) {
+            return redirect()->route('jadwal_index')
+                ->with('error', 'Jadwal untuk cabang, slot waktu dan tanggal tersebut sudah ada.');
+        }
 
         $jadwal = new Jadwal_H();
         $jadwal->id_cabang = $request->cabang;

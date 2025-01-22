@@ -15,6 +15,7 @@
                     @endif
 
                     {{ __('You are logged in!') }}
+                    <!-- TODO: ADD MENU BUTTONS -->
                 </div>
             </div>
         </div>
