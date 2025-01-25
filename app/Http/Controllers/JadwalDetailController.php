@@ -113,6 +113,8 @@ class JadwalDetailController extends Controller
             ]
         ];
 
+        // TODO: ADD CHECK IF THIS JADWAL_H IS FULL OR NOT FROM THE SLOT REQUIREMENT
+
         // Get schedule and determine day type
         $jadwalHeader = Jadwal_H::findOrFail($request->jadwal);
         $date = Carbon::parse($jadwalHeader->tanggal_jadwal);
@@ -130,7 +132,7 @@ class JadwalDetailController extends Controller
                 return $team->tim_pelayanan_d->pluck('id_user')->push($team->id_user);
             })
             ->unique();
-        dump($teamMembers);
+        // dump("ALL TEAM MEMBERS ON CABANG: ".$teamMembers);
 
         // Get all users already assigned on the same day
         $assignedUsers = Jadwal_D::whereHas('detail', function ($query) use ($jadwalHeader) {
@@ -138,6 +140,7 @@ class JadwalDetailController extends Controller
             })
             ->pluck('id_user')
             ->unique();
+        // dump("ASSIGNED USERS: ".$assignedUsers);
 
         // Get active sections
         $bagianIds = Bagian::where('status_bagian', 1)->pluck('id_bagian', 'nama_bagian');
@@ -146,7 +149,7 @@ class JadwalDetailController extends Controller
         DB::beginTransaction();
         try {
             foreach ($slots as $bagianName => $requirements) {
-                dump($bagianName);
+                dump("Bagian Name: ".$bagianName);
                 dump($requirements);
                 // Get available volunteers for this section based on grade requirements
                 $availableVolunteers = User::whereIn('id', $teamMembers)
@@ -159,12 +162,16 @@ class JadwalDetailController extends Controller
                     ->whereNotIn('id', $assignedUsers)
                     ->inRandomOrder()
                     ->get();
-                dump($availableVolunteers);
+
+                // dump("AVAILABLE VOLUNTEERS");
+                // foreach($availableVolunteers as $volunteer) {
+                //     dump($volunteer->nama_lengkap);
+                // }
 
                 // Assign volunteers to slots
                 for ($i = 0; $i < $requirements['slots']; $i++) {
                     $volunteer = $availableVolunteers->shift();
-                    dump($volunteer->nama_lengkap);
+                    // dump("Selected: ".$volunteer->nama_lengkap);
                     
                     if (!$volunteer) {
                         Log::warning("Tidak ada volunteer yang tersedia untuk bagian {$bagianName} slot ke-" . ($i + 1));
@@ -183,12 +190,12 @@ class JadwalDetailController extends Controller
             }
 
             DB::commit();
-            // return redirect()->route('jadwal_detail_index', $jadwalHeader->id_jadwal_h)->with('success', 'Penugasan volunteer berhasil secara otomatis berhasil.');
+            return redirect()->route('jadwal_detail_index', $jadwalHeader->id_jadwal_h)->with('success', 'Penugasan volunteer berhasil secara otomatis berhasil.');
 
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Error penugasan volunteer: ' . $e->getMessage());
-            // return redirect()->route('jadwal_detail_index', $jadwalHeader->id_jadwal_h)->with('error', 'Penugasan volunteer secara otomatis gagal.');
+            return redirect()->route('jadwal_detail_index', $jadwalHeader->id_jadwal_h)->with('error', 'Penugasan volunteer secara otomatis gagal.');
         }
     }
 
