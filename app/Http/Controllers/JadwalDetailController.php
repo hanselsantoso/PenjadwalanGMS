@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Bagian;
-use App\Models\Jadwal_D;
-use App\Models\Jadwal_H;
-use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB; // Add this import
+use Illuminate\Support\Facades\Log; // Add this import
+use Carbon\Carbon;
+use App\Models\Jadwal_H;
+use App\Models\Jadwal_D;
+use App\Models\TimPelayanan_H;
+use App\Models\Bagian;
+use App\Models\User;
 
 class JadwalDetailController extends Controller
 {
@@ -94,89 +96,210 @@ class JadwalDetailController extends Controller
 
     public function automation(Request $request)
     {
-        // Retrieve necessary data from the request
-        $jadwalId = $request->jadwal;
-        $jadwalHeader = Jadwal_H::findOrFail($jadwalId);
+        // Constants for slot requirements
+        $slotRequirements = [
+            'saturday' => [
+                'F.O.H' => ['slots' => 1, 'minGrade' => 10],
+                'Monitor' => ['slots' => 2, 'minGrade' => 5, 'maxGrade' => 7],
+                'Stage' => ['slots' => 2, 'minGrade' => 1, 'maxGrade' => 4],
+            ],
+            'sunday' => [
+                'F.O.H' => ['slots' => 2, 'minGrade' => 10],
+                'B.C' => ['slots' => 2, 'minGrade' => 5, 'maxGrade' => 7],
+                'Monitor' => ['slots' => 2, 'minGrade' => 5, 'maxGrade' => 7],
+                'Stage' => ['slots' => 2, 'minGrade' => 1, 'maxGrade' => 4],
+                'Super Trooper' => ['slots' => 2, 'minGrade' => 1, 'maxGrade' => 4],
+                'All star dan Little Eagle' => ['slots' => 1, 'minGrade' => 1, 'maxGrade' => 4],
+            ]
+        ];
 
-        // Define the slots needed for each day
-        $slots = [];
-        if (Carbon::parse($jadwalHeader->tanggal_jadwal)->isSaturday()) {
-            // Saturday schedule
-            $slots = [
-                'F.O.H' => 1,
-                'Monitor' => 2,
-                'Stage' => 2,
-            ];
-        } elseif (Carbon::parse($jadwalHeader->tanggal_jadwal)->isSunday()) {
-            // Sunday schedule
-            $slots = [
-                'F.O.H' => 2,
-                'B.C' => 2,
-                'Monitor' => 2,
-                'Stage' => 2,
-                'Super Trooper' => 2,
-                'All star dan Little Eagle' => 1,
-            ];
+        // Get schedule and determine day type
+        $jadwalHeader = Jadwal_H::findOrFail($request->jadwal);
+        $date = Carbon::parse($jadwalHeader->tanggal_jadwal);
+        $slots = $date->isSaturday() ? $slotRequirements['saturday'] : 
+            ($date->isSunday() ? $slotRequirements['sunday'] : []);
+
+        if (empty($slots)) {
+            return redirect()->route('jadwal_detail_index', $jadwalHeader->id_jadwal_h)->with('error', 'Tidak ada slot yang ditentukan untuk hari ini');
         }
 
-        // Get volunteers grouped by grade
-        $grade1to4 = User::whereBetween('grade', [1, 4])->get()->shuffle();
-        $grade5to7 = User::whereBetween('grade', [5, 7])->get()->shuffle();
-        $gradeAbove7 = User::where('grade', '=', 10)->get()->shuffle();
+        // Get all team members from the same branch
+        $teamMembers = TimPelayanan_H::where('id_cabang', $jadwalHeader->id_cabang)
+            ->get()
+            ->flatMap(function ($team) {
+                return $team->tim_pelayanan_d->pluck('id_user')->push($team->id_user);
+            })
+            ->unique();
+        dump($teamMembers);
 
-        // Retrieve `Bagian` IDs based on names
-        $bagianIds = Bagian::where('status_bagian', 1)
-                        ->pluck('id_bagian', 'nama_bagian');
-
-        // Get all user IDs already assigned on the same day
-        $assignedUserIds = Jadwal_D::whereHas('detail', function ($query) use ($jadwalHeader) {
+        // Get all users already assigned on the same day
+        $assignedUsers = Jadwal_D::whereHas('detail', function ($query) use ($jadwalHeader) {
                 $query->whereDate('tanggal_jadwal', $jadwalHeader->tanggal_jadwal);
             })
             ->pluck('id_user')
             ->unique();
 
-        // Track assigned users for each slot
-        $assignedUsers = collect($assignedUserIds); // Start with users already assigned
+        // Get active sections
+        $bagianIds = Bagian::where('status_bagian', 1)->pluck('id_bagian', 'nama_bagian');
 
-        // Loop through the slots and assign volunteers
-        foreach ($slots as $bagianName => $numSlots) {
-            $bagianId = $bagianIds[$bagianName];
+        // Start transaction
+        DB::beginTransaction();
+        try {
+            foreach ($slots as $bagianName => $requirements) {
+                dump($bagianName);
+                dump($requirements);
+                // Get available volunteers for this section based on grade requirements
+                $availableVolunteers = User::whereIn('id', $teamMembers)
+                    ->when(isset($requirements['maxGrade']), function ($query) use ($requirements) {
+                        return $query->whereBetween('grade', [$requirements['minGrade'], $requirements['maxGrade']]);
+                    })
+                    ->when(!isset($requirements['maxGrade']), function ($query) use ($requirements) {
+                        return $query->where('grade', '>=', $requirements['minGrade']);
+                    })
+                    ->whereNotIn('id', $assignedUsers)
+                    ->inRandomOrder()
+                    ->get();
+                dump($availableVolunteers);
 
-            for ($i = 0; $i < $numSlots; $i++) {
-                $user = null;
+                // Assign volunteers to slots
+                for ($i = 0; $i < $requirements['slots']; $i++) {
+                    $volunteer = $availableVolunteers->shift();
+                    dump($volunteer->nama_lengkap);
+                    
+                    if (!$volunteer) {
+                        Log::warning("Tidak ada volunteer yang tersedia untuk bagian {$bagianName} slot ke-" . ($i + 1));
+                        continue;
+                    }
 
-                // Choose volunteers based on grade and section requirements
-                if (in_array($bagianName, ['Stage', 'All star dan Little Eagle', 'Super Trooper'])) {
-                    $user = $grade1to4->reject(function ($u) use ($assignedUsers) {
-                        return $assignedUsers->contains($u->id);
-                    })->pop();
-                } elseif (in_array($bagianName, ['Monitor', 'B.C'])) {
-                    $user = $grade5to7->reject(function ($u) use ($assignedUsers) {
-                        return $assignedUsers->contains($u->id);
-                    })->pop();
-                } elseif ($bagianName === 'F.O.H') {
-                    $user = $gradeAbove7->reject(function ($u) use ($assignedUsers) {
-                        return $assignedUsers->contains($u->id);
-                    })->pop();
+                    Jadwal_D::create([
+                        'id_jadwal_h' => $jadwalHeader->id_jadwal_h,
+                        'id_bagian' => $bagianIds[$bagianName],
+                        'id_user' => $volunteer->id,
+                        'status_jadwal_d' => 1,
+                    ]);
+
+                    $assignedUsers->push($volunteer->id);
                 }
-
-                // Skip if no volunteer is available for the slot or already assigned
-                if (!$user) continue;
-
-                // Create new detail schedule entry
-                Jadwal_D::create([
-                    'id_jadwal_h' => $jadwalId,
-                    'id_bagian' => $bagianId,
-                    'id_user' => $user->id,
-                    'status_jadwal_d' => 1,
-                ]);
-
-                // Track assigned user
-                $assignedUsers->push($user->id);
             }
+
+            DB::commit();
+            // return redirect()->route('jadwal_detail_index', $jadwalHeader->id_jadwal_h)->with('success', 'Penugasan volunteer berhasil secara otomatis berhasil.');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error penugasan volunteer: ' . $e->getMessage());
+            // return redirect()->route('jadwal_detail_index', $jadwalHeader->id_jadwal_h)->with('error', 'Penugasan volunteer secara otomatis gagal.');
         }
-        return redirect()->route('jadwal_detail_index', $jadwalId)->with('success', 'Jadwal telah dibuat secara otomatis dengan penugasan acak.');
     }
+
+    // public function automation(Request $request)
+    // {
+    //     // Retrieve necessary data from the request
+    //     $jadwalId = $request->jadwal;
+    //     $jadwalHeader = Jadwal_H::findOrFail($jadwalId);
+
+    //     // Define the slots needed for each day
+    //     $slots = [];
+    //     if (Carbon::parse($jadwalHeader->tanggal_jadwal)->isSaturday()) {
+    //         // Saturday schedule
+    //         $slots = [
+    //             'F.O.H' => 1,
+    //             'Monitor' => 2,
+    //             'Stage' => 2,
+    //         ];
+    //     } elseif (Carbon::parse($jadwalHeader->tanggal_jadwal)->isSunday()) {
+    //         // Sunday schedule
+    //         $slots = [
+    //             'F.O.H' => 2,
+    //             'B.C' => 2,
+    //             'Monitor' => 2,
+    //             'Stage' => 2,
+    //             'Super Trooper' => 2,
+    //             'All star dan Little Eagle' => 1,
+    //         ];
+    //     }
+
+    //     // Get volunteers on the same cabang
+    //     $teamMembersOnCabang = TimPelayanan_H::where('id_cabang', $jadwalHeader->id_cabang)->get();
+    //     $teamMembers = collect();
+    //     foreach($teamMembersOnCabang as $team) {
+    //         // Get team leader ID
+    //         $teamMembers->push($team->id_user);
+            
+    //         // Get team member IDs from tim_pelayanan_d
+    //         $memberIds = $team->tim_pelayanan_d->pluck('id_user');
+    //         $teamMembers = $teamMembers->concat($memberIds);
+    //     }
+    //     $teamMembers = $teamMembers->unique();
+
+    //     // Get volunteers grouped by grade
+    //     $grade1to4 = User::whereIn('id', $teamMembers)
+    //         ->whereBetween('grade', [1, 4])
+    //         ->get()
+    //         ->shuffle();
+    //     $grade5to7 = User::whereIn('id', $teamMembers)
+    //         ->whereBetween('grade', [5, 7])
+    //         ->get()
+    //         ->shuffle();
+    //     $gradeAbove7 = User::whereIn('id', $teamMembers)
+    //         ->where('grade', 10)
+    //         ->get()
+    //         ->shuffle();
+
+    //     // Retrieve `Bagian` IDs based on names
+    //     $bagianIds = Bagian::where('status_bagian', 1)
+    //                     ->pluck('id_bagian', 'nama_bagian');
+
+    //     // Get all user IDs already assigned on the same day
+    //     $assignedUserIds = Jadwal_D::whereHas('detail', function ($query) use ($jadwalHeader) {
+    //             $query->whereDate('tanggal_jadwal', $jadwalHeader->tanggal_jadwal);
+    //         })
+    //         ->pluck('id_user')
+    //         ->unique();
+            
+    //     // Track assigned users for each slot
+    //     $assignedUsers = collect($assignedUserIds); // Start with users already assigned
+    //     dd($assignedUsers);
+
+    //     // Loop through the slots and assign volunteers
+    //     foreach ($slots as $bagianName => $numSlots) {
+    //         $bagianId = $bagianIds[$bagianName];
+
+    //         for ($i = 0; $i < $numSlots; $i++) {
+    //             $user = null;
+
+    //             // Choose volunteers based on grade and section requirements
+    //             if (in_array($bagianName, ['Stage', 'All star dan Little Eagle', 'Super Trooper'])) {
+    //                 $user = $grade1to4->reject(function ($u) use ($assignedUsers) {
+    //                     return $assignedUsers->contains($u->id);
+    //                 })->pop();
+    //             } elseif (in_array($bagianName, ['Monitor', 'B.C'])) {
+    //                 $user = $grade5to7->reject(function ($u) use ($assignedUsers) {
+    //                     return $assignedUsers->contains($u->id);
+    //                 })->pop();
+    //             } elseif ($bagianName === 'F.O.H') {
+    //                 $user = $gradeAbove7->reject(function ($u) use ($assignedUsers) {
+    //                     return $assignedUsers->contains($u->id);
+    //                 })->pop();
+    //             }
+
+    //             // Skip if no volunteer is available for the slot or already assigned
+    //             if (!$user) continue;
+
+    //             // Create new detail schedule entry
+    //             Jadwal_D::create([
+    //                 'id_jadwal_h' => $jadwalId,
+    //                 'id_bagian' => $bagianId,
+    //                 'id_user' => $user->id,
+    //                 'status_jadwal_d' => 1,
+    //             ]);
+
+    //             // Track assigned user
+    //             $assignedUsers->push($user->id);
+    //         }
+    //     }
+    //     return redirect()->route('jadwal_detail_index', $jadwalId)->with('success', 'Jadwal telah dibuat secara otomatis dengan penugasan acak.');
+    // }
 
 
 
