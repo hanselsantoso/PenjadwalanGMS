@@ -13,7 +13,7 @@ class JadwalDetailController extends Controller
     public function jadwal_detail($id)
     {
         // Order By Bagian ID
-        $detail = Jadwal_H::with(['detail' => function($query) {
+        $jadwal = Jadwal_H::with(['detail' => function($query) {
             $query->join('bagian', 'jadwal_d.id_bagian', '=', 'bagian.id_bagian')
                 ->orderBy('bagian.id_bagian');
         }])->find($id);
@@ -22,7 +22,7 @@ class JadwalDetailController extends Controller
         $user = User::where('status_user', 1)->where('role', '!=', 0)->get();
         $id_H = $id;
 
-        return view ('jadwal_detail', compact('detail', 'bagian', 'user', 'id_H'));
+        return view ('jadwal_detail', compact('jadwal', 'bagian', 'user', 'id_H'));
     }
 
     public function store(Request $request)

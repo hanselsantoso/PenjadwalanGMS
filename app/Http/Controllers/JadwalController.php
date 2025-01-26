@@ -21,14 +21,16 @@ class JadwalController extends Controller
         $user = User::where('status_user', 1)->where('role', '!=', 0)->get();
 
         // Get jadwal with order by latest date and the earliest stand by time
-        $jadwal = Jadwal_H::where('status_jadwal_h', 1)
-            ->join('jadwal_ibadah', 'jadwal_h.id_jadwal_ibadah', '=', 'jadwal_ibadah.id_jadwal_ibadah')
+        $jadwal = Jadwal_H::join('jadwal_ibadah', 'jadwal_h.id_jadwal_ibadah', '=', 'jadwal_ibadah.id_jadwal_ibadah')
             ->orderBy('tanggal_jadwal', 'desc')
             ->orderBy('jadwal_ibadah.jam_stand_by', 'asc')
             ->select('jadwal_h.*')
             ->get();
+        // Split into active and inactive jadwal
+        $jadwalActive = $jadwal->where('status_jadwal_h', 1);
+        $jadwalDeactive = $jadwal->where('status_jadwal_h', 0);
 
-        return view('jadwal', compact('jadwal','jadwalIbadah', 'cabang', 'user'));
+        return view('jadwal', compact('jadwalActive', 'jadwalDeactive', 'jadwalIbadah', 'cabang', 'user'));
     }
 
     public function store(Request $request)
@@ -43,6 +45,7 @@ class JadwalController extends Controller
         $existingJadwal = Jadwal_H::where('id_cabang', $request->cabang)
             ->where('id_jadwal_ibadah', $request->jadwal_ibadah)
             ->where('tanggal_jadwal', date('Y-m-d', strtotime($request->tanggal_jadwal)))
+            ->where('status_jadwal_h', 1)
             ->first();
 
         if ($existingJadwal) {
@@ -59,6 +62,25 @@ class JadwalController extends Controller
         $jadwal->save();
 
         return redirect()->route('jadwal_index')->with('success', 'Jadwal berhasil dibuat.');
+    }
+
+    // TODO: Add Update, Activate & Deactivate function 
+    public function activate($id)
+    {
+        $jadwal = Jadwal_H::find($id);
+        $jadwal->status_jadwal_h = 1;
+        $jadwal->save();
+
+        return redirect()->route('jadwal_index')->with('success', 'Jadwal berhasil diaktifkan.');
+    }
+
+    public function deactivate($id)
+    {
+        $jadwal = Jadwal_H::find($id);
+        $jadwal->status_jadwal_h = 0;
+        $jadwal->save();
+
+        return redirect()->route('jadwal_index')->with('success', 'Jadwal berhasil dinonaktifkan.');
     }
 
     public function downloadSchedule(Request $request)

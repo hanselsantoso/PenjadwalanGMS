@@ -28,10 +28,11 @@
 
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
+
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
+            <div class="container mb-0">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     GMS
                 </a>
@@ -76,7 +77,7 @@
                                 </li> --}}
                                 <li class="nav-item dropdown">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                       {{ Auth::user()->nama_lengkap }}
+                                        {{ Auth::user()->nama_lengkap }}
                                     </a>
 
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -94,7 +95,7 @@
                             @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                 {{ Auth::user()->nama_lengkap }}
+                                    {{ Auth::user()->nama_lengkap }}
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -141,7 +142,7 @@
                 {{ session('error') }}
             </div>
         @endif
-        <main class="py-4">
+        <main class="py-3">
             @yield('content')
         </main>
 

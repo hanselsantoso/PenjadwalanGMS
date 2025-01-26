@@ -124,8 +124,8 @@ Route::prefix('admin')->middleware(['role:0'])->group(function(){
             Route::post('/', [JadwalDetailController::class, 'store'])->name('jadwal_detail_store');
             Route::put('/', [JadwalDetailController::class, 'update'])->name('jadwal_detail_update');
             Route::post('/delete/{id}', [JadwalDetailController::class, 'delete'])->name('jadwal_detail_delete');
-            Route::post('/deactivate/{id}', [JadwalDetailController::class, 'deactivate'])->name('jadwal_detail_deactivate');
-            Route::post('/activate/{id}', [JadwalDetailController::class, 'activate'])->name('jadwal_detail_activate');
+            // Route::post('/deactivate/{id}', [JadwalDetailController::class, 'deactivate'])->name('jadwal_detail_deactivate');
+            // Route::post('/activate/{id}', [JadwalDetailController::class, 'activate'])->name('jadwal_detail_activate');
             Route::post('/automation', [JadwalAutomationController::class, 'automation'])->name('jadwal_automation');
         });
     });

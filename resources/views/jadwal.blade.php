@@ -28,7 +28,8 @@
                 </div>
             </div>
 
-            <table id="tabelUser" class="table table-striped table-bordered">
+            <h4>Jadwal Aktif</h4>
+            <table id="tabelJadwalActive" class="table table-striped table-bordered">
                 <thead>
                     <tr>
                         <th width="5%">No.</th>
@@ -43,7 +44,7 @@
                 </thead>
                 <tbody>
 
-                    @foreach ($jadwal as $item)
+                    @foreach ($jadwalActive as $item)
                         <tr>
                             <input type="hidden" name="id_jadwal_h" value="{{$item["id_jadwal_h"] }}">
                             <input type="hidden" name="nama_bagian" value="{{$item["id_cabang"] }}">
@@ -67,17 +68,58 @@
                                     Update
                                 </a>
 
-                                @if ($item->status_jadwal_h == 1)
-                                    <form action="/admin/jadwal/deactivate/{{ $item["id_jadwal_h"] }}" method="post">
-                                        @csrf
-                                        <button type="submit" class="btn btn-danger w-100">Suspend</button>
-                                    </form>
-                                @else
-                                    <form action="/admin/jadwal/activate/{{ $item["id_jadwal_h"] }}" method="post">
-                                        @csrf
-                                        <button type="submit" class="btn btn-success w-100">Aktifkan</button>
-                                    </form>
-                                @endif
+                                <form action="/admin/jadwal/deactivate/{{ $item["id_jadwal_h"] }}" method="post">
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger w-100">Deactivate</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+
+            <br>
+            <hr/>
+            <h4>Jadwal Deaktif</h4>
+            <table id="tabelJadwalDeactivate" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th width="5%">No.</th>
+                        <th width="10%">Cabang</th>
+                        <th width="20%">Nama Ibadah</th>
+                        <th width="10%">Tanggal</th>
+                        <th width="10%">Stand By</th>
+                        <th width="10%">Jam</th>
+                        <th width="10%">PIC</th>
+                        <th width="15%">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach ($jadwalDeactive as $item)
+                        <tr>
+                            <input type="hidden" name="id_jadwal_h" value="{{$item["id_jadwal_h"] }}">
+                            <input type="hidden" name="nama_bagian" value="{{$item["id_cabang"] }}">
+                            <input type="hidden" name="nama_bagian" value="{{ date('d-m-Y', strtotime($item["tanggal_jadwal"])) }}">
+                            <input type="hidden" name="nama_bagian" value="{{$item["id_jadwal_ibadah"] }}">
+                            <input type="hidden" name="nama_bagian" value="{{$item["pic"] }}">
+                            <td> {{ $loop->index + 1 }}</td>
+                            <td> {{ $item->cabang->nama_cabang ?? "-" }}</td>
+                            <td> {{ $item->jadwalIbadah->nama_ibadah ?? "-" }}</td>
+                            <td> {{ date('d-m-Y', strtotime($item["tanggal_jadwal"])) }}</td>
+                            <td> {{ $item->jadwalIbadah->jam_stand_by ?? "-" }}</td>
+                            <td> {{ $item->jadwalIbadah->jam_mulai ?? "-" }} - {{$item->jadwalIbadah->jam_akhir ?? "-" }}</td>
+                            <td> {{ $item->user->nama_lengkap ?? "-" }}</td>
+
+                            <td>
+                                <a href="/admin/jadwal/detail/{{$item["id_jadwal_h"] }}" class="btn btn-primary w-100 mb-2">
+                                    Detail
+                                </a>
+
+                                <form action="/admin/jadwal/activate/{{ $item["id_jadwal_h"] }}" method="post">
+                                    @csrf
+                                    <button type="submit" class="btn btn-success w-100">Activate</button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach
@@ -86,6 +128,7 @@
             </table>
         </div>
     </div>
+
     <!-- Create User Modal -->
     <div class="modal fade" id="createJadwal">
         <div class="modal-dialog">
@@ -208,7 +251,12 @@
 
 @section('script')
 <script>
-    $('#tabelUser').DataTable({
+    $('#tabelJadwalActive').DataTable({
+        "paging": true,
+        "pageLength": 10,
+    });
+
+    $('#tabelJadwalDeactivate').DataTable({
         "paging": true,
         "pageLength": 10,
     });

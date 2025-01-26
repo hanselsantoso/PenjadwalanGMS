@@ -9,33 +9,48 @@
             </div>
 
             <div class="row align-items-center mb-2 shadow-sm rounded bg-light">
-                <div class="col-md px-4 pt-4 mb-2">
+                <div class="col-md px-4 pt-2 mb-2">
                     <h2 class="text-primary fw-bold mb-3">
-                        Jadwal {{$detail->cabang->nama_cabang}}: {{$detail->jadwalIbadah->nama_ibadah}}
+                        Jadwal {{$jadwal->cabang->nama_cabang}}: {{$jadwal->jadwalIbadah->nama_ibadah}}
                     </h2>
-                    <h4 class="text-secondary mb-2 d-flex align-items-center">
+                    <h5 class="text-secondary d-flex align-items-center">
                         <i class="bi bi-calendar-fill"></i>
-                        <p class="mb-0 ms-2">Tanggal: {{ \Carbon\Carbon::parse($detail->tanggal_jadwal)->format('d-m-Y') }}</p>
-                    </h4>
-                    <h4 class="text-secondary mb-2 d-flex align-items-center">
+                        <p class="mb-0 ms-2">Tanggal: {{ \Carbon\Carbon::parse($jadwal->tanggal_jadwal)->format('d-m-Y') }}</p>
+                    </h5>
+                    <h5 class="text-secondary d-flex align-items-center">
                         <i class="bi bi-clock-fill"></i> 
-                        <p class="mb-0 ms-2">Jam {{$detail->jadwalIbadah->jam_mulai}} - {{$detail->jadwalIbadah->jam_akhir}}</p>
-                    </h4>
-                    <h4 class="text-muted d-flex align-items-center">
+                        <p class="mb-0 ms-2">Jam {{$jadwal->jadwalIbadah->jam_mulai}} - {{$jadwal->jadwalIbadah->jam_akhir}}</p>
+                    </h5>
+                    <h5 class="text-secondary d-flex align-items-center">
                         <i class="bi bi-bell-fill"></i> 
-                        <p class="mb-0 ms-2">Stand By: {{$detail->jadwalIbadah->jam_stand_by}}</p>
-                    </h4>
+                        <p class="mb-0 ms-2">Stand By: {{$jadwal->jadwalIbadah->jam_stand_by}}</p>
+                    </h5>
+                    <h5 class="text-secondary d-flex align-items-center">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <p class="mb-0 ms-2">
+                            Status: 
+                            <span class="{{$jadwal->status_jadwal_h == 1 ? 'text-success fw-bold' : 'text-danger fw-bold'}}">
+                                {{$jadwal->status_jadwal_h == 1 ? "Aktif" : "Tidak Aktif"}}
+                            </span>
+                        </p>
+                    </h5>
                 </div>
 
                 <div class="d-flex gap-2 text-start px-4 pb-4">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createJadwal">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createJadwal" 
+                        {{ $jadwal->status_jadwal_h == 0 ? 'disabled' : '' }}
+                    >
                         Tambah Jadwal
                     </button>
 
                     <form action="{{ route('jadwal_automation') }}" method="POST">
                         @csrf
                         <input type="hidden" name="jadwal" value="{{ $id_H }}">
-                        <button type="submit" class="btn btn-success">Automate Schedule</button>
+                        <button type="submit" class="btn btn-success" 
+                            {{ $jadwal->status_jadwal_h == 0 ? 'disabled' : '' }}
+                        >
+                            Automate Schedule
+                        </button>
                     </form>
                 </div>
             </div>
@@ -51,7 +66,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($detail->detail as $item)
+                    @foreach ($jadwal->detail as $item)
                         <tr>
                             <input type="hidden" name="id_jadwal_h" value="{{$item["id_jadwal_h"] }}">
                             <input type="hidden" name="nama_bagian" value="{{$item["id_jadwal_d"] }}">
@@ -63,21 +78,20 @@
                             <td> {{$item->status_jadwal_d == 1 ? "Aktif" : "Tidak Aktif" }}</td>
 
                             <td>
-                                <a href="#" class="btn btn-warning buttonEdit w-100 mb-2" data-toggle="modal" data-target="#updateJadwal">
+                                <button href="#" class="btn btn-warning buttonEdit w-100 mb-2" data-toggle="modal" data-target="#updateJadwal" 
+                                    {{ $jadwal->status_jadwal_h == 0 ? 'disabled' : '' }}
+                                >
                                     Update
-                                </a>
+                                </button>
 
-                                @if ($item->status_jadwal_d == 1)
-                                    <form action="/admin/jadwal/detail/delete/{{ $item["id_jadwal_d"] }}" method="post">
-                                        @csrf
-                                        <button type="submit" class="btn btn-danger w-100">Remove</button>
-                                    </form>
-                                @else
-                                    <form action="/admin/jadwal/detail/activate/{{ $item["id_jadwal_d"] }}" method="post">
-                                        @csrf
-                                        <button type="submit" class="btn btn-success w-100">Aktifkan</button>
-                                    </form>
-                                @endif
+                                <form action="/admin/jadwal/detail/delete/{{ $item["id_jadwal_d"] }}" method="post">
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger w-100" 
+                                        {{ $jadwal->status_jadwal_h == 0 ? 'disabled' : '' }}
+                                    >
+                                        Remove
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach
@@ -86,6 +100,7 @@
             </table>
         </div>
     </div>
+
     <!-- Create User Modal -->
     <div class="modal fade" id="createJadwal">
         <div class="modal-dialog">
@@ -97,7 +112,7 @@
                 </div>
                 <form action="{{ route('jadwal_detail_store') }}" method="post">
                     @csrf
-                    <input type="hidden" name="jadwal" value="{{$detail["id_jadwal_h"]}}">
+                    <input type="hidden" name="jadwal" value="{{$jadwal["id_jadwal_h"]}}">
                     <div class="modal-body">
                         <div class="form-group mb-1">
                             <label for="user">Anggota</label>
