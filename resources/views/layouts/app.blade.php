@@ -129,6 +129,13 @@
                 {{ session('success') }}
             </div>
         @endif
+        @if (session('warning'))
+            <div class="alert alert-warning">
+                @foreach(session('warning') as $warning)
+                    {{ $warning }}<br>
+                @endforeach
+            </div>
+        @endif
         @if (session('error'))
             <div class="alert alert-danger">
                 {{ session('error') }}

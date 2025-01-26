@@ -2,11 +2,21 @@
 @section('content')
     <div class="main">
         <div class="container">
+            <div class="mb-3">
+                <a href="{{ route('jadwal_index') }}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Back
+                </a>
+            </div>
+
             <div class="row align-items-center mb-2 shadow-sm rounded bg-light">
                 <div class="col-md px-4 pt-4 mb-2">
                     <h2 class="text-primary fw-bold mb-3">
-                        Jadwal {{$detail->cabang->nama_cabang}}: {{ \Carbon\Carbon::parse($detail->tanggal_jadwal)->format('d-m-Y') }}
+                        Jadwal {{$detail->cabang->nama_cabang}}: {{$detail->jadwalIbadah->nama_ibadah}}
                     </h2>
+                    <h4 class="text-secondary mb-2 d-flex align-items-center">
+                        <i class="bi bi-calendar-fill"></i>
+                        <p class="mb-0 ms-2">Tanggal: {{ \Carbon\Carbon::parse($detail->tanggal_jadwal)->format('d-m-Y') }}</p>
+                    </h4>
                     <h4 class="text-secondary mb-2 d-flex align-items-center">
                         <i class="bi bi-clock-fill"></i> 
                         <p class="mb-0 ms-2">Jam {{$detail->jadwalIbadah->jam_mulai}} - {{$detail->jadwalIbadah->jam_akhir}}</p>
@@ -139,7 +149,7 @@
                         <div class="form-group mb-1">
                             <label for="user">Anggota</label>
                             <select class="form-control" name="user" required>
-                                <option value="0">Pilih Anggota</option>
+                                <option value="" disabled selected>Pilih Anggota</option>
                                 @foreach ($user as $item)
                                     <option value="{{ $item->id }}">{{ $item->nama_lengkap }}</option>
                                 @endforeach
@@ -149,7 +159,7 @@
                         <div class="form-group mb-1">
                             <label for="bagian">Bagian</label>
                             <select class="form-control" name="bagian" required>
-                                <option value="0">Pilih Jam</option>
+                                <option value="" disabled selected>Pilih Jam</option>
                                 @foreach ($bagian as $item)
                                     <option value="{{ $item->id_bagian }}">{{ $item->nama_bagian }}</option>
                                 @endforeach
