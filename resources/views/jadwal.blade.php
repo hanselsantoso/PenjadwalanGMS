@@ -47,10 +47,10 @@
                     @foreach ($jadwalActive as $item)
                         <tr>
                             <input type="hidden" name="id_jadwal_h" value="{{$item["id_jadwal_h"] }}">
-                            <input type="hidden" name="nama_bagian" value="{{$item["id_cabang"] }}">
-                            <input type="hidden" name="nama_bagian" value="{{ date('d-m-Y', strtotime($item["tanggal_jadwal"])) }}">
-                            <input type="hidden" name="nama_bagian" value="{{$item["id_jadwal_ibadah"] }}">
-                            <input type="hidden" name="nama_bagian" value="{{$item["pic"] }}">
+                            <input type="hidden" name="cabang" value="{{$item["id_cabang"] }}">
+                            <input type="hidden" name="tanggal_jadwal" value="{{ date('d-m-Y', strtotime($item["tanggal_jadwal"])) }}">
+                            <input type="hidden" name="jadwal_ibadah" value="{{$item["id_jadwal_ibadah"] }}">
+                            <input type="hidden" name="pic_user" value="{{$item["pic"] }}">
                             <td> {{ $loop->index + 1 }}</td>
                             <td> {{ $item->cabang->nama_cabang ?? "-" }}</td>
                             <td> {{ $item->jadwalIbadah->nama_ibadah ?? "-" }}</td>
@@ -98,11 +98,6 @@
 
                     @foreach ($jadwalDeactive as $item)
                         <tr>
-                            <input type="hidden" name="id_jadwal_h" value="{{$item["id_jadwal_h"] }}">
-                            <input type="hidden" name="nama_bagian" value="{{$item["id_cabang"] }}">
-                            <input type="hidden" name="nama_bagian" value="{{ date('d-m-Y', strtotime($item["tanggal_jadwal"])) }}">
-                            <input type="hidden" name="nama_bagian" value="{{$item["id_jadwal_ibadah"] }}">
-                            <input type="hidden" name="nama_bagian" value="{{$item["pic"] }}">
                             <td> {{ $loop->index + 1 }}</td>
                             <td> {{ $item->cabang->nama_cabang ?? "-" }}</td>
                             <td> {{ $item->jadwalIbadah->nama_ibadah ?? "-" }}</td>
@@ -157,7 +152,7 @@
                         </div>
 
                         <div class="form-group mb-1">
-                            <label for="jadwal_ibadah">Slot Jadwal</label>
+                            <label for="jadwal_ibadah">Ibadah</label>
                             <select class="form-control" name="jadwal_ibadah" required>
                                 <option value="" disabled selected>Pilih Ibadah</option>
                                 @foreach ($jadwalIbadah as $item)
@@ -167,12 +162,9 @@
                         </div>
 
                         <div class="form-group mb-1">
-                            <label for="user">PIC</label>
-                            <select class="form-control" name="user" required>
-                                <option value="" disabled selected>Pilih User</option>
-                                @foreach ($user as $item)
-                                    <option value="{{ $item->id }}">{{ $item->nama_lengkap }}</option>
-                                @endforeach
+                            <label for="pic_user">PIC</label>
+                            <select class="form-control" name="pic_user" required disabled>
+                                <option value="" disabled selected>Pilih PIC</option>
                             </select>
                         </div>
 
@@ -200,6 +192,8 @@
                     @method('PUT')
                     @csrf
                     <input type="hidden" name="id_jadwal_h">
+                    <input type="hidden" name="cabang">
+                    <input type="hidden" name="jadwal_ibadah">
                     <div class="modal-body">
                         <div class="form-group mb-1">
                             <label for="tanggal_jadwal">Tanggal Jadwal</label>
@@ -207,8 +201,8 @@
                         </div>
                         <div class="form-group mb-1">
                             <label for="cabang">Cabang</label>
-                            <select class="form-control" name="cabang" required>
-                                <option value="0">Pilih Cabang</option>
+                            <select class="form-control" name="cabang" required disabled>
+                                <option value="" disabled selected>Pilih Cabang</option>
                                 @foreach ($cabang as $item)
                                     <option value="{{ $item->id_cabang }}">{{ $item->nama_cabang }}</option>
                                 @endforeach
@@ -216,22 +210,21 @@
                         </div>
 
                         <div class="form-group mb-1">
-                            <label for="jadwal_ibadah">Slot Jadwal</label>
-                            <select class="form-control" name="jadwal_ibadah" required>
-                                <option value="0">Pilih Jam</option>
+                            <label for="jadwal_ibadah">Ibadah</label>
+                            <select class="form-control" name="jadwal_ibadah" required disabled>
+                                <option value="" disabled selected>Pilih Ibadah</option>
                                 @foreach ($jadwalIbadah as $item)
-                                    <option value="{{ $item->id_jadwal_ibadah }}">{{ $item->jam_mulai }} - {{ $item->jam_akhir }}</option>
+                                    @if($item->id_cabang == old('cabang'))
+                                        <option value="{{ $item->id_jadwal_ibadah }}">{{ $item->nama_ibadah }}: {{ $item->jam_mulai }} - {{ $item->jam_akhir }}</option>
+                                    @endif
                                 @endforeach
                             </select>
                         </div>
 
                         <div class="form-group mb-1">
                             <label for="user">PIC</label>
-                            <select class="form-control" name="user" required>
-                                <option value="0">Pilih User</option>
-                                @foreach ($user as $item)
-                                    <option value="{{ $item->id }}">{{ $item->nama_lengkap }}</option>
-                                @endforeach
+                            <select class="form-control" name="pic_user" required>
+                                <option value="" disabled selected>Pilih PIC</option>
                             </select>
                         </div>
 
@@ -261,6 +254,7 @@
         "pageLength": 10,
     });
 
+    var USERS = @json($user);
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
@@ -279,6 +273,28 @@
     // });
 
     $(document).ready(function () {
+        // Add this new event handler
+        $('select[name="cabang"]').on('change', function() {
+            var cabangId = $(this).val();
+            var picUser = $('select[name="pic_user"]');
+            
+            picUser.prop('disabled', !cabangId);
+            picUser.empty();
+            picUser.append('<option value="" disabled selected>Pilih PIC</option>');
+            
+            if (cabangId) {
+                $.each(USERS, function(index, item) {
+                    if (item.id_cabang == cabangId) {
+                        picUser.append(new Option(
+                            item.nama_lengkap,
+                            item.id
+                        ));
+                    }
+                });
+            }
+        });
+        
+        // Existing buttonEdit click handler
         $('.buttonEdit').on('click', function() {
             var row = $(this).closest('tr');
             var hiddenInputs = row.find('input[type="hidden"]');
@@ -287,21 +303,37 @@
                 var value = $(this).val();
                 data.push(value);
             });
-            console.log(data);
+
             let id = data[0];
             let cabang = data[1];
             let tanggal = data[2];
-            let slot = data[3];
+            let jadwal = data[3];
             let pic = data[4];
-
-            $('#updateJadwal').find('select[name="id_jadwal_h"]').val(id);
-            $('#updateJadwal').find('select[name="cabang"]').val(cabang);
-            $('#updateJadwal').find('select[name="jadwal_ibadah"]').val(slot);
-            $('#updateJadwal').find('select[name="user"]').val(pic);
-
+            // Convert date format from DD-MM-YYYY to MM-DD-YYYY
+            let dateParts = tanggal.split('-');
+            let formattedDate = dateParts[1] + '-' + dateParts[0] + '-' + dateParts[2];
+            tanggal = formattedDate;
+            
+            $('#updateJadwal').find('input[name="id_jadwal_h"]').val(id);
             $('#updateJadwal').find('input[name="tanggal_jadwal"]').datepicker('setDate', tanggal);
+            $('#updateJadwal').find('input[name="cabang"]').val(cabang);
+            $('#updateJadwal').find('select[name="cabang"]').val(cabang);
+            $('#updateJadwal').find('input[name="jadwal_ibadah"]').val(jadwal);
+            $('#updateJadwal').find('select[name="jadwal_ibadah"]').val(jadwal);
 
-            // $("#tanggal_jadwal").datepicker("setDate", tanggal);
+            
+            var picUser = $('#updateJadwal').find('select[name="pic_user"]');
+            picUser.empty();
+            picUser.append('<option value="" disabled selected>Pilih PIC</option>');
+            $.each(USERS, function(index, item) {
+                if (item.id_cabang == cabang) {
+                    picUser.append(new Option(
+                        item.nama_lengkap,
+                        item.id
+                    ));
+                }
+            });
+            picUser.val(pic);
         });
     });
 

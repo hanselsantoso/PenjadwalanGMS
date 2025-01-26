@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Exports\ScheduleExport;
 use App\Http\Controllers\Controller;
-use App\Models\Bagian;
 use App\Models\Cabang;
 use App\Models\Jadwal_H;
 use App\Models\JadwalIbadah;
@@ -18,7 +17,14 @@ class JadwalController extends Controller
     {
         $jadwalIbadah = JadwalIbadah::where('status_jadwal_ibadah', 1)->get();
         $cabang = Cabang::where('status_cabang', 1)->get();
-        $user = User::where('status_user', 1)->where('role', '!=', 0)->get();
+        $user = User::join('user_tag', 'users.id', '=', 'user_tag.id_user')
+                    ->join('tag', 'user_tag.id_tag', '=', 'tag.id_tag')
+                    ->join('tim_pelayanan_d', 'tim_pelayanan_d.id_user', '=', 'users.id')
+                    ->join('tim_pelayanan_h', 'tim_pelayanan_h.id_pelayanan_h', '=', 'tim_pelayanan_d.id_pelayanan_h')
+                    ->where('status_user', 1)
+                    ->where('role', '!=', 0)
+                    ->where('tag.nama_tag', 'PIC')
+                    ->get();
 
         // Get jadwal with order by latest date and the earliest stand by time
         $jadwal = Jadwal_H::join('jadwal_ibadah', 'jadwal_h.id_jadwal_ibadah', '=', 'jadwal_ibadah.id_jadwal_ibadah')
@@ -33,21 +39,27 @@ class JadwalController extends Controller
         return view('jadwal', compact('jadwalActive', 'jadwalDeactive', 'jadwalIbadah', 'cabang', 'user'));
     }
 
-    public function store(Request $request)
+    public function checkJadwalExists(Request $request)
     {
-        $request->validate([
-            'cabang' => 'required|integer',
-            'user' => 'required|integer',
-            'jadwal_ibadah' => 'required|integer',
-        ]);
-
         // Check for existing schedule with same cabang, jadwal_ibadah and date
         $existingJadwal = Jadwal_H::where('id_cabang', $request->cabang)
             ->where('id_jadwal_ibadah', $request->jadwal_ibadah)
             ->where('tanggal_jadwal', date('Y-m-d', strtotime($request->tanggal_jadwal)))
             ->where('status_jadwal_h', 1)
             ->first();
+        return $existingJadwal;
+    }
 
+    public function store(Request $request)
+    {
+        $request->validate([
+            'cabang' => 'required|integer',
+            'tanggal_jadwal' => 'required',
+            'jadwal_ibadah' => 'required|integer',
+            'pic_user' => 'required|integer',
+        ]);
+
+        $existingJadwal = $this->checkJadwalExists($request);
         if ($existingJadwal) {
             return redirect()->route('jadwal_index')
                 ->with('error', 'Jadwal untuk cabang, slot waktu dan tanggal tersebut sudah ada.');
@@ -55,7 +67,7 @@ class JadwalController extends Controller
 
         $jadwal = new Jadwal_H();
         $jadwal->id_cabang = $request->cabang;
-        $jadwal->pic = $request->user;
+        $jadwal->pic = $request->pic_user;
         $jadwal->id_jadwal_ibadah = $request->jadwal_ibadah;
         $jadwal->tanggal_jadwal = date('Y-m-d', strtotime($request->tanggal_jadwal));
         $jadwal->status_jadwal_h = 1;
@@ -64,7 +76,30 @@ class JadwalController extends Controller
         return redirect()->route('jadwal_index')->with('success', 'Jadwal berhasil dibuat.');
     }
 
-    // TODO: Add Update, Activate & Deactivate function 
+    public function update(Request $request)
+    {
+        $request->validate([
+            'id_jadwal_h' => 'required|integer',
+            'cabang' => 'required|integer',
+            'tanggal_jadwal' => 'required',
+            'jadwal_ibadah' => 'required|integer',
+            'pic_user' => 'required|integer',
+        ]);
+
+        $existingJadwal = $this->checkJadwalExists($request);
+        if ($existingJadwal) {
+            return redirect()->route('jadwal_index')
+                ->with('error', 'Jadwal untuk cabang, slot waktu dan tanggal tersebut sudah ada.');
+        }
+
+        $jadwal = Jadwal_H::find($request->id_jadwal_h);
+        $jadwal->pic = $request->pic_user;
+        $jadwal->tanggal_jadwal = date('Y-m-d', strtotime($request->tanggal_jadwal));
+        $jadwal->save();
+
+        return redirect()->back()->with('success', 'Jadwal berhasil diperbarui.');
+    }
+
     public function activate($id)
     {
         $jadwal = Jadwal_H::find($id);

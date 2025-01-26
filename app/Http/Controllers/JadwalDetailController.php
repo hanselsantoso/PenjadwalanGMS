@@ -53,7 +53,6 @@ class JadwalDetailController extends Controller
 
     public function update(Request $request)
     {
-        // TODO: PENGECEKAN NULLABLE
         $request->validate([
             'bagian' => 'required|integer',
             'user' => 'required|integer',
