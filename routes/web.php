@@ -1,17 +1,9 @@
 <?php
 
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\aturanController;
-use App\Http\Controllers\aturanPinjamanController;
 use App\Http\Controllers\BagianController;
-use App\Http\Controllers\BungaController;
-use App\Http\Controllers\bungaPinjamanController;
-use App\Http\Controllers\cicilanController;
-use App\Http\Controllers\iuranController;
 use App\Http\Controllers\JadwalDetailController;
-use App\Http\Controllers\pinjamanController;
-use App\Http\Controllers\SHUController;
-use App\Http\Controllers\simpananController;
+use App\Http\Controllers\JadwalAutomationController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CabangController;
@@ -134,7 +126,7 @@ Route::prefix('admin')->middleware(['role:0'])->group(function(){
             Route::post('/delete/{id}', [JadwalDetailController::class, 'delete'])->name('jadwal_detail_delete');
             Route::post('/deactivate/{id}', [JadwalDetailController::class, 'deactivate'])->name('jadwal_detail_deactivate');
             Route::post('/activate/{id}', [JadwalDetailController::class, 'activate'])->name('jadwal_detail_activate');
-            Route::post('/automation', [JadwalDetailController::class, 'automation'])->name('jadwal_automation');
+            Route::post('/automation', [JadwalAutomationController::class, 'automation'])->name('jadwal_automation');
         });
     });
 });
