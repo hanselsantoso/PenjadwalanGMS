@@ -19,7 +19,14 @@ class JadwalController extends Controller
         $jadwalIbadah = JadwalIbadah::where('status_jadwal_ibadah', 1)->get();
         $cabang = Cabang::where('status_cabang', 1)->get();
         $user = User::where('status_user', 1)->where('role', '!=', 0)->get();
-        $jadwal = Jadwal_H::where('status_jadwal_h', 1)->orderBy('tanggal_jadwal', 'desc')->get();
+
+        // Get jadwal with order by latest date and the earliest stand by time
+        $jadwal = Jadwal_H::where('status_jadwal_h', 1)
+            ->join('jadwal_ibadah', 'jadwal_h.id_jadwal_ibadah', '=', 'jadwal_ibadah.id_jadwal_ibadah')
+            ->orderBy('tanggal_jadwal', 'desc')
+            ->orderBy('jadwal_ibadah.jam_stand_by', 'asc')
+            ->select('jadwal_h.*')
+            ->get();
 
         return view('jadwal', compact('jadwal','jadwalIbadah', 'cabang', 'user'));
     }

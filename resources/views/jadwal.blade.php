@@ -116,9 +116,9 @@
                         <div class="form-group mb-1">
                             <label for="jadwal_ibadah">Slot Jadwal</label>
                             <select class="form-control" name="jadwal_ibadah" required>
-                                <option value="" disabled selected>Pilih Jam</option>
+                                <option value="" disabled selected>Pilih Ibadah</option>
                                 @foreach ($jadwalIbadah as $item)
-                                    <option value="{{ $item->id_jadwal_ibadah }}">{{ $item->jam_mulai }} - {{ $item->jam_akhir }}</option>
+                                    <option value="{{ $item->id_jadwal_ibadah }}">{{ $item->nama_ibadah }}: {{ $item->jam_mulai }} - {{ $item->jam_akhir }}</option>
                                 @endforeach
                             </select>
                         </div>
