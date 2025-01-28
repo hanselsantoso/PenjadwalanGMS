@@ -7,25 +7,33 @@
                     <h2>Daftar Jadwal</h2>
                 </div>
 
-                <!-- TODO: ADD DOWNLOAD SCHEDULE BUTTON -->
-                <!-- <div class="col-md-6">
-                    <form action="{{ route('jadwal.download') }}" method="GET">
-                        @csrf
-                        <label for="start_date">Start Date:</label>
-                        <input type="date" id="start_date" name="start_date" required>
-
-                        <label for="end_date">End Date:</label>
-                        <input type="date" id="end_date" name="end_date" required>
-
-                        <button type="submit">Download Schedule</button>
-                    </form>
-                </div> -->
-
                 <div class="col-md-6 text-end">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createJadwal">
                         Tambah Jadwal
                     </button>
                 </div>
+            </div>
+            
+            <div class="col-md p-2 px-3 mt-2 mb-3 shadow-sm rounded bg-light">
+                <form action="{{ route('jadwal.download') }}" method="GET">
+                    @csrf
+                    <div class="row mb-3">
+                        <div class="col-auto mb-0">
+                            <label for="start_date" class="form-label me-3">From Date:</label>
+                            <input type="date" id="start_date" name="start_date" class="form-control" required>
+                        </div>
+
+                        <div class="col-auto mb-0">
+                            <label for="end_date" class="form-label me-3">End Date:</label>
+                            <input type="date" id="end_date" name="end_date" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-download me-1"></i>
+                        Download
+                    </button>
+                </form>
             </div>
 
             <h4>Jadwal Aktif</h4>

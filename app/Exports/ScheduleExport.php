@@ -16,159 +16,146 @@ class ScheduleExport implements FromCollection, WithHeadings, WithStyles
     protected $startDate;
     protected $endDate;
     protected $positions;
+    protected $headings;
+    protected $rows;
 
-    public function __construct($startDate, $endDate)
+    public function __construct($startDate, $endDate, $idCabang)
     {
         $this->startDate = Carbon::parse($startDate);
         $this->endDate = Carbon::parse($endDate);
-
-        // Fetch active positions dynamically
         $this->positions = Bagian::where('status_bagian', 1)->get();
+
+        $this->generateData($idCabang);
     }
 
-    public function collection()
+    private function generateData($idCabang)
     {
+        $headings = ['Position'];
         $rows = collect();
 
-        // Retrieve jadwal_h entries within the date range and group by date and time slot
-        $schedules = Jadwal_H::whereBetween('tanggal_jadwal', [$this->startDate, $this->endDate])
-            ->where('status_jadwal_h', 1)
-            ->with(['detail' => function ($query) {
-                $query->with('bagian', 'user');
-            }, 'jadwalIbadah'])
-            ->get()
-            ->groupBy(['tanggal_jadwal', 'id_jadwal_ibadah']);
+        $schedules = $this->getSchedules($idCabang);
+        $datePairs = $this->getDatePairs($schedules);
 
-        $datePairs = $schedules->keys()
-            ->map(function ($date) {
-                return Carbon::parse($date)->startOfWeek(Carbon::SATURDAY);
-            })
-            ->unique()
-            ->values();
-
-        // Iterate over each position
+        $row = [];
         foreach ($this->positions as $position) {
-            $row = ['Position' => $position->nama_bagian];
+            // Assign nama_bagian to column "Position"
+            $row[$headings[0]] = $position->nama_bagian;
 
+            // Iterate over each Saturday+Sunday date pair
             foreach ($datePairs as $startDate) {
                 $saturdayDate = $startDate->toDateString();
                 $sundayDate = $startDate->copy()->addDay()->toDateString();
 
+                $saturdaySchedules = $schedules[$saturdayDate] ?? null;
+                $sundaySchedules = $schedules[$sundayDate] ?? null;
+
                 // Saturday data
-                if (isset($schedules[$saturdayDate])) {
-                    $timeSlots = $schedules[$saturdayDate]->sortBy(function ($dateSchedules) {
-                        return $dateSchedules->first()->jadwalIbadah->jam_mulai; // Sort by start time
-                    });
-
-                    foreach ($timeSlots as $timeSlotId => $dateSchedules) {
-                        $timeSlot = $dateSchedules->first()->jadwalIbadah;
-                        $formattedDate = Carbon::parse($saturdayDate)->isoFormat('D MMM');
-                        $timeRange = "($timeSlot->jam_mulai - $timeSlot->jam_akhir)";
-                        $headerKey = "$formattedDate $timeRange";
-
-                        $volunteers = $dateSchedules
-                            ->pluck('detail')
-                            ->flatten()
-                            ->where('id_bagian', $position->id_bagian)
-                            ->map(function ($detail) {
-                                return $detail->user->nama_lengkap ?? '';
-                            })
-                            ->filter()
-                            ->implode("\n");
-
-                        $row[$headerKey] = $volunteers;
-                    }
+                if ($saturdaySchedules) {
+                    $saturdaySchedules = $this->sortSchedulesByJamMulai($saturdaySchedules);
+                    
+                    $this->fillRowAndHeader(
+                        $saturdaySchedules, 
+                        $saturdayDate, 
+                        $position,
+                        $headings,
+                        $row
+                    );
                 }
 
                 // Sunday data
-                if (isset($schedules[$sundayDate])) {
-                    $timeSlots = $schedules[$sundayDate]->sortBy(function ($dateSchedules) {
-                        return $dateSchedules->first()->jadwalIbadah->jam_mulai; // Sort by start time
-                    });
+                if ($sundaySchedules) {
+                    $sundaySchedules = $this->sortSchedulesByJamMulai($sundaySchedules);
 
-                    foreach ($timeSlots as $timeSlotId => $dateSchedules) {
-                        $timeSlot = $dateSchedules->first()->jadwalIbadah;
-                        $formattedDate = Carbon::parse($sundayDate)->isoFormat('D MMM');
-                        $timeRange = "($timeSlot->jam_mulai - $timeSlot->jam_akhir)";
-                        $headerKey = "$formattedDate $timeRange";
-
-                        $volunteers = $dateSchedules
-                            ->pluck('detail')
-                            ->flatten()
-                            ->where('id_bagian', $position->id_bagian)
-                            ->map(function ($detail) {
-                                return $detail->user->nama_lengkap ?? '';
-                            })
-                            ->filter()
-                            ->implode("\n");
-
-                        $row[$headerKey] = $volunteers;
-                    }
+                    $this->fillRowAndHeader(
+                        $sundaySchedules, 
+                        $sundayDate, 
+                        $position,
+                        $headings,
+                        $row
+                    );
                 }
             }
 
             $rows->push($row);
         }
 
-        return $rows;
+        $this->headings = $headings;
+        $this->rows = $rows;
     }
 
+    private function getSchedules($idCabang)
+    {
+        // Retrieve jadwal_h entries within the date range and group by date and time slot
+        return Jadwal_H::whereBetween('tanggal_jadwal', [$this->startDate, $this->endDate])
+            ->where('status_jadwal_h', 1)
+            ->where('id_cabang', $idCabang) 
+            ->with(['detail' => function ($query) {
+                $query->with('bagian', 'user');
+            }, 'jadwalIbadah'])
+            ->get()
+            ->groupBy(['tanggal_jadwal', 'id_jadwal_ibadah'])
+            ->sortBy('tanggal_jadwal');
+    }
+    
+    private function getDatePairs($schedules)
+    {
+        // Get Saturday and Sunday date pair from schedules
+        return $schedules
+                    ->keys()
+                    ->map(function ($date) {
+                        return Carbon::parse($date)->startOfWeek(Carbon::SATURDAY);
+                    })
+                    ->unique()
+                    ->values();
+    }
+
+    private function sortSchedulesByJamMulai($schedules)
+    {
+        // Sort by start time
+        return $schedules->sortBy(function ($dateSchedules) {
+            return $dateSchedules->first()->jadwalIbadah->jam_mulai; 
+        });
+    }
+
+    private function fillRowAndHeader($schedules, $jadwalDate, $position, &$headings, &$row)
+    {
+        // dump($schedules);
+        foreach ($schedules as $scheduleId => $schedule) {
+            $jadwalIbadah = $schedule->first()->jadwalIbadah;
+            
+            $aliasIbadah = $jadwalIbadah->alias_ibadah;
+            $tanggalIbadah = Carbon::parse($jadwalDate)->isoFormat('ddd, DD MMM YYYY');
+            $jamIbadah = "($jadwalIbadah->jam_mulai - $jadwalIbadah->jam_akhir)";
+            
+            $headingKey = "$tanggalIbadah \n$aliasIbadah \n$jamIbadah";
+            if (!in_array($headingKey, $headings)) {
+                $headings[] = $headingKey;
+            }
+
+            $volunteers = $schedule
+                ->pluck('detail')
+                ->flatten()
+                ->where('id_bagian', $position->id_bagian)
+                ->map(function ($detail) {
+                    return $detail->user->nama_lengkap ?? '-';
+                })
+                ->filter()
+                ->implode(" & ");
+            // dump($headingKey." ;;; ".$volunteers);
+            
+            $row[$headingKey] = $volunteers ?: '-';
+        }
+    }
+
+    public function collection()
+    {
+        return $this->rows;
+    }
 
     public function headings(): array
     {
-        // Initialize the header with "Position"
-        $headings = ['Position'];
-
-        // Retrieve schedules within the date range and group by date and time slot
-        $existingSchedules = Jadwal_H::whereBetween('tanggal_jadwal', [$this->startDate, $this->endDate])
-            ->where('status_jadwal_h', 1)
-            ->with('jadwalIbadah')
-            ->get()
-            ->groupBy(['tanggal_jadwal', 'id_jadwal_ibadah']);
-
-        $datePairs = $existingSchedules->keys()
-            ->map(function ($date) {
-                return Carbon::parse($date)->startOfWeek(Carbon::SATURDAY);
-            })
-            ->unique()
-            ->values();
-
-        foreach ($datePairs as $startDate) {
-            $saturdayDate = $startDate->toDateString();
-            $sundayDate = $startDate->copy()->addDay()->toDateString();
-
-            // Saturday headers
-            if (isset($existingSchedules[$saturdayDate])) {
-                $timeSlots = $existingSchedules[$saturdayDate]->sortBy(function ($dateSchedules) {
-                    return $dateSchedules->first()->jadwalIbadah->jam_mulai; // Sort by start time
-                });
-
-                foreach ($timeSlots as $timeSlotId => $dateSchedules) {
-                    $timeSlot = $dateSchedules->first()->jadwalIbadah;
-                    $formattedDate = Carbon::parse($saturdayDate)->isoFormat('D MMM');
-                    $timeRange = "($timeSlot->jam_mulai - $timeSlot->jam_akhir)";
-                    $headings[] = "$formattedDate $timeRange $timeSlot->nama_ibadah";
-                }
-            }
-
-            // Sunday headers
-            if (isset($existingSchedules[$sundayDate])) {
-                $timeSlots = $existingSchedules[$sundayDate]->sortBy(function ($dateSchedules) {
-                    return $dateSchedules->first()->jadwalIbadah->jam_mulai; // Sort by start time
-                });
-
-                foreach ($timeSlots as $timeSlotId => $dateSchedules) {
-                    $timeSlot = $dateSchedules->first()->jadwalIbadah;
-                    $formattedDate = Carbon::parse($sundayDate)->isoFormat('D MMM');
-                    $timeRange = "($timeSlot->jam_mulai - $timeSlot->jam_akhir)";
-                    $headings[] = "$formattedDate $timeRange $timeSlot->nama_ibadah";
-                }
-            }
-        }
-
-        return $headings;
+        return $this->headings;
     }
-
 
     public function styles(Worksheet $sheet)
     {
@@ -183,15 +170,35 @@ class ScheduleExport implements FromCollection, WithHeadings, WithStyles
 
         // Style the "Position" column for clarity
         $sheet->getStyle('A')->applyFromArray([
-            'font' => ['bold' => true]
+            'font' => ['bold' => true],
+            'alignment' => [
+                'horizontal' => 'center',
+                'vertical' => 'center',
+                'wrapText' => true
+            ],
         ]);
 
         // Style for alternating colors on Saturday and Sunday columns
         $columnIndex = 'B';
         foreach ($this->headings() as $heading) {
-            if (strpos($heading, 'Sun') !== false) {
-                $sheet->getStyle($columnIndex)->getFill()->setFillType('solid')->getStartColor()->setRGB('D1E8FF'); // Light blue for Sunday
-            }
+            // Style center and wrap text for the whole column
+            $sheet->getStyle($columnIndex.':'.$columnIndex)->applyFromArray([
+                'alignment' => [
+                    'horizontal' => 'center',
+                    'vertical' => 'center',
+                    'wrapText' => true
+                ],
+            ]);
+
+            // if (str_contains(strtolower($heading), 'sun')) {
+            //     // Light blue bgc for Sunday
+            //     $columnName = $columnIndex.'1';
+            //     $sheet->getStyle($columnIndex.'1')
+            //             ->getFill()
+            //             ->setFillType('solid')
+            //             ->getStartColor()
+            //             ->setRGB('D1E8FF');
+            // }
             $columnIndex++;
         }
 

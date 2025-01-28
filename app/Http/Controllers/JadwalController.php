@@ -124,11 +124,22 @@ class JadwalController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
         ]);
-
+        
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
+        // TODO: able to choose Timur, Barat, Selatan, or All
+        // $idCabang = $request->input('id_cabang');
+        $idCabang = 1;
+        
+        // Format dates for filename
+        $startDateFormatted = date('d-m-Y', strtotime($startDate));
+        $endDateFormatted = date('d-m-Y', strtotime($endDate));
+        $filename = "GMS_Sound_Schedule_{$startDateFormatted}_to_{$endDateFormatted}.xlsx";
 
         // Trigger the download
-        return Excel::download(new ScheduleExport($startDate, $endDate), 'schedule.xlsx');
+        return Excel::download(
+            new ScheduleExport($startDate, $endDate, $idCabang), 
+            $filename
+        );
     }
 }

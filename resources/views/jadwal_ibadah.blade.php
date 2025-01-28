@@ -18,6 +18,7 @@
                     <tr>
                         <th width="10%">No</th>
                         <th width="30%">Nama Ibadah</th>
+                        <th width="30%">Alias</th>
                         <th width="15%">Jam Stand By</th>
                         <th width="15%">Jam Mulai</th>
                         <th width="15%">Jam Akhir</th>
@@ -29,11 +30,13 @@
                     <tr>
                         <input type="hidden" name="id_jadwal_ibadah" value="{{$item["id_jadwal_ibadah"] }}">
                         <input type="hidden" name="nama_ibadah" value="{{$item["nama_ibadah"] }}">
+                        <input type="hidden" name="alias_ibadah" value="{{$item["alias_ibadah"] }}">
                         <input type="hidden" name="jadwal_stand_by" value="{{$item["jam_stand_by"] }}">
                         <input type="hidden" name="jadwal_mulai" value="{{$item["jam_mulai"] }}">
                         <input type="hidden" name="jadwal_akhir" value="{{$item["jam_akhir"] }}">
                         <td>{{ $loop->index + 1 }}</td>
                         <td> {{$item["nama_ibadah"] }}</td>
+                        <td> {{$item["alias_ibadah"] }}</td>
                         <td> {{$item["jam_stand_by"] }}</td>
                         <td> {{$item["jam_mulai"] }}</td>
                         <td> {{$item["jam_akhir"] }}</td>
@@ -88,8 +91,12 @@
                     @csrf
                     <div class="modal-body">
                         <div class="form-group mb-1">
-                            <label for="nama_ibadah">Nama Jadwal Ibadah</label>
+                            <label for="nama_ibadah">Nama Ibadah</label>
                             <input type="text" class="form-control" name="nama_ibadah" required>
+                        </div>
+                        <div class="form-group mb-1">
+                            <label for="alias_ibadah">Alias Ibadah</label>
+                            <input type="text" class="form-control" name="alias_ibadah" required>
                         </div>
                         <div class="form-group mb-1">
                             <label for="nama_tag">Jam Stand By</label>
@@ -138,8 +145,12 @@
                     <div class="modal-body">
                         <div class="modal-body">
                             <div class="form-group mb-1">
-                                <label for="nama_ibadah">Nama Jadwal Ibadah</label>
+                                <label for="nama_ibadah">Nama Ibadah</label>
                                 <input type="text" class="form-control" name="nama_ibadah" required>
+                            </div>
+                            <div class="form-group mb-1">
+                                <label for="alias_ibadah">Alias Ibadah</label>
+                                <input type="text" class="form-control" name="alias_ibadah" required>
                             </div>
                             <div class="form-group mb-1">
                                 <label for="nama_tag">Jam Stand By</label>
@@ -196,12 +207,14 @@
             console.log(data);
             let id = data[0];
             let nama_ibadah = data[1];
-            let stand = data[2];
-            let awal = data[3];
-            let akhir = data[4];
+            let alias_ibadah = data[2];
+            let stand = data[3];
+            let awal = data[4];
+            let akhir = data[5];
 
             $('#updateJadwalIbadah').find('input[name="id_jadwal_ibadah"]').val(id);
             $('#updateJadwalIbadah').find('input[name="nama_ibadah"]').val(nama_ibadah);
+            $('#updateJadwalIbadah').find('input[name="alias_ibadah"]').val(alias_ibadah);
             $('#updateJadwalIbadah').find('select[name="jam_stand_by"]').val(stand);
             $('#updateJadwalIbadah').find('select[name="jam_mulai"]').val(awal);
             $('#updateJadwalIbadah').find('select[name="jam_akhir"]').val(akhir);

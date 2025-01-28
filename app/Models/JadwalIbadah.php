@@ -15,6 +15,7 @@ class JadwalIbadah extends Model
 
     protected $fillable = [
         'nama_ibadah',
+        'alias_ibadah',
         'jam_stand_by',
         'jam_mulai',
         'jam_akhir',

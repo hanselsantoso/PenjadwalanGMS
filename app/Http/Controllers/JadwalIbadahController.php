@@ -20,6 +20,7 @@ class JadwalIbadahController extends Controller
         //TODO: PENGECEKAN SEMUA JAM
         $jadwalIbadah = new JadwalIbadah();
         $jadwalIbadah->nama_ibadah = $request->nama_ibadah;
+        $jadwalIbadah->alias_ibadah = $request->alias_ibadah;
         $jadwalIbadah->jam_stand_by = $request->jam_stand_by;
         $jadwalIbadah->jam_mulai = $request->jam_mulai;
         $jadwalIbadah->jam_akhir = $request->jam_akhir;
@@ -33,6 +34,7 @@ class JadwalIbadahController extends Controller
         //TODO: PENGECEKAN SEMUA JAM
         $jadwalIbadah = JadwalIbadah::find($request->id_jadwal_ibadah);
         $jadwalIbadah->nama_ibadah = $request->nama_ibadah;
+        $jadwalIbadah->alias_ibadah = $request->alias_ibadah;
         $jadwalIbadah->jam_stand_by = $request->jam_stand_by;
         $jadwalIbadah->jam_mulai = $request->jam_mulai;
         $jadwalIbadah->jam_akhir = $request->jam_akhir;
