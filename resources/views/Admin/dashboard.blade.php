@@ -36,6 +36,7 @@
                         <th>Nama</th>
                         <th>Email</th>
                         <th>No. Telp</th>
+                        <th>Tim</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -62,6 +63,7 @@
                             <td> {{$item["nama_lengkap"] }}</td>
                             <td> {{$item["email"] }}</td>
                             <td> {{$item["telp"] }}</td>
+                            <td> {{$item->team_name }}</td>
                             <td> {{$item["status_user"] == 1 ? 'Aktif' : 'Tidak Aktif' }}</td>
                             <td>
                                 {{-- <a href="" class="btn btn-primary">View</a> --}}

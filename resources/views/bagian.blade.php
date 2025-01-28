@@ -17,8 +17,9 @@
                 <thead>
                     <tr>
                         <th width="10%">No</th>
-                        <th width="70%">Nama Bagian</th>
-                        <th width="20%">Action</th>
+                        <th width="60%">Nama Bagian</th>
+                        <th width="15%">Status</th>
+                        <th width="15%">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -28,6 +29,7 @@
                         <input type="hidden" name="nama_bagian" value="{{$item["nama_bagian"] }}">
                         <td> {{ $loop->index + 1 }}</td>
                         <td> {{ $item["nama_bagian"] }}</td>
+                        <td> {{$item["status_bagian"] == 1 ? 'Aktif' : 'Tidak Aktif' }}</td>
 
                         <td>
                             <a href="#" class="btn btn-warning buttonEdit w-100 mb-2" data-toggle="modal" data-target="#updateBagian">

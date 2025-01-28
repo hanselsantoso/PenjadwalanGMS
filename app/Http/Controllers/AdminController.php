@@ -19,7 +19,19 @@ class AdminController extends Controller
 {
     //
     public function index(Request $request) {
-        $user = User::where('role', '!=', 0)->get();
+        $user = User::where('role', '!=', 0)
+            ->with(['tim_pelayanan_d.tim_pelayanan_h'])
+            ->get()
+            ->map(function($user) {
+                if (isset($user->tim_pelayanan_d)) {
+                    $user->team_name = $user->tim_pelayanan_d->tim_pelayanan_h->nama_tim_pelayanan_h;
+                } else {
+                    $user->team_name = '-';
+                }
+                return $user;
+            })
+            ->groupBy('team_name')
+            ->flatten();
 
         $tag = Tag::where('status_tag',1)->get();
         return view('Admin.dashboard',with([
@@ -86,7 +98,7 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
-        $this->doValidate($request);
+        $this->doValidate($request, 'CREATE');
         try {
             $id_tags = $request->id_tag;
             // Create a new User with role 1
@@ -98,6 +110,7 @@ class AdminController extends Controller
             $user->email = $request->input('email');
             $user->tempat_lahir = $request->input('tempat_lahir');
             $user->tanggal_lahir = Carbon::createFromFormat('d-m-Y', $request->tanggal_lahir)->format('Y-m-d');
+            dump($user->tanggal_lahir);
             $user->jenis_kelamin = $request->input('jenis_kelamin');
             $user->telp = $request->input('telp');
             $user->nomor_cg = $request->input('nomor_cg');
@@ -108,12 +121,14 @@ class AdminController extends Controller
             $user->status_user = 1;
             $user->role = 1; //percobaan
             $user->save();
-
-            foreach ($id_tags as $id_tag) {
-                $mapping = new UserTag();
-                $mapping->id_user = $user->id;
-                $mapping->id_tag = $id_tag;
-                $mapping->save();
+            
+            if (isset($id_tags)) {
+                foreach ($id_tags as $id_tag) {
+                    $mapping = new UserTag();
+                    $mapping->id_user = $user->id;
+                    $mapping->id_tag = $id_tag;
+                    $mapping->save();
+                }
             }
 
             return redirect()->back()->with('success', 'User berhasil ditambahkan.');
