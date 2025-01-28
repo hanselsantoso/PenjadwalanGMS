@@ -13,83 +13,100 @@
                 </div>
             </div>
 
-            <div class="accordion" id="accordionCabang">
+            <div id="accordionCabang" class="accordion">
                 @foreach ($cabangs as $cabang)
-                    <div class="card">
-                        <div class="card-header" id="headingCabang{{ $cabang->id }}">
+                    <div class="card mb-2">
+                        <div class="card-header" id="headingCabang{{ $cabang->id_cabang }}">
                             <h2 class="mb-0">
-                                <button class="btn fs-4 fw-bold" type="button" data-toggle="collapse" data-target="#collapseCabang{{ $cabang->id }}" aria-expanded="true" aria-controls="collapseCabang{{ $cabang->id }}">
+                                <button type="button"
+                                    class="btn fs-4 fw-bold"
+                                    data-toggle="collapse" 
+                                    data-target="#collapseCabang-{{ $cabang->id_cabang }}" 
+                                    aria-expanded="true" 
+                                    aria-controls="collapseCabang-{{ $cabang->id_cabang }}"
+                                >
                                     <i class="fas fa-caret-down mr-2"></i> {{ $cabang->nama_cabang }}
                                 </button>
                             </h2>
                         </div>
 
-                        <div id="collapseCabang{{ $cabang->id }}" class="collapse" aria-labelledby="headingCabang{{ $cabang->id }}" data-parent="#accordionCabang">
-                            <div class="card-body">
+                        <div id="collapseCabang-{{ $cabang->id_cabang }}"
+                            class="card-body collapse"
+                            aria-labelledby="headingCabang{{ $cabang->id_cabang }}" 
+                            data-parent="#accordionCabang"
+                        >
+                            <div id="accordionTim" class="accordion">
                                 <!-- Nested Accordion for Teams -->
-                                <div class="accordion" id="accordionTeams{{ $cabang->id }}">
-                                    @foreach ($cabang->tim as $team)  <!-- Assuming each cabang has multiple teams -->
-                                        <div class="card">
-                                            <div class="card-header" id="headingTeam{{ $team->id }}">
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <h3 class="mb-0 col-9">
-                                                        <button class="btn fs-5 fw-bold" type="button" data-toggle="collapse" data-target="#collapseTeam{{ $team->id }}" aria-expanded="true" aria-controls="collapseTeam{{ $team->id }}">
-                                                            <i class="fas fa-caret-down mr-2"></i> {{ $team->nama_tim_pelayanan_h }} - {{ $team->user["nama_lengkap"] }} <!-- Team name and leader -->
-                                                        </button>
-                                                    </h3>
-
-                                                    <div id="collapseTeam{{ $team->id }}" class="collapse" aria-labelledby="headingTeam{{ $team->id }}">
-                                                        <input type="hidden" id="id_pelayanan_h" name="id_pelayanan_h" value="{{$team["id_pelayanan_h"]}}">
-                                                        <input type="hidden" id="nama_tim_pelayanan_h" name="nama_tim_pelayanan_h" value="{{$team["nama_tim_pelayanan_h"]}}">
-                                                        <input type="hidden" id="id_user" name="id_user" value="{{$team["id_user"]}}">
-                                                        <input type="hidden" id="id_cabang" name="id_cabang" value="{{$team["id_cabang"]}}">
-
-                                                        <button class="btn btn-success buttonAddMember" data-id="{{ $team->id_pelayanan_h }}" data-toggle="modal" data-target="#addMember">Add</button>
-                                                        <button class="btn btn-warning buttonEditPic" data-id="{{ $team->id }}" data-toggle="modal" data-target="#updatePIC">Edit</button>
-                                                        <button type="submit" class="btn btn-danger">Delete</button>
-                                                        {{-- <form action="{{ route('tim_deactivate', $team->id) }}" method="POST" style="display:inline;">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                        </form> --}}
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div id="collapseTeam{{ $team->id }}" class="collapse" aria-labelledby="headingTeam{{ $team->id }}" data-parent="#accordionTeams{{ $cabang->id }}">
-                                                <div class="card-body">
-                                                    <table class="table table-striped table-bordered">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>No</th>
-                                                                <th>Nama Anggota</th>
-                                                                <th>Action</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @foreach ($team->tim_pelayanan_d as $member)
-                                                                <tr>
-                                                                    <input type="hidden" name="id_pelayanan_d" value="{{$member["id_pelayanan_d"]}}">
-                                                                    <input type="hidden" name="id_user" value="{{$member["id_user"]}}">
-
-                                                                    <td>{{ $loop->iteration }}</td>
-                                                                    <td>{{ $member->user["nama_lengkap"] }}</td>
-                                                                    <td>
-                                                                        <button class="btn btn-warning buttonEdit" data-id="{{ $member->id_pelayanan_d }}" data-toggle="modal" data-target="#updateMember">Edit</button>
-                                                                        <form action="{{ route('tim_deactivate', ['id' => $member->id_pelayanan_d, 'id_user' => $member->id_user]) }}" method="POST" style="display:inline;">
-                                                                            @csrf
-                                                                            @method('DELETE')
-                                                                            <button type="submit" class="btn btn-danger">Delete</button>
-                                                                        </form>
-                                                                    </td>
-                                                                </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
+                                @foreach ($cabang->tim as $team)  <!-- Assuming each cabang has multiple teams -->
+                                    <div class="card mb-2">
+                                        <div class="card-header" 
+                                            id="headingTim{{ $team->id_pelayanan_h }}"
+                                        >
+                                            <h3 class="mb-0">
+                                                <button type="button"
+                                                    class="btn fs-4 fw-bold"
+                                                    data-toggle="collapse" 
+                                                    data-target="#collapseTim-{{ $team->id_pelayanan_h }}" 
+                                                    aria-expanded="true" 
+                                                    aria-controls="collapseTim-{{ $team->id_pelayanan_h }}"
+                                                >
+                                                    <i class="fas fa-caret-down mr-2"></i> 
+                                                    {{ $team->nama_tim_pelayanan_h }} (PIC: {{ $team->user["nama_lengkap"] }}) <!-- Team name and leader -->
+                                                </button>
+                                            </h3>
                                         </div>
-                                    @endforeach
-                                </div>
+
+                                        <div id="collapseTim-{{ $team->id_pelayanan_h }}"
+                                            class="card-body collapse"
+                                            aria-labelledby="headingTim{{ $team->id_pelayanan_h }}" 
+                                            data-parent="#accordionTim"
+                                        >
+                                            <div class="mb-2">
+                                                <input type="hidden" id="id_pelayanan_h" name="id_pelayanan_h" value="{{$team["id_pelayanan_h"]}}">
+                                                <input type="hidden" id="nama_tim_pelayanan_h" name="nama_tim_pelayanan_h" value="{{$team["nama_tim_pelayanan_h"]}}">
+                                                <input type="hidden" id="id_user" name="id_user" value="{{$team["id_user"]}}">
+                                                <input type="hidden" id="id_cabang" name="id_cabang" value="{{$team["id_cabang"]}}">
+
+                                                <button class="btn btn-success buttonAddMember" data-id="{{ $team->id_pelayanan_h }}" data-toggle="modal" data-target="#addMember">Add</button>
+                                                <button class="btn btn-warning buttonEditPic" data-id="{{ $team->id }}" data-toggle="modal" data-target="#updatePIC">Edit</button>
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                                {{-- <form action="{{ route('tim_deactivate', $team->id) }}" method="POST" style="display:inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                </form> --}}
+                                            </div>
+
+                                            <table id="tabelUser{{ $team->id_pelayanan_h }}" class="table table-striped table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="5%">No</th>
+                                                        <th width="75%">Nama Anggota</th>
+                                                        <th width="20%">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($team->tim_pelayanan_d as $member)
+                                                        <tr>
+                                                            <input type="hidden" name="id_pelayanan_d" value="{{$member["id_pelayanan_d"]}}">
+                                                            <input type="hidden" name="id_user" value="{{$member["id_user"]}}">
+
+                                                            <td>{{ $loop->iteration }}</td>
+                                                            <td>{{ $member->user["nama_lengkap"] }}</td>
+                                                            <td>
+                                                                <button class="btn btn-warning buttonEdit" data-id="{{ $member->id_pelayanan_d }}" data-toggle="modal" data-target="#updateMember">Edit</button>
+                                                                <form action="{{ route('tim_deactivate', ['id' => $member->id_pelayanan_d, 'id_user' => $member->id_user]) }}" method="POST" style="display:inline;">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                                </form>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                @endforeach
                                 <!-- End of Nested Accordion for Teams -->
                             </div>
                         </div>
@@ -277,40 +294,41 @@
 
 @section('script')
 <script>
-    $('#tabelUser').DataTable({
+    $('table[id^="tabelUser"]').DataTable({
         "paging": true,
         "pageLength": 10,
     });
-    document.addEventListener('DOMContentLoaded', function() {
-    // Persistent accordion state using localStorage
-        let activeAccordion = localStorage.getItem('activeAccordion');
+    
+    // document.addEventListener('DOMContentLoaded', function() {
+    // // Persistent accordion state using localStorage
+    //     let activeAccordion = localStorage.getItem('activeAccordion');
 
-        if (activeAccordion) {
-            let collapseElement = document.getElementById(activeAccordion);
-            let buttonElement = collapseElement.previousElementSibling.querySelector('button');
-            buttonElement.setAttribute('aria-expanded', 'true');
-            collapseElement.classList.add('show');
-        }
+    //     if (activeAccordion) {
+    //         let collapseElement = document.getElementById(activeAccordion);
+    //         let buttonElement = collapseElement.previousElementSibling.querySelector('button');
+    //         buttonElement.setAttribute('aria-expanded', 'true');
+    //         collapseElement.classList.add('show');
+    //     }
 
-        document.querySelectorAll('.accordion .card .collapse').forEach(function(element) {
-            element.addEventListener('shown.bs.collapse', function() {
-                localStorage.setItem('activeAccordion', this.id);
-            });
+    //     document.querySelectorAll('.accordion .card .collapse').forEach(function(element) {
+    //         element.addEventListener('shown.bs.collapse', function() {
+    //             localStorage.setItem('activeAccordion', this.id);
+    //         });
 
-            element.addEventListener('hidden.bs.collapse', function() {
-                localStorage.removeItem('activeAccordion');
-            });
-        });
+    //         element.addEventListener('hidden.bs.collapse', function() {
+    //             localStorage.removeItem('activeAccordion');
+    //         });
+    //     });
 
-        // Edit button functionality placeholder
-        // document.querySelectorAll('.buttonEdit').forEach(button => {
-        //     button.addEventListener('click', function() {
-        //         let id = this.getAttribute('data-id');
-        //         // Trigger the modal or do the necessary action, here using alert as a placeholder
-        //         alert(`Edit volunteer with ID: ${id}`);
-        //     });
-        // });
-    });
+    //     // Edit button functionality placeholder
+    //     // document.querySelectorAll('.buttonEdit').forEach(button => {
+    //     //     button.addEventListener('click', function() {
+    //     //         let id = this.getAttribute('data-id');
+    //     //         // Trigger the modal or do the necessary action, here using alert as a placeholder
+    //     //         alert(`Edit volunteer with ID: ${id}`);
+    //     //     });
+    //     // });
+    // });
 
     document.getElementById('addVolunteer').addEventListener('click', function() {
         var container = document.getElementById('additionalVolunteers');
