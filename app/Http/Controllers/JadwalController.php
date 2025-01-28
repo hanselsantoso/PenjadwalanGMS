@@ -34,9 +34,9 @@ class JadwalController extends Controller
             ->get();
         // Split into active and inactive jadwal
         $jadwalActive = $jadwal->where('status_jadwal_h', 1);
-        $jadwalDeactive = $jadwal->where('status_jadwal_h', 0);
+        $jadwalInactive = $jadwal->where('status_jadwal_h', 0);
 
-        return view('jadwal', compact('jadwalActive', 'jadwalDeactive', 'jadwalIbadah', 'cabang', 'user'));
+        return view('jadwal', compact('jadwalActive', 'jadwalInactive', 'jadwalIbadah', 'cabang', 'user'));
     }
 
     public function checkJadwalExists(Request $request)

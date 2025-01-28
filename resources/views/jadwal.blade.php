@@ -88,8 +88,8 @@
 
             <br>
             <hr/>
-            <h4>Jadwal Deaktif</h4>
-            <table id="tabelJadwalDeactivate" class="table table-striped table-bordered">
+            <h4>Jadwal Tidak Aktif</h4>
+            <table id="tabelJadwalInactive" class="table table-striped table-bordered">
                 <thead>
                     <tr>
                         <th width="5%">No.</th>
@@ -104,7 +104,7 @@
                 </thead>
                 <tbody>
 
-                    @foreach ($jadwalDeactive as $item)
+                    @foreach ($jadwalInactive as $item)
                         <tr>
                             <td> {{ $loop->index + 1 }}</td>
                             <td> {{ $item->cabang->nama_cabang ?? "-" }}</td>
@@ -257,7 +257,7 @@
         "pageLength": 10,
     });
 
-    $('#tabelJadwalDeactivate').DataTable({
+    $('#tabelJadwalInactive').DataTable({
         "paging": true,
         "pageLength": 10,
     });
