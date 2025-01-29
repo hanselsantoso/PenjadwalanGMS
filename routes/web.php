@@ -37,7 +37,7 @@ Auth::routes();
 Route::get('/index', [AdminController::class, 'index'])->name('index');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/resetPassword', [SiteController::class, 'resetPassword'])->name('resetPassword');
+Route::get('/reset-password', [SiteController::class, 'resetPassword'])->name('resetPassword');
 Route::post('/doResetPassword', [SiteController::class, 'doResetPassword'])->name('doResetPassword');
 
 //admin

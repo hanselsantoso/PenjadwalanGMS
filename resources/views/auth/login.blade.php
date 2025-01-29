@@ -57,9 +57,9 @@
                                     {{ __('Login') }}
                                 </button>
 
-                                    <a class="btn btn-link" href="/resetPassword">
-                                        {{ __('Reset Password') }}
-                                    </a>
+                                <a type="submit" class="btn btn-warning" href="{{ route('resetPassword') }}">
+                                    {{ __('Reset Password') }}
+                                </a>
                             </div>
                         </div>
                     </form>

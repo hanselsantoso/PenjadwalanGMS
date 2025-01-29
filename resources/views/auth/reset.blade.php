@@ -57,6 +57,10 @@
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Submit') }}
                                 </button>
+
+                                <a type="submit" class="btn btn-warning" href="{{ route('login') }}">
+                                    {{ __('Back to Login') }}
+                                </a>
                             </div>
                         </div>
                     </form>
