@@ -14,7 +14,7 @@
                         <th width="5%">No</th>
                         <th width="15%">NIJ</th>
                         <th width="30%">Nama</th>
-                        <th width="10%">No. Telp</th>
+                        <th width="10%">Team</th>
                         <th width="10%">Grade</th>
                         <th width="10%">Action</th>
                     </tr>
@@ -27,7 +27,7 @@
                             <td>{{ $loop->index + 1 }}</td>
                             <td> {{$item["nij"] }}</td>
                             <td> {{$item["nama_lengkap"] }}</td>
-                            <td> {{$item["telp"] }}</td>
+                            <td> {{$item->team_name }}</td>
                             <td> {{$item["grade"] }}</td>
                             <td>
                                 {{-- <a href="" class="btn btn-primary">View</a> --}}
