@@ -136,8 +136,11 @@ Route::prefix('servo')->middleware(['role:1'])->group(function(){
 });
 
 Route::prefix('volunteer')->middleware(['role:3'])->group(function(){
-    Route::get('/', [UserController::class, 'volunteer']);
-    Route::get('/detail/{id}', [VolunteerController::class, 'detail'])->name('volunteer_detail');
+    Route::get('/', function () {
+        return redirect('/home');
+    });
+    Route::get('/schedule', [UserController::class, 'volunteer']);
+    Route::get('/schedule/detail/{id}', [VolunteerController::class, 'detail'])->name('volunteer_detail');
 });
 
 Route::prefix('pic')->middleware(['role:2'])->group(function(){

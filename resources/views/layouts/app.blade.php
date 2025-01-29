@@ -52,7 +52,7 @@
                             @if (Auth::user()->role == 0)
                                 <li class="nav-item dropdown">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        {{ __('Admin') }}
+                                        {{ __('Menu') }}
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                         <a class="dropdown-item" href="/admin/user">{{ __('Volunteer') }}</a>
@@ -66,33 +66,24 @@
                                         <a class="dropdown-item" href="/admin/grading">{{ __('Grading') }}</a>
                                     </div>
                                 </li>
-                                {{-- <li class="nav-item">
-                                    <a class="nav-link" href="/admin/index">{{ __('Nasabah') }}</a>
-                                </li>
+                            @elseif (Auth::user()->role == 1)
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ url('/cabang') }}">Cabang</a>
+                                    
                                 </li>
+                            @elseif (Auth::user()->role == 2)
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ url('/tag') }}">Tag</a>
-                                </li> --}}
+                                    
+                                </li>
+                            @elseif (Auth::user()->role == 3)
                                 <li class="nav-item dropdown">
-                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                        {{ Auth::user()->nama_lengkap }}
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        {{ __('Menu') }}
                                     </a>
-
-                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="{{ route('logout') }}"
-                                        onclick="event.preventDefault();
-                                                        document.getElementById('logout-form').submit();">
-                                            {{ __('Logout') }}
-                                        </a>
-
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                            @csrf
-                                        </form>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="/volunteer/schedule">{{ __('Schedule') }}</a>
                                     </div>
                                 </li>
-                            @else
+                            @endif
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->nama_lengkap }}
@@ -110,7 +101,6 @@
                                     </form>
                                 </div>
                             </li>
-                            @endif
                         @endif
                     </ul>
                 </div>
