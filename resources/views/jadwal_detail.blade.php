@@ -11,15 +11,18 @@
             <div class="row align-items-center mb-2 shadow-sm rounded bg-light">
                 <div class="col-md px-4 pt-2 mb-2">
                     <h2 class="text-primary fw-bold mb-3">
-                        Jadwal {{$jadwal->cabang->nama_cabang}}: {{$jadwal->jadwalIbadah->nama_ibadah}}
+                        Detail Jadwal
                     </h2>
+                    <h5 class="text-primary fw-bold mb-3">
+                        {{$jadwal->cabang->nama_cabang}}: {{$jadwal->jadwalIbadah->nama_ibadah}}
+                    </h5>
                     <h5 class="text-secondary d-flex align-items-center">
                         <i class="bi bi-calendar-fill"></i>
                         <p class="mb-0 ms-2">Tanggal: {{ \Carbon\Carbon::parse($jadwal->tanggal_jadwal)->format('d-m-Y') }}</p>
                     </h5>
                     <h5 class="text-secondary d-flex align-items-center">
                         <i class="bi bi-clock-fill"></i> 
-                        <p class="mb-0 ms-2">Jam {{$jadwal->jadwalIbadah->jam_mulai}} - {{$jadwal->jadwalIbadah->jam_akhir}}</p>
+                        <p class="mb-0 ms-2">Jam: {{$jadwal->jadwalIbadah->jam_mulai}} - {{$jadwal->jadwalIbadah->jam_akhir}}</p>
                     </h5>
                     <h5 class="text-secondary d-flex align-items-center">
                         <i class="bi bi-bell-fill"></i> 
