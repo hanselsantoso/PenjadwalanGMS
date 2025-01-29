@@ -27,11 +27,20 @@
                             <label for="end_date" class="form-label me-3">End Date:</label>
                             <input type="date" id="end_date" name="end_date" class="form-control" required>
                         </div>
+
+                        <div class="col-auto mb-0">
+                            <label for="id_cabang" class="form-label me-3">Cabang:</label>
+                            <select class="form-select" name="id_cabang">
+                                @foreach ($cabang as $item)
+                                    <option value="{{ $item->id_cabang }}">{{ $item->nama_cabang }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
 
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-download me-1"></i>
-                        Download
+                        Download Jadwal
                     </button>
                 </form>
             </div>

@@ -127,14 +127,13 @@ class JadwalController extends Controller
         
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
-        // TODO: able to choose Timur, Barat, Selatan, or All
-        // $idCabang = $request->input('id_cabang');
-        $idCabang = 1;
+        $idCabang = $request->id_cabang;
+        $cabang = Cabang::find($idCabang);
         
         // Format dates for filename
         $startDateFormatted = date('d-m-Y', strtotime($startDate));
         $endDateFormatted = date('d-m-Y', strtotime($endDate));
-        $filename = "GMS_Sound_Schedule_{$startDateFormatted}_to_{$endDateFormatted}.xlsx";
+        $filename = "GMS_Sound_Schedule_{$cabang->nama_cabang}_{$startDateFormatted}_to_{$endDateFormatted}.xlsx";
 
         // Trigger the download
         return Excel::download(
