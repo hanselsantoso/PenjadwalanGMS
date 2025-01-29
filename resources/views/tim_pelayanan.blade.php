@@ -68,8 +68,9 @@
                                                 <input type="hidden" id="id_cabang" name="id_cabang" value="{{$team["id_cabang"]}}">
 
                                                 <button class="btn btn-success buttonAddMember" data-id="{{ $team->id_pelayanan_h }}" data-toggle="modal" data-target="#addMember">Add</button>
-                                                <button class="btn btn-warning buttonEditPic" data-id="{{ $team->id }}" data-toggle="modal" data-target="#updatePIC">Edit</button>
-                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                                <button class="btn btn-warning buttonEditTim" data-id="{{ $team->id }}" data-toggle="modal" data-target="#updateTim">Edit</button>
+                                                <!-- TODO: FIX SUSPEND/DELETE TIM -->
+                                                <!-- <button type="submit" class="btn btn-danger">Suspend</button> -->
                                                 {{-- <form action="{{ route('tim_deactivate', $team->id) }}" method="POST" style="display:inline;">
                                                     @csrf
                                                     @method('DELETE')
@@ -118,7 +119,7 @@
         </div>
     </div>
 
-    <!-- Create User Modal -->
+    <!-- Create Tim Modal -->
     <div class="modal fade" id="createTimPelayanan">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -136,7 +137,7 @@
                             <input type="text" class="form-control" name="nama_tim_pelayanan_h" required>
                         </div>
                         <div class="form-group mb-1">
-                            <label for="user">Cabang</label>
+                            <label for="cabang">Cabang</label>
                             <select class="form-control" name="cabang" required>
                                 <option value="" disabled selected>Pilih Cabang</option>
                                 @foreach ($cabangs as $item)
@@ -146,7 +147,7 @@
                         </div>
                         
                         <div class="form-group mb-1">
-                            <label for="user">Team Leader</label>
+                            <label for="pic">Team Leader</label>
                             <select class="form-control" name="pic" required>
                                 <option value="" disabled selected>Pilih Team Leader</option>
                                 @foreach ($users as $item)
@@ -207,8 +208,8 @@
         </div>
     </div>
 
-    <!-- Update User Modal -->
-    <div class="modal fade" id="updatePIC">
+    <!-- Update Tim Modal -->
+    <div class="modal fade" id="updateTim">
         <div class="modal-dialog">
             <div class="modal-content">
                 <!-- Modal Header -->
@@ -216,7 +217,7 @@
                     <h4 class="modal-title">Ubah Cabang</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <form action="{{ route('tim_update_pic') }}" method="post">
+                <form action="{{ route('tim_update_tim') }}" method="post">
                     @method('PUT')
                     @csrf
                     <input type="hidden" name="id_pelayanan_h" id="id_pelayanan_h_pic">
@@ -365,26 +366,22 @@
             $('#updateMember').find('select[name="volunteer"]').val(id_user);
         });
 
-        $('.buttonEditPic').on('click', function() {
+        $('.buttonAddMember').on('click', function() {
+            var id = $(this).attr('data-id');
+            $('#addMember').find('#id_header').val(id);
+        });
+
+        $('.buttonEditTim').on('click', function() {
             var id_pelayanan_h = $(this).closest('div').find('input[name="id_pelayanan_h"]').val();
             var id_user = $(this).closest('div').find('input[name="id_user"]').val();
             var nama_tim_pelayanan_h =$(this).closest('div').find('input[name="nama_tim_pelayanan_h"]').val();
             var id_cabang = $(this).closest('div').find('input[name="id_cabang"]').val();
-            console.log(id_pelayanan_h);
-            console.log(id_user);
-            console.log(nama_tim_pelayanan_h);
-            console.log(id_cabang);
-            $('#updatePIC').find('#id_pelayanan_h_pic').val(id_pelayanan_h);
-            $('#updatePIC').find('#id_user_pic').val(id_user);
-            $('#updatePIC').find('#update_nama_tim_pelayanan_h').val(nama_tim_pelayanan_h);
-            $('#updatePIC').find('#update_cabang').val(id_cabang);
-            $('#updatePIC').find('#update_pic').val(id_user);
 
-        });
-
-        $('.buttonAddMember').on('click', function() {
-            var id = $(this).attr('data-id');
-            $('#addMember').find('#id_header').val(id);
+            $('#updateTim').find('#id_pelayanan_h_pic').val(id_pelayanan_h);
+            $('#updateTim').find('#id_user_pic').val(id_user);
+            $('#updateTim').find('#update_nama_tim_pelayanan_h').val(nama_tim_pelayanan_h);
+            $('#updateTim').find('#update_cabang').val(id_cabang);
+            $('#updateTim').find('#update_pic').val(id_user);
         });
     });
 

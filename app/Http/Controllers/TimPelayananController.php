@@ -15,10 +15,8 @@ use Illuminate\Support\Facades\DB;
 class TimPelayananController extends Controller
 {
     function tim() {
-        // $bagian = Bagian::where('status_bagian', 1)->get();
         $teams = TimPelayanan_H::all();
         $users = User::where('status_user', 1)->where('role', '!=', 0)->get();
-        // $users = User::where('status_user', 1)->get();
         $cabang = Cabang::where('status_cabang', 1)->get();
 
         return view('tim_pelayanan', [
@@ -31,7 +29,9 @@ class TimPelayananController extends Controller
     function store(Request $request) {
         $request->validate([
             'nama_tim_pelayanan_h' => 'required|string|max:255',
+            'cabang' => 'required',
             'user' => 'required',
+            'pic' => 'required',
         ], [
             'nama_tim_pelayanan_h.required' => 'Nama tim pelayanan wajib diisi',
             'nama_tim_pelayanan_h.string' => 'Nama tim pelayanan harus berupa teks',
@@ -41,21 +41,20 @@ class TimPelayananController extends Controller
 
         try {
             DB::transaction(function () use ($request) {
-                $timPelayananH = TimPelayanan_H::create([
-                    'nama_tim_pelayanan_h' => $request->nama_tim_pelayanan_h,
-                    'id_cabang' => $request->cabang,
-                    'id_user' => $request->pic,
-                ]);
+                $timPelayananH = new TimPelayanan_H();
+                $timPelayananH->nama_tim_pelayanan_h = $request->nama_tim_pelayanan_h;
+                $timPelayananH->id_cabang = $request->cabang;
+                $timPelayananH->id_user = $request->pic;
+                $timPelayananH->save();
 
                 User::where('id', $request->pic)->update(['role' => 2]);
-                // dd($timPelayananH);
 
                 foreach ($request->user as $item) {
                     User::where('id', $item)->update(['role' => 3]);
-                    TimPelayanan_D::create([
-                        'id_pelayanan_h' => $timPelayananH->id_pelayanan_h,
-                        'id_user' => $item,
-                    ]);
+                    $timPelayananD = new TimPelayanan_D();
+                    $timPelayananD->id_pelayanan_h = $timPelayananH->id_pelayanan_h;
+                    $timPelayananD->id_user = $item;
+                    $timPelayananD->save();
                 }
 
                 return redirect()->route('tim_index')->with('success', 'Tim berhasil dibuat.');
@@ -116,7 +115,7 @@ class TimPelayananController extends Controller
         return redirect()->route('tim_index')->with('success', 'Header berhasil diperbarui.');
     }
 
-    function updatePIC(Request $request) {
+    function updateTim(Request $request) {
         // dd($request->all());
         //update dulu role pic lama dengan 1, yang baru diganti 2
         // update id_user baru
@@ -129,12 +128,11 @@ class TimPelayananController extends Controller
         $picLama = $request->id_user;
         $picBaru = $request->pic;
 
-        $data = TimPelayanan_H::find($request->id_pelayanan_h)
-        ->update([
-            'nama_tim_pelayanan_h' => $request->nama_tim_pelayanan_h,
-            'id_cabang' => $request->cabang,
-            'id_user' => $request->pic,
-        ]);
+        $timData = TimPelayanan_H::find($request->id_pelayanan_h);
+        $timData->nama_tim_pelayanan_h = $request->nama_tim_pelayanan_h;
+        $timData->id_cabang = $request->cabang;
+        $timData->id_user = $picBaru;
+        $timData->save();
 
         User::where('id', $picLama)->update(['role' => 3]);
         User::where('id', $picBaru)->update(['role' => 2]);

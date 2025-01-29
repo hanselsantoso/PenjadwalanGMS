@@ -104,7 +104,7 @@ Route::prefix('admin')->middleware(['role:0'])->group(function(){
         Route::get('/', [TimPelayananController::class, 'tim'])->name('tim_index');
         Route::post('/', [TimPelayananController::class, 'store'])->name('tim_store');
         Route::post('/member', [TimPelayananController::class, 'store_member'])->name('tim_store_member');
-        Route::put('/updatePIC', [TimPelayananController::class, 'updatePIC'])->name('tim_update_pic');
+        Route::put('/updateTim', [TimPelayananController::class, 'updateTim'])->name('tim_update_tim');
         Route::put('/', [TimPelayananController::class, 'updateMember'])->name('tim_update');
         Route::delete('/deactivate/{id}/{id_user}', [TimPelayananController::class, 'deactivate'])->name('tim_deactivate');
         Route::post('/activate/{id}', [TimPelayananController::class, 'activate'])->name('tim_activate');
