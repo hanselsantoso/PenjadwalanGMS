@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Penjadwalan</title>
+    <title>GMS Sound Penjadwalan</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
@@ -55,9 +55,10 @@
                                         {{ __('Menu') }}
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="/admin/index">{{ __('Dashboard') }}</a>
                                         <a class="dropdown-item" href="/admin/user">{{ __('Volunteer') }}</a>
                                         <a class="dropdown-item" href="/admin/cabang">{{ __('Lokasi') }}</a>
-                                        <a class="dropdown-item" href="/admin/tag">{{ __('Tag') }}</a>
+                                        {{-- <a class="dropdown-item" href="/admin/tag">{{ __('Tag') }}</a> --}}
                                         {{-- <a class="dropdown-item" href="/admin/mapping">{{ __('Grading') }}</a> --}}
                                         <a class="dropdown-item" href="/admin/bagian">{{ __('Position') }}</a>
                                         <a class="dropdown-item" href="/admin/jadwal_ibadah">{{ __('Services') }}</a>

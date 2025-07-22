@@ -45,7 +45,7 @@ Route::prefix('admin')->middleware(['role:0'])->group(function(){
     Route::get('/index', [AdminController::class, 'index'])->name('admin_index');
 
     Route::prefix('user')->group(function(){
-        Route::get('/', [AdminController::class, 'index'])->name('user_index');
+        Route::get('/', [AdminController::class, 'userManagement'])->name('user_index');
         Route::post('/', [AdminController::class, 'store'])->name('user_store');
         Route::put('/', [AdminController::class, 'update'])->name('user_update');
         Route::post('/deactivate/{id}', [AdminController::class, 'deactivate'])->name('user_deactivate');
