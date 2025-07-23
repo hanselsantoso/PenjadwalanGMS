@@ -21,39 +21,17 @@ class RedirectIfAuthenticated
           $role = Auth::user()->role;
           switch ($role) {
             case 0:
-               return redirect('/admin/index');
+               return redirect('/admin');
                break;
             case 1:
-               return redirect('/user/index');
+               return redirect('/user');
                break;
 
             default:
-               return redirect('/home');
+               return redirect('/dashboard');
                break;
           }
         }
         return $next($request);
       }
-
-    // public function handle(Request $request, Closure $next, string ...$guards): Response
-    // {
-    //     $guards = empty($guards) ? [null] : $guards;
-    //     if (Auth::guard($guards)->check()) {
-    //         $role = Auth::user()->role;
-
-    //         switch ($role) {
-    //           case 'admin':
-    //              return redirect('/admin_index');
-    //              break;
-    //           case 'seller':
-    //              return redirect('/user_index');
-    //              break;
-
-    //           default:
-    //              return redirect('/home');
-    //              break;
-    //         }
-    //       }
-    //       return $next($request);
-    // }
 }

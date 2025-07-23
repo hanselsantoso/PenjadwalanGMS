@@ -44,7 +44,7 @@ class LoginController extends Controller
     protected function redirectTo(): string
     {
         if (Auth::user()->role == 0) {
-            return '/admin/index';
+            return '/admin';
         } elseif (Auth::user()->role == 1) {
             return '/servo';
         }elseif (Auth::user()->role == 2) {
@@ -52,7 +52,7 @@ class LoginController extends Controller
         }elseif (Auth::user()->role == 3) {
             return '/volunteer';
         }else{
-            return '/home';
+            return '/dashboard';
         }
     }
 }

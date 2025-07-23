@@ -28,7 +28,7 @@ class AdminMiddleware
             }elseif (Auth::user()->role == '3') {
                 return $next($request);
             }else{
-                return redirect('/home')->with('message','Access Denied!, Your are not an admin');
+                return redirect('/dashboard')->with('message','Access Denied!, Your are not an admin');
             }
         }else{
             return redirect('/login')->with('message','Login to access');

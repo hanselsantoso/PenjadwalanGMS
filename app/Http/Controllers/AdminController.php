@@ -17,11 +17,6 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class AdminController extends Controller
 {
-    //
-    public function index(Request $request) {
-        return view('Admin.dashboard');
-    }
-
     public function userManagement(Request $request) {
         $user = User::where('role', '!=', 0)
             ->with(['tim_pelayanan_d.tim_pelayanan_h'])

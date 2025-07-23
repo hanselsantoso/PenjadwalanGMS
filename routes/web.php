@@ -8,6 +8,7 @@ use App\Http\Controllers\SiteController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CabangController;
 use App\Http\Controllers\GradingController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\JadwalIbadahController;
 use App\Http\Controllers\MappingController;
@@ -34,15 +35,15 @@ Route::get('/', function () {
     return redirect('/login');
 });
 Auth::routes();
-Route::get('/index', [AdminController::class, 'index'])->name('index');
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
 Route::get('/reset-password', [SiteController::class, 'resetPassword'])->name('resetPassword');
-Route::post('/doResetPassword', [SiteController::class, 'doResetPassword'])->name('doResetPassword');
+Route::post('/do-reset-password', [SiteController::class, 'doResetPassword'])->name('doResetPassword');
 
 //admin
 Route::prefix('admin')->middleware(['role:0'])->group(function(){
-    Route::get('/index', [AdminController::class, 'index'])->name('admin_index');
+    Route::get('/', function () {
+        return redirect('/dashboard');
+    });
 
     Route::prefix('user')->group(function(){
         Route::get('/', [AdminController::class, 'userManagement'])->name('user_index');
@@ -132,12 +133,12 @@ Route::prefix('admin')->middleware(['role:0'])->group(function(){
 });
 
 Route::prefix('servo')->middleware(['role:1'])->group(function(){
-    Route::get('/index', [UserController::class, 'servo']);
+    Route::get('/', [UserController::class, 'servo'])->name('servo_index');
 });
 
 Route::prefix('volunteer')->middleware(['role:3'])->group(function(){
     Route::get('/', function () {
-        return redirect('/home');
+        return redirect('/dashboard');
     });
     Route::get('/schedule', [UserController::class, 'volunteer']);
     Route::get('/schedule/detail/{id}', [VolunteerController::class, 'detail'])->name('volunteer_detail');
