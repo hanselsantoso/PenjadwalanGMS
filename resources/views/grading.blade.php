@@ -49,7 +49,7 @@
                     <h4 class="modal-title">Ubah User</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <form action="{{ route('grading_update') }}" method="post">
+                <form action="{{ route('grading.update') }}" method="post">
                     @method('PUT')
                     @csrf
                     <input type="hidden" name="idUser">

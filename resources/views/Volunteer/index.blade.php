@@ -28,7 +28,7 @@
                         <td>{{ $jadwal->detail->jadwalIbadah["jam_stand_by"] }}</td>
                         <td>{{ $jadwal->detail->jadwalIbadah["jam_mulai"] }} - {{ $jadwal->detail->jadwalIbadah["jam_akhir"] }}</td>
                         <td>
-                        <a href="{{ route('volunteer_detail', $jadwal->id_jadwal_h) }}" class="btn btn-success">Detail</a>
+                        <a href="{{ route('volunteer.detail', $jadwal->id_jadwal_h) }}" class="btn btn-success">Detail</a>
                         <a href="asdasd" class="btn btn-warning">Tukar / Ganti</a>
                         {{-- <a href="asdasd" class="btn btn-danger">Tolak</a> --}}
                         </td>

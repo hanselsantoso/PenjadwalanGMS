@@ -77,7 +77,7 @@
                             <td> {{ $item->user->nama_lengkap ?? "-" }}</td>
 
                             <td>
-                                <a href="/admin/jadwal/detail/{{$item["id_jadwal_h"] }}" class="btn btn-primary w-100 mb-2">
+                                <a href="{{ route('jadwal_detail.index', $item['id_jadwal_h']) }}" class="btn btn-primary w-100 mb-2">
                                     Detail
                                 </a>
 
@@ -85,7 +85,7 @@
                                     Update
                                 </a>
 
-                                <form action="/admin/jadwal/deactivate/{{ $item["id_jadwal_h"] }}" method="post">
+                                <form action="{{ route('jadwal.deactivate', $item['id_jadwal_h']) }}" method="post">
                                     @csrf
                                     <button type="submit" class="btn btn-danger w-100">Deactivate</button>
                                 </form>
@@ -124,11 +124,11 @@
                             <td> {{ $item->user->nama_lengkap ?? "-" }}</td>
 
                             <td>
-                                <a href="/admin/jadwal/detail/{{$item["id_jadwal_h"] }}" class="btn btn-primary w-100 mb-2">
+                                <a href="{{ route('jadwal_detail.index', $item['id_jadwal_h']) }}" class="btn btn-primary w-100 mb-2">
                                     Detail
                                 </a>
 
-                                <form action="/admin/jadwal/activate/{{ $item["id_jadwal_h"] }}" method="post">
+                                <form action="{{ route('jadwal.activate', $item['id_jadwal_h']) }}" method="post">
                                     @csrf
                                     <button type="submit" class="btn btn-success w-100">Activate</button>
                                 </form>
@@ -151,7 +151,7 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
-                <form action="{{ route('jadwal_store') }}" method="post">
+                <form action="{{ route('jadwal.store') }}" method="post">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group mb-1">
@@ -205,7 +205,7 @@
                     <h4 class="modal-title">Ubah Bagian</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <form action="{{ route('jadwal_update') }}" method="post">
+                <form action="{{ route('jadwal.update') }}" method="post">
                     @method('PUT')
                     @csrf
                     <input type="hidden" name="id_jadwal_h">

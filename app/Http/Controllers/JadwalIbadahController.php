@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class JadwalIbadahController extends Controller
 {
-    public function jadwalIbadah()
+    public function index()
     {
         $jadwal = JadwalIbadah::get();
         $jadwalActive = $jadwal->where('status_jadwal_ibadah', 1);
@@ -29,7 +29,7 @@ class JadwalIbadahController extends Controller
         $jadwalIbadah->jam_akhir = $request->jam_akhir;
         $jadwalIbadah->status_jadwal_ibadah = 1;
         $jadwalIbadah->save();
-        return redirect()->route('jadwal_ibadah_index')->with('success', 'Jadwal Ibadah berhasil ditambahkan.');
+        return redirect()->route('jadwal_ibadah.index')->with('success', 'Jadwal Ibadah berhasil ditambahkan.');
     }
 
     public function update(Request $request)
@@ -48,7 +48,7 @@ class JadwalIbadahController extends Controller
         $jadwalIbadah->jam_mulai = $request->jam_mulai;
         $jadwalIbadah->jam_akhir = $request->jam_akhir;
         $jadwalIbadah->save();
-        return redirect()->route('jadwal_ibadah_index')->with('success', 'Jadwal Ibadah berhasil diperbarui.');
+        return redirect()->route('jadwal_ibadah.index')->with('success', 'Jadwal Ibadah berhasil diperbarui.');
     }
 
     private function doValidate(Request $request) {
@@ -72,19 +72,19 @@ class JadwalIbadahController extends Controller
         ]);
     }
 
-    public function deactivate($id)
-    {
-        $jadwalIbadah = JadwalIbadah::find($id);
-        $jadwalIbadah->status_jadwal_ibadah = 0;
-        $jadwalIbadah->save();
-        return redirect()->route('jadwal_ibadah_index')->with('success', 'Jadwal Ibadah berhasil dinonaktifkan.');
-    }
-
     public function activate($id)
     {
         $jadwalIbadah = JadwalIbadah::find($id);
         $jadwalIbadah->status_jadwal_ibadah = 1;
         $jadwalIbadah->save();
-        return redirect()->route('jadwal_ibadah_index')->with('success', 'Jadwal Ibadah berhasil diaktifkan.');
+        return redirect()->route('jadwal_ibadah.index')->with('success', 'Jadwal Ibadah berhasil diaktifkan.');
+    }
+
+    public function deactivate($id)
+    {
+        $jadwalIbadah = JadwalIbadah::find($id);
+        $jadwalIbadah->status_jadwal_ibadah = 0;
+        $jadwalIbadah->save();
+        return redirect()->route('jadwal_ibadah.index')->with('success', 'Jadwal Ibadah berhasil dinonaktifkan.');
     }
 }

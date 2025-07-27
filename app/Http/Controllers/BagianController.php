@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class BagianController extends Controller
 {
-    function bagian() {
+    function index() {
         $bagian = Bagian::all();
         return view('bagian', compact('bagian'));
     }
@@ -22,7 +22,7 @@ class BagianController extends Controller
         $bagian->nama_bagian = $request->nama_bagian;
         $bagian->status_bagian = 1;
         $bagian->save();
-        return redirect()->route('bagian_index')->with('success', 'Bagian berhasil ditambahkan.');
+        return redirect()->route('bagian.index')->with('success', 'Bagian berhasil ditambahkan.');
     }
 
     function update(Request $request) {
@@ -35,15 +35,7 @@ class BagianController extends Controller
         $bagian->nama_bagian = $request->nama_bagian;
         $bagian->save();
 
-        return redirect()->route('bagian_index')->with('success', 'Bagian berhasil diperbarui.');
-    }
-
-    function deactivate($id) {
-        $bagian = Bagian::findOrFail($id);
-        $bagian->status_bagian = false;
-        $bagian->save();
-
-        return redirect()->route('bagian_index')->with('success', 'Bagian berhasil dinonaktifkan.');
+        return redirect()->route('bagian.index')->with('success', 'Bagian berhasil diperbarui.');
     }
 
     function activate($id) {
@@ -51,6 +43,14 @@ class BagianController extends Controller
         $bagian->status_bagian = true;
         $bagian->save();
 
-        return redirect()->route('bagian_index')->with('success', 'Bagian berhasil diaktifkan.');
+        return redirect()->route('bagian.index')->with('success', 'Bagian berhasil diaktifkan.');
+    }
+
+    function deactivate($id) {
+        $bagian = Bagian::findOrFail($id);
+        $bagian->status_bagian = false;
+        $bagian->save();
+
+        return redirect()->route('bagian.index')->with('success', 'Bagian berhasil dinonaktifkan.');
     }
 }

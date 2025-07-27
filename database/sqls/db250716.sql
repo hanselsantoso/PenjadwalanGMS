@@ -40,6 +40,8 @@ insert  into `bagian`(`id_bagian`,`nama_bagian`,`status_bagian`,`created_at`,`up
 (5,'Super Trooper',1,'2024-11-11 20:23:41','2024-11-11 13:23:41',NULL),
 (6,'All star dan Little Eagle',1,'2024-11-11 20:17:07','2024-11-11 13:17:07',NULL);
 
+
+
 /*Table structure for table `cabang` */
 
 DROP TABLE IF EXISTS `cabang`;
@@ -61,6 +63,8 @@ insert  into `cabang`(`id_cabang`,`nama_cabang`,`status_cabang`,`created_at`,`up
 (2,'Barat',1,'2024-08-02 10:58:03','2024-08-02 03:58:03',NULL),
 (3,'Selatan',1,'2024-09-30 21:24:06','2024-09-30 14:24:06',NULL);
 
+
+
 /*Table structure for table `jadwal_d` */
 
 DROP TABLE IF EXISTS `jadwal_d`;
@@ -78,7 +82,6 @@ CREATE TABLE `jadwal_d` (
 ) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `jadwal_d` */
-
 
 
 /*Table structure for table `jadwal_h` */
@@ -107,6 +110,8 @@ insert  into `jadwal_h`(`id_jadwal_h`,`id_cabang`,`id_jadwal_ibadah`,`tanggal_ja
 (4,1,4,'2025-01-05',40,1,'2024-11-11 15:58:48','2024-11-11 15:58:48',NULL),
 (5,1,5,'2025-01-05',50,1,'2024-11-11 15:59:53','2024-11-11 15:59:53',NULL);
 
+
+
 /*Table structure for table `jadwal_ibadah` */
 
 DROP TABLE IF EXISTS `jadwal_ibadah`;
@@ -134,6 +139,8 @@ insert  into `jadwal_ibadah`(`id_jadwal_ibadah`,`nama_ibadah`,`alias_ibadah`,`ja
 (4,'Ibadah Umum 2 & 3','UM 2 - 3','09:00','10:00','15:00',1,'2024-11-12 14:43:41','2024-11-11 13:21:55',NULL),
 (5,'Ibadah Umum 4 & 5','UM 4 - 5','15:00','16:00','21:00',1,'2024-11-12 14:52:02',NULL,NULL);
 
+
+
 /*Table structure for table `tag` */
 
 DROP TABLE IF EXISTS `tag`;
@@ -154,6 +161,8 @@ insert  into `tag`(`id_tag`,`nama_tag`,`status_tag`,`created_at`,`updated_at`,`d
 (1,'PIC',1,'2024-08-02 14:03:47','2024-08-02 07:03:47',NULL),
 (2,'Anggota',1,'2024-08-02 07:03:37','2024-08-02 07:03:37',NULL),
 (3,'Full Timer',1,'2024-08-02 07:03:37','2024-08-02 07:03:37',NULL);
+
+
 
 /*Table structure for table `tim_pelayanan_d` */
 
@@ -249,6 +258,8 @@ insert  into `tim_pelayanan_h`(`id_pelayanan_h`,`nama_tim_pelayanan_h`,`id_user`
 (11,'MCC 1',200,3,1,'2024-10-04 10:44:33','2024-10-04 10:44:33',NULL),
 (12,'MCC 2',210,3,1,'2024-10-04 10:44:33','2024-10-04 10:44:33',NULL);
 
+
+
 /*Table structure for table `user_tag` */
 
 DROP TABLE IF EXISTS `user_tag`;
@@ -316,6 +327,8 @@ insert  into `user_tag`(`id_user_tag`,`id_user`,`id_tag`,`status_user_tag`,`crea
 (47,210,1,1,'2024-09-30 21:23:25','2024-09-30 14:23:25',NULL),
 (48,211,2,1,'2024-09-30 21:23:25','2024-09-30 14:23:25',NULL),
 (49,212,2,1,'2024-09-30 21:23:25','2024-09-30 14:23:25',NULL);
+
+
 
 /*Table structure for table `users` */
 

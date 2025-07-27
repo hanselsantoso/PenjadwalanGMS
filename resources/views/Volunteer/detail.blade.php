@@ -3,7 +3,7 @@
     <div class="main">
         <div class="container">
             <div class="mb-3">
-                <a href="/volunteer" class="btn btn-secondary">
+                <a href="{{ route('volunteer.index') }}" class="btn btn-secondary">
                     <i class="bi bi-arrow-left"></i> Back
                 </a>
             </div>

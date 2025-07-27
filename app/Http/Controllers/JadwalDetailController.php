@@ -10,7 +10,7 @@ use App\Models\User;
 
 class JadwalDetailController extends Controller
 {
-    public function jadwal_detail($id)
+    public function index($id)
     {
         // Order By Bagian ID
         $jadwal = Jadwal_H::with(['detail' => function($query) {
@@ -39,7 +39,7 @@ class JadwalDetailController extends Controller
             ->first();
 
         if ($existingJadwal) {
-            return redirect()->route('jadwal_detail_index', $request->jadwal)->with('error', 'User sudah ada di jadwal.');
+            return redirect()->route('jadwal_detail.index', $request->jadwal)->with('error', 'User sudah ada di jadwal.');
         }
 
         $jadwal = new Jadwal_D();
@@ -48,7 +48,7 @@ class JadwalDetailController extends Controller
         $jadwal->id_user = $request->user;
         $jadwal->status_jadwal_d = 1;
         $jadwal->save();
-        return redirect()->route('jadwal_detail_index', $request->jadwal)->with('success', 'Jadwal berhasil dibuat.');
+        return redirect()->route('jadwal_detail.index', $request->jadwal)->with('success', 'Jadwal berhasil dibuat.');
     }
 
     public function update(Request $request)
@@ -74,7 +74,7 @@ class JadwalDetailController extends Controller
         $jadwal->status_jadwal_d = 1;
         $jadwal->save();
 
-        return redirect()->route('jadwal_detail_index', $jadwal->id_jadwal_h)->with('success', 'Jadwal berhasil diaktifkan.');
+        return redirect()->route('jadwal_detail.index', $jadwal->id_jadwal_h)->with('success', 'Jadwal berhasil diaktifkan.');
     }
 
     public function deactivate($id)
@@ -83,7 +83,7 @@ class JadwalDetailController extends Controller
         $jadwal->status_jadwal_d = 0;
         $jadwal->save();
 
-        return redirect()->route('jadwal_detail_index', $jadwal->id_jadwal_h)->with('success', 'Jadwal berhasil dinonaktifkan.');
+        return redirect()->route('jadwal_detail.index', $jadwal->id_jadwal_h)->with('success', 'Jadwal berhasil dinonaktifkan.');
     }
 
     public function delete($id)
@@ -92,6 +92,6 @@ class JadwalDetailController extends Controller
         $jadwalId = $jadwal->id_jadwal_h;
         $jadwal->delete();
 
-        return redirect()->route('jadwal_detail_index', $jadwalId)->with('success', 'Jadwal berhasil dihapus.');
+        return redirect()->route('jadwal_detail.index', $jadwalId)->with('success', 'Jadwal berhasil dihapus.');
     }
 }

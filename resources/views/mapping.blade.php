@@ -35,12 +35,12 @@
                                 {{-- <a href="" class="btn btn-primary">View</a> --}}
                                 <a href="#" class="btn btn-warning buttonEdit" data-toggle="modal" data-target="#updateMapping">Update</a>
                                 @if ($item->status_user_tag == 1)
-                                    <form action="/admin/mapping/deactivate/{{ $item["id_user_tag"] }}" method="post">
+                                    <form action="{{ route('mapping.deactivate', $item['id_user_tag']) }}" method="post">
                                         @csrf
                                         <button type="submit" class="btn btn-danger">Suspend</button>
                                     </form>
                                 @else
-                                    <form action="/admin/mapping/activate/{{ $item["id_user_tag"] }}" method="post">
+                                    <form action="{{ route('mapping.activate', $item['id_user_tag']) }}" method="post">
                                         @csrf
                                         <button type="submit" class="btn btn-success">Aktifkan</button>
                                     </form>
@@ -62,7 +62,7 @@
                     <h4 class="modal-title">Tambah Cabang</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <form action="{{ route('mapping_store') }}" method="post">
+                <form action="{{ route('mapping.store') }}" method="post">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
@@ -105,7 +105,7 @@
                     <h4 class="modal-title">Ubah Cabang</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <form action="{{ route('mapping_update') }}" method="post">
+                <form action="{{ route('mapping.update') }}" method="post">
                     @method('PUT')
                     @csrf
                     <input type="hidden" name="id_user_tag">

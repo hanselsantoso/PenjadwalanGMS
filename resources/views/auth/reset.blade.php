@@ -7,7 +7,7 @@
                 <div class="card-header">{{ __('Reset Password') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('do-reset-password') }}">
+                    <form method="POST" action="{{ route('doResetPassword') }}">
                         @csrf
 
                         <div class="row mb-3">

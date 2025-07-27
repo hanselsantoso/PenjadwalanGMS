@@ -15,7 +15,7 @@
                 </div>
 
                 <div class="col-md p-2 px-3 mt-2 mb-3 shadow-sm rounded bg-light">                    
-                    <form action="{{ route('user.excel_store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('volunteers.excel_store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-2">
                             <label for="file" class="form-label fs-4">Upload User Excel File</label>
@@ -72,12 +72,12 @@
                                 </a>
 
                                 @if ($item->status_user == 1)
-                                    <form action="/admin/user/deactivate/{{ $item["id"] }}" method="post">
+                                    <form action="{{ route('volunteeers.deactivate', ['id' => $item['id']]) }}" method="post">
                                         @csrf
                                         <button type="submit" class="btn btn-danger w-100">Suspend</button>
                                     </form>
                                 @else
-                                    <form action="/admin/user/activate/{{ $item["id"] }}" method="post">
+                                    <form action="{{ route('volunteeers.activate', ['id' => $item['id']]) }}" method="post">
                                         @csrf
                                         <button type="submit" class="btn btn-success w-100">Aktifkan</button>
                                     </form>
@@ -100,7 +100,7 @@
                     <h4 class="modal-title">Tambah User</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <form action="{{ route('user_store') }}" method="post">
+                <form action="{{ route('volunteeers.store') }}" method="post">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group mb-1">
@@ -185,7 +185,7 @@
                     <h4 class="modal-title">Ubah User</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <form action="{{ route('user_update') }}" method="post">
+                <form action="{{ route('volunteeers.update') }}" method="post">
                     @method('PUT')
                     @csrf
                     <input type="hidden" name="idUser">

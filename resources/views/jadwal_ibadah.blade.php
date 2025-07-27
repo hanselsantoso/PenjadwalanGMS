@@ -46,7 +46,7 @@
                             <a href="#" class="btn btn-warning buttonEdit w-100 mb-2" data-toggle="modal" data-target="#updateJadwalIbadah">
                                 Update
                             </a>
-                            <form action="/admin/jadwal_ibadah/deactivate/{{ $item["id_jadwal_ibadah"] }}" method="post">
+                            <form action="{{ route('jadwal_ibadah.deactivate', $item['id_jadwal_ibadah']) }}" method="post">
                                 @csrf
                                 <button type="submit" class="btn btn-danger w-100">Suspend</button>
                             </form>
@@ -92,7 +92,7 @@
                             <a href="#" class="btn btn-warning buttonEdit w-100 mb-2" data-toggle="modal" data-target="#updateJadwalIbadah">
                                 Update
                             </a>
-                            <form action="/admin/jadwal_ibadah/activate/{{ $item["id_jadwal_ibadah"] }}" method="post">
+                            <form action="{{ route('jadwal_ibadah.activate', $item['id_jadwal_ibadah']) }}" method="post">
                                 @csrf
                                 <button type="submit" class="btn btn-success w-100">Activate</button>
                             </form>
@@ -114,7 +114,7 @@
                     <h4 class="modal-title">Tambah Jadwal Ibadah</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <form action="{{ route('jadwal_ibadah_store') }}" method="post">
+                <form action="{{ route('jadwal_ibadah.store') }}" method="post">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group mb-1">
@@ -159,7 +159,7 @@
                     <h4 class="modal-title">Ubah Jadwal Ibadah</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <form action="{{ route('jadwal_ibadah_update') }}" method="post">
+                <form action="{{ route('jadwal_ibadah.update') }}" method="post">
                     @method('PUT')
                     @csrf
                     <input type="hidden" name="id_jadwal_ibadah">

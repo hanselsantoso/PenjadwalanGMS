@@ -37,12 +37,12 @@
                             </a>
 
                             @if ($item->status_bagian == 1)
-                                <form action="/admin/bagian/deactivate/{{ $item["id_bagian"] }}" method="post">
+                                <form action="{{ route('bagian.deactivate', ['id' => $item["id_bagian"]]) }}" method="post">
                                     @csrf
                                     <button type="submit" class="btn btn-danger w-100">Suspend</button>
                                 </form>
                             @else
-                                <form action="/admin/bagian/activate/{{ $item["id_bagian"] }}" method="post">
+                                <form action="{{ route('bagian.activate', ['id' => $item["id_bagian"]]) }}" method="post">
                                     @csrf
                                     <button type="submit" class="btn btn-success w-100">Aktifkan</button>
                                 </form>
@@ -64,7 +64,7 @@
                     <h4 class="modal-title">Tambah Bagian</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <form action="{{ route('bagian_store') }}" method="post">
+                <form action="{{ route('bagian.store') }}" method="post">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
@@ -92,7 +92,7 @@
                     <h4 class="modal-title">Ubah Bagian</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <form action="{{ route('bagian_update') }}" method="post">
+                <form action="{{ route('bagian.update') }}" method="post">
                     @method('PUT')
                     @csrf
                     <input type="hidden" name="id_bagian">

@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class MappingController extends Controller
 {
-    public function mapping()
+    public function index()
     {
         $mapping = UserTag::where('status_user_tag', 1)->get();
         $user = ModelsUser::where('status_user', 1)->where('role', 1)->get();
@@ -41,7 +41,7 @@ class MappingController extends Controller
         //     $mapping->save();
         // }
 
-        return redirect()->route('mapping_index')->with('success', 'Mapping berhasil dibuat.');
+        return redirect()->route('mapping.index')->with('success', 'Mapping berhasil dibuat.');
     }
 
     public function update(Request $request)
@@ -58,23 +58,10 @@ class MappingController extends Controller
             $mapping->id_user = $request->user;
             $mapping->id_tag = $request->tags;
             $mapping->save();
-            return redirect()->route('mapping_index')->with('success', 'Mapping berhasil diperbarui.');
+            return redirect()->route('mapping.index')->with('success', 'Mapping berhasil diperbarui.');
         // } catch (\Exception $e) {
-        //     return redirect()->route('mapping_index')->with('error', 'Terjadi kesalahan saat memperbarui mapping.');
+        //     return redirect()->route('mapping.index')->with('error', 'Terjadi kesalahan saat memperbarui mapping.');
         // }
-    }
-
-    public function deactivate($id)
-    {
-        try {
-            $mapping = UserTag::findOrFail($id);
-            $mapping->status_user_tag = 0;
-            $mapping->save();
-
-            return redirect()->route('mapping_index')->with('success', 'Mapping berhasil dinonaktifkan.');
-        } catch (\Exception $e) {
-            return redirect()->route('mapping_index')->with('error', 'Terjadi kesalahan saat menonaktifkan mapping.');
-        }
     }
 
     public function activate($id)
@@ -84,14 +71,22 @@ class MappingController extends Controller
             $mapping->status_user_tag = 1;
             $mapping->save();
 
-            return redirect()->route('mapping_index')->with('success', 'Mapping berhasil diaktifkan.');
+            return redirect()->route('mapping.index')->with('success', 'Mapping berhasil diaktifkan.');
         } catch (\Exception $e) {
-            return redirect()->route('mapping_index')->with('error', 'Terjadi kesalahan saat mengaktifkan mapping.');
+            return redirect()->route('mapping.index')->with('error', 'Terjadi kesalahan saat mengaktifkan mapping.');
         }
     }
 
+    public function deactivate($id)
+    {
+        try {
+            $mapping = UserTag::findOrFail($id);
+            $mapping->status_user_tag = 0;
+            $mapping->save();
 
-
-
-
+            return redirect()->route('mapping.index')->with('success', 'Mapping berhasil dinonaktifkan.');
+        } catch (\Exception $e) {
+            return redirect()->route('mapping.index')->with('error', 'Terjadi kesalahan saat menonaktifkan mapping.');
+        }
+    }
 }

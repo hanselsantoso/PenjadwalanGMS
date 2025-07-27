@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class TagController extends Controller
 {
-    public function tag()
+    public function index()
     {
         $tag = Tag::all();
         return view('tag', compact('tag'));
@@ -24,7 +24,7 @@ class TagController extends Controller
         $tag->nama_tag = $request->nama_tag;
         $tag->status_tag = 1;
         $tag->save();
-        return redirect()->route('tag_index')->with('success', 'Tag berhasil ditambahkan.');
+        return redirect()->route('tag.index')->with('success', 'Tag berhasil ditambahkan.');
     }
 
     public function update(Request $request)
@@ -38,16 +38,7 @@ class TagController extends Controller
         $tag->nama_tag = $request->nama_tag;
         $tag->save();
 
-        return redirect()->route('tag_index')->with('success', 'Tag berhasil diperbarui.');
-    }
-
-    public function deactivate($id)
-    {
-        $tag = Tag::findOrFail($id);
-        $tag->status_tag = false;
-        $tag->save();
-
-        return redirect()->route('tag_index')->with('success', 'Tag berhasil dinonaktifkan.');
+        return redirect()->route('tag.index')->with('success', 'Tag berhasil diperbarui.');
     }
 
     public function activate($id)
@@ -56,7 +47,15 @@ class TagController extends Controller
         $tag->status_tag = true;
         $tag->save();
 
-        return redirect()->route('tag_index')->with('success', 'Tag berhasil diaktifkan.');
+        return redirect()->route('tag.index')->with('success', 'Tag berhasil diaktifkan.');
     }
 
+    public function deactivate($id)
+    {
+        $tag = Tag::findOrFail($id);
+        $tag->status_tag = false;
+        $tag->save();
+
+        return redirect()->route('tag.index')->with('success', 'Tag berhasil dinonaktifkan.');
+    }
 }

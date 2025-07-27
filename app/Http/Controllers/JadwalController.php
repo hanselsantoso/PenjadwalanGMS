@@ -13,7 +13,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class JadwalController extends Controller
 {
-    public function jadwal()
+    public function index()
     {
         $jadwalIbadah = JadwalIbadah::where('status_jadwal_ibadah', 1)->get();
         $cabang = Cabang::where('status_cabang', 1)->get();
@@ -39,7 +39,7 @@ class JadwalController extends Controller
         return view('jadwal', compact('jadwalActive', 'jadwalInactive', 'jadwalIbadah', 'cabang', 'user'));
     }
 
-    public function checkJadwalExists(Request $request)
+    private function checkJadwalExists(Request $request)
     {
         // Check for existing schedule with same cabang, jadwal_ibadah and date
         $existingJadwal = Jadwal_H::where('id_cabang', $request->cabang)
@@ -61,7 +61,7 @@ class JadwalController extends Controller
 
         $existingJadwal = $this->checkJadwalExists($request);
         if ($existingJadwal) {
-            return redirect()->route('jadwal_index')
+            return redirect()->route('jadwal.index')
                 ->with('error', 'Jadwal untuk cabang, slot waktu dan tanggal tersebut sudah ada.');
         }
 
@@ -73,7 +73,7 @@ class JadwalController extends Controller
         $jadwal->status_jadwal_h = 1;
         $jadwal->save();
 
-        return redirect()->route('jadwal_index')->with('success', 'Jadwal berhasil dibuat.');
+        return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil dibuat.');
     }
 
     public function update(Request $request)
@@ -88,7 +88,7 @@ class JadwalController extends Controller
 
         $existingJadwal = $this->checkJadwalExists($request);
         if ($existingJadwal) {
-            return redirect()->route('jadwal_index')
+            return redirect()->route('jadwal.index')
                 ->with('error', 'Jadwal untuk cabang, slot waktu dan tanggal tersebut sudah ada.');
         }
 
@@ -106,7 +106,7 @@ class JadwalController extends Controller
         $jadwal->status_jadwal_h = 1;
         $jadwal->save();
 
-        return redirect()->route('jadwal_index')->with('success', 'Jadwal berhasil diaktifkan.');
+        return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil diaktifkan.');
     }
 
     public function deactivate($id)
@@ -115,10 +115,10 @@ class JadwalController extends Controller
         $jadwal->status_jadwal_h = 0;
         $jadwal->save();
 
-        return redirect()->route('jadwal_index')->with('success', 'Jadwal berhasil dinonaktifkan.');
+        return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil dinonaktifkan.');
     }
 
-    public function downloadSchedule(Request $request)
+    public function download(Request $request)
     {
         $request->validate([
             'start_date' => 'required|date',

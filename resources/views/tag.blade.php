@@ -38,12 +38,12 @@
                             </a>
 
                             @if ($item->status_tag == 1)
-                                <form action="/admin/tag/deactivate/{{ $item["id_tag"] }}" method="post">
+                                <form action="{{ route('tag.deactivate', $item['id_tag']) }}" method="post">
                                     @csrf
                                     <button type="submit" class="btn btn-danger w-100">Suspend</button>
                                 </form>
                             @else
-                                <form action="/admin/tag/activate/{{ $item["id_tag"] }}" method="post">
+                                <form action="{{ route('tag.activate', $item['id_tag']) }}" method="post">
                                     @csrf
                                     <button type="submit" class="btn btn-success w-100">Aktifkan</button>
                                 </form>
@@ -65,7 +65,7 @@
                     <h4 class="modal-title">Tambah Tag</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <form action="{{ route('tag_store') }}" method="post">
+                <form action="{{ route('tag.store') }}" method="post">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
@@ -93,7 +93,7 @@
                     <h4 class="modal-title">Ubah Tag</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <form action="{{ route('tag_update') }}" method="post">
+                <form action="{{ route('tag.update') }}" method="post">
                     @method('PUT')
                     @csrf
                     <input type="hidden" name="id_tag">

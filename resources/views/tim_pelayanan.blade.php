@@ -71,7 +71,7 @@
                                                 <button class="btn btn-warning buttonEditTim" data-id="{{ $team->id }}" data-toggle="modal" data-target="#updateTim">Edit</button>
                                                 <!-- TODO: FIX SUSPEND/DELETE TIM -->
                                                 <!-- <button type="submit" class="btn btn-danger">Suspend</button> -->
-                                                {{-- <form action="{{ route('tim_deactivate', $team->id) }}" method="POST" style="display:inline;">
+                                                {{-- <form action="{{ route('tim_pelayanan.deactivate', $team->id) }}" method="POST" style="display:inline;">
                                                     @csrf
                                                     @method('DELETE')
                                                 </form> --}}
@@ -95,7 +95,7 @@
                                                             <td>{{ $member->user["nama_lengkap"] }}</td>
                                                             <td>
                                                                 <button class="btn btn-warning buttonEdit" data-id="{{ $member->id_pelayanan_d }}" data-toggle="modal" data-target="#updateMember">Edit</button>
-                                                                <form action="{{ route('tim_deactivate', ['id' => $member->id_pelayanan_d, 'id_user' => $member->id_user]) }}" method="POST" style="display:inline;">
+                                                                <form action="{{ route('tim_pelayanan.deactivate', ['id' => $member->id_pelayanan_d, 'id_user' => $member->id_user]) }}" method="POST" style="display:inline;">
                                                                     @csrf
                                                                     @method('DELETE')
                                                                     <button type="submit" class="btn btn-danger">Delete</button>
@@ -129,7 +129,7 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
-                <form action="{{ route('tim_store') }}" method="post">
+                <form action="{{ route('tim_pelayanan.store') }}" method="post">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group mb-1">
@@ -181,7 +181,7 @@
                     <h4 class="modal-title">Tambah Tim Pelayanan</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <form action="{{ route('tim_store_member') }}" method="post">
+                <form action="{{ route('tim_pelayanan.store_member') }}" method="post">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group mb-1">
@@ -217,7 +217,7 @@
                     <h4 class="modal-title">Ubah Cabang</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <form action="{{ route('tim_update_tim') }}" method="post">
+                <form action="{{ route('tim_pelayanan.update_tim') }}" method="post">
                     @method('PUT')
                     @csrf
                     <input type="hidden" name="id_pelayanan_h" id="id_pelayanan_h_pic">
@@ -265,7 +265,7 @@
                     <h4 class="modal-title">Ubah Anggota</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <form action="{{ route('tim_update') }}" method="post">
+                <form action="{{ route('tim_pelayanan.update') }}" method="post">
                     @method('PUT')
                     @csrf
                     <input type="hidden" name="id_pelayanan_d" id="id_pelayanan_d_member">

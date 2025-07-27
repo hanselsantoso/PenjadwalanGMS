@@ -11,7 +11,24 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function pic(){
+    public function servoIndex(){
+
+        // dd($info);
+        return view('Servo.index',with([
+            // 'user'=> $user,
+            // 'info'=> $info,
+        ]));
+    }
+
+    public function volunteerScheduleIndex(Request $request, ){
+
+        $jadwal = Jadwal_D::where('id_user',auth()->user()->id)->get();
+        return view('Volunteer.index',with([
+            'jadwal'=> $jadwal,
+        ]));
+    }
+    
+    public function picIndex(){
 
         $jadwal = Jadwal_D::where('id_user',auth()->user()->id)->get();
         $team = TimPelayanan_H::where('id_user', auth()->user()->id)->first();
@@ -19,23 +36,6 @@ class UserController extends Controller
         return view('Pic.index',with([
             'jadwals'=> $jadwal,
             'team' => $team,
-        ]));
-    }
-
-    public function volunteer(Request $request, ){
-
-        $jadwal = Jadwal_D::where('id_user',auth()->user()->id)->get();
-        return view('Volunteer.index',with([
-            'jadwal'=> $jadwal,
-        ]));
-    }
-
-    public function servo(){
-
-        // dd($info);
-        return view('Servo.index',with([
-            // 'user'=> $user,
-            // 'info'=> $info,
         ]));
     }
 }

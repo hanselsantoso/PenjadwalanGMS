@@ -21,17 +21,17 @@
                         <div class="mt-4">
                             <div class="row">
                                 <div class="col-md-4 mb-3">
-                                    <a href="/admin/user" class="btn btn-primary w-100">
+                                    <a href="{{ route('volunteers.index') }}" class="btn btn-primary w-100">
                                         <i class="fas fa-users"></i> {{ __('Volunteer') }}
                                     </a>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <a href="/admin/cabang" class="btn btn-primary w-100">
+                                    <a href="{{ route('cabang.index') }}" class="btn btn-primary w-100">
                                         <i class="fas fa-map-marker-alt"></i> {{ __('Lokasi') }}
                                     </a>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <a href="/admin/tag" class="btn btn-primary w-100">
+                                    <a href="{{ route('tag.index') }}" class="btn btn-primary w-100">
                                         <i class="fas fa-tags"></i> {{ __('Tag') }}
                                     </a>
                                 </div>
@@ -39,17 +39,17 @@
 
                             <div class="row">
                                 <div class="col-md-4 mb-3">
-                                    <a href="/admin/bagian" class="btn btn-primary w-100">
+                                    <a href="{{ route('bagian.index') }}" class="btn btn-primary w-100">
                                         <i class="fas fa-sitemap"></i> {{ __('Position') }}
                                     </a>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <a href="/admin/jadwal_ibadah" class="btn btn-primary w-100">
+                                    <a href="{{ route('jadwal_ibadah.index') }}" class="btn btn-primary w-100">
                                         <i class="fas fa-church"></i> {{ __('Services') }}
                                     </a>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <a href="/admin/jadwal" class="btn btn-primary w-100">
+                                    <a href="{{ route('jadwal.index') }}" class="btn btn-primary w-100">
                                         <i class="fas fa-calendar-alt"></i> {{ __('Schedule') }}
                                     </a>
                                 </div>
@@ -57,12 +57,12 @@
 
                             <div class="row">
                                 <div class="col-md-4 mb-3">
-                                    <a href="/admin/tim_pelayanan" class="btn btn-primary w-100">
+                                    <a href="{{ route('tim_pelayanan.index') }}" class="btn btn-primary w-100">
                                         <i class="fas fa-users-cog"></i> {{ __('Team') }}
                                     </a>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <a href="/admin/grading" class="btn btn-primary w-100">
+                                    <a href="{{ route('grading.index') }}" class="btn btn-primary w-100">
                                         <i class="fas fa-star"></i> {{ __('Grading') }}
                                     </a>
                                 </div>
@@ -90,7 +90,7 @@
                         <div class="mt-4">
                             <div class="row">
                                 <div class="col-md-4 mb-3">
-                                    <a href="/volunteer/schedule" class="btn btn-primary w-100">
+                                    <a href="{{ route('volunteer.schedule.index') }}" class="btn btn-primary w-100">
                                         <i class="fas fa-calendar-alt"></i> {{ __('Schedule') }}
                                     </a>
                                 </div>

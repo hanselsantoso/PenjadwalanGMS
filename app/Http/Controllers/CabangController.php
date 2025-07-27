@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class CabangController extends Controller
 {
-    public function cabang()
+    public function index()
     {
         $cabang = Cabang::all();
         return view('cabang', compact('cabang'));
@@ -25,7 +25,7 @@ class CabangController extends Controller
         $cabang->status_cabang = 1;
         $cabang->save();
 
-        return redirect()->route('cabang_index')->with('success', 'Lokasi berhasil ditambahkan.');
+        return redirect()->route('cabang.index')->with('success', 'Lokasi berhasil ditambahkan.');
     }
 
     public function update(Request $request)
@@ -39,16 +39,7 @@ class CabangController extends Controller
         $cabang->nama_cabang = $request->nama_cabang;
         $cabang->save();
 
-        return redirect()->route('cabang_index')->with('success', 'Lokasi berhasil diperbarui.');
-    }
-
-    public function deactivate($id)
-    {
-        $cabang = Cabang::findOrFail($id);
-        $cabang->status_cabang = false;
-        $cabang->save();
-
-        return redirect()->route('cabang_index')->with('success', 'Lokasi berhasil dinonaktifkan.');
+        return redirect()->route('cabang.index')->with('success', 'Lokasi berhasil diperbarui.');
     }
 
     public function activate($id)
@@ -57,6 +48,15 @@ class CabangController extends Controller
         $cabang->status_cabang = true;
         $cabang->save();
 
-        return redirect()->route('cabang_index')->with('success', 'Lokasi berhasil diaktifkan.');
+        return redirect()->route('cabang.index')->with('success', 'Lokasi berhasil diaktifkan.');
+    }
+
+    public function deactivate($id)
+    {
+        $cabang = Cabang::findOrFail($id);
+        $cabang->status_cabang = false;
+        $cabang->save();
+
+        return redirect()->route('cabang.index')->with('success', 'Lokasi berhasil dinonaktifkan.');
     }
 }

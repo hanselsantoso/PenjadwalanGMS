@@ -24,7 +24,7 @@ class RedirectIfAuthenticated
                return redirect('/admin');
                break;
             case 1:
-               return redirect('/user');
+               return redirect('/volunteer');
                break;
 
             default:
