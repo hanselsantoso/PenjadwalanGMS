@@ -44,7 +44,11 @@ Route::prefix('user')->middleware(['role:0'])->group(function(){
     Route::post('/activate/{id}', [UserController::class, 'activate'])->name('user.activate');
     Route::post('/deactivate/{id}', [UserController::class, 'deactivate'])->name('user.deactivate');
 
-    Route::post('/excel-store', [UserController::class, 'excelStore'])->name('user.excel_store');
+    Route::prefix('excel')-> group(function() {
+        Route::get('/', [UserController::class, 'excelIndex'])->name('user.excel.index');
+        Route::post('/store', [UserController::class, 'excelStore'])->name('user.excel.store');
+        Route::post('/download', [UserController::class, 'excelDownload'])->name('user.excel.download');
+    });
 });
 
 Route::prefix('cabang')->middleware(['role:0'])->group(function(){

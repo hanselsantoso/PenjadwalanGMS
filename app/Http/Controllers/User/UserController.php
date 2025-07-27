@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Imports\UsersImport;
+use App\Exports\UsersExport;
 use App\Models\Tag;
 use App\Models\User;
 use App\Models\UserTag;
@@ -92,7 +93,7 @@ class UserController extends Controller
         // dd($request->all());
         // Update user data
         try {
-            $user = User::find($request->input('idUser'));
+            $user = User::find($request->input('id_user'));
             $user->nama_lengkap = $request->input('nama_lengkap');
             $user->nij = $request->input('nij');
             $user->alamat = $request->input('alamat');
@@ -179,6 +180,11 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'User berhasil di-suspend.');
     }
 
+    public function excelIndex(Request $request)
+    {
+        return view('user.excel');
+    }
+
     public function excelStore(Request $request)
     {
         $request->validate([
@@ -193,5 +199,10 @@ class UserController extends Controller
             dd($e->getMessage());
             return redirect()->back()->with('error', 'There was an error during the import: ' . $e->getMessage());
         }
+    }
+
+    public function excelDownload()
+    {
+        return Excel::download(new UsersExport, 'users.xlsx');
     }
 }
