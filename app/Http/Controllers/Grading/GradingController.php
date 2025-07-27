@@ -27,13 +27,31 @@ class GradingController extends Controller
         return view('grading.index', compact('user'));
     }
 
+    public function store(Request $request)
+    {
+        $request->validate([
+            'id_user' => 'required|integer|exists:users,id',
+            'grade' => 'required|integer|min:1|max:10',
+        ]);
+
+        try {
+            $user = User::findOrFail($request->id_user);
+            $user->grade = $request->grade;
+            $user->save();
+
+            return redirect()->route('grading.index')->with('success', 'Grade user berhasil ditambahkan.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menambahkan grade user: ' . $e->getMessage());
+        }
+    }
+
     public function update(Request $request) {
         $request->validate([
-            'idUser' => 'required|integer',
+            'id_user' => 'required|integer',
             'grade' => 'required|integer',
         ]);
 
-        $user = User::findOrFail($request->idUser);
+        $user = User::findOrFail($request->id_user);
         $user->grade = $request->grade;
         $user->save();
 

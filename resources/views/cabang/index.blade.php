@@ -1,19 +1,19 @@
 @extends('layouts.app')
 @section('content')
     <div class="main">
-    <div class="container">
+        <div class="container">
             <div class="row align-items-center mb-2">
                 <div class="col-md-6">
                     <h2>Daftar Cabang</h2>
                 </div>
                 <div class="col-md-6 text-end">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createCabang">
+                    <button type="button" id="btnCreate" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cabangModal">
                         Tambah Cabang 
                     </button>
                 </div>
             </div>
 
-            <table id="tabelUser" class="table table-striped table-bordered">
+            <table id="table-list" class="table table-striped table-bordered">
                 <thead>
                     <tr>
                         <th width="10%">No</th>
@@ -26,16 +26,14 @@
                     @foreach ($cabang as $item)
                         <tr>
                             <input type="hidden" name="id_cabang" value="{{$item["id_cabang"] }}">
-                            <input type="hidden" name="nama_cabang" value="{{$item["nama_cabang"] }}">
+
                             <td> {{ $loop->index + 1 }}</td>
                             <td> {{$item["nama_cabang"] }}</td>
                             <td> {{$item["status_cabang"] == 1 ? 'Aktif' : 'Tidak Aktif' }}</td>
-
                             <td>
-                                {{-- <a href="" class="btn btn-primary">View</a> --}}
-                                <a href="#" class="btn btn-warning buttonEdit w-100 mb-2" data-toggle="modal" data-target="#updateCabang">
+                                <button class="btn btn-warning w-100 mb-2 btnEdit" data-bs-toggle="modal" data-bs-target="#cabangModal">
                                     Update
-                                </a>
+                                </button>
 
                                 @if ($item->status_cabang == 1)
                                     <form action="{{ route('cabang.deactivate', $item['id_cabang']) }}" method="post">
@@ -51,94 +49,88 @@
                             </td>
                         </tr>
                     @endforeach
-
                 </tbody>
             </table>
         </div>
     </div>
-    <!-- Create User Modal -->
-    <div class="modal fade" id="createCabang">
+
+    <!-- Cabang Modal -->
+    <div class="modal fade" id="cabangModal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 class="modal-title">Tambah Cabang</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="cabangModalLabel"></h4>
+                    <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
                 </div>
-                <form action="{{ route('cabang.store') }}" method="post">
+                
+                <form id="cabangForm" method="POST">
                     @csrf
+                    @method('POST') {{-- This will be dynamically changed to PUT for updates --}}
+                    <input type="hidden" name="id_cabang" id="id_cabang">
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="nama_cabang">Nama Cabang</label>
-                            <input type="text" class="form-control" name="nama_cabang" required>
+                            <input type="text" class="form-control" name="nama_cabang" id="nama_cabang" required>
                         </div>
-
                     </div>
+
                     <!-- Modal footer -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-
-    <!-- Update User Modal -->
-    <div class="modal fade" id="updateCabang">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Ubah Cabang</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <form action="{{ route('cabang.update') }}" method="post">
-                    @method('PUT')
-                    @csrf
-                    <input type="hidden" name="id_cabang">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="nama_cabang">Nama Cabang</label>
-                            <input type="text" class="form-control" name="nama_cabang" required>
-                        </div>
-
-                    </div>
-                    <!-- Modal footer -->
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-
 @endsection
 
 @section('script')
 <script>
-    $('#tabelUser').DataTable({
+    $('#table-list').DataTable({
         "paging": true,
         "pageLength": 10,
     });
 
     $(document).ready(function () {
-        $('.buttonEdit').on('click', function() {
-            var row = $(this).closest('tr');
-            var hiddenInputs = row.find('input[type="hidden"]');
-            var data = [];
-            hiddenInputs.each(function() {
-                var value = $(this).val();
-                data.push(value);
-            });
-            console.log(data);
-            let id = data[0];
-            let nama = data[1];
+        function fillFields(cabangObject) {
+            let modal = $('#cabangModal');
+            modal.find('#id_cabang').val(cabangObject.id_cabang);
+            modal.find('#nama_cabang').val(cabangObject.nama_cabang);
+        }
 
-            $('#updateCabang').find('input[name="id_cabang"]').val(id);
-            $('#updateCabang').find('input[name="nama_cabang"]').val(nama);
+        function getCabangFromArray(cabangId) {
+            const cabangs = <?php echo json_encode($cabang); ?>;
+            const cabang = cabangs.find(c => c.id_cabang == cabangId);
+            console.log(cabang);
+            return cabang;
+        }
+
+        // Handle Create button click
+        $('#btnCreate').on('click', function() {
+            $('#cabangModalLabel').text('Tambah Cabang');
+            $('#cabangForm').attr('action', '{{ route('cabang.store') }}');
+            $('#cabangForm').find('input[name="_method"]').val('POST');
+            $('#cabangForm')[0].reset(); // Clear form fields
+            $('#cabangForm :input').prop('disabled', false); // Enable all inputs
+            $('#cabangModal .modal-footer button[type="submit"]').show(); // Show submit button
+            $('#cabangModal').modal('show');
+        });
+
+        // Handle Edit button click
+        $('.btnEdit').on('click', function() {
+            $('#cabangModalLabel').text('Ubah Cabang');
+            $('#cabangForm').attr('action', '{{ route('cabang.update') }}');
+            $('#cabangForm').find('input[name="_method"]').val('PUT');
+            $('#cabangForm :input').prop('disabled', false); // Enable all inputs
+            $('#cabangModal .modal-footer button[type="submit"]').show(); // Show submit button
+
+            const cabangId = $(this).closest('tr').find('input[name="id_cabang"]').val();
+            const cabangObject = getCabangFromArray(cabangId);
+            fillFields(cabangObject);
+
+            $('#cabangModal').modal('show');
         });
     });
 

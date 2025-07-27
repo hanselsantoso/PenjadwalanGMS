@@ -58,7 +58,7 @@
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <a href="{{ route('jadwal.index') }}" class="btn btn-primary w-100" style="height: 100px; display: flex; align-items: center; justify-content: center;">
-                                        <i class="fas fa-calendar-alt" style="margin-right: 10px;"></i> {{ __('Jadwal Tugas') }}
+                                        <i class="fas fa-calendar-alt" style="margin-right: 10px;"></i> {{ __('Jadwal Pelayanan') }}
                                     </a>
                                 </div>
                                 <div class="col-md-4 mb-3">

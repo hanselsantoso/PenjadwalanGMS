@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Mapping;
 
 use App\Http\Controllers\Controller;
 use App\Models\Tag;
-use App\Models\User as ModelsUser;
+use App\Models\User;
 use App\Models\UserTag;
 use Illuminate\Http\Request;
 
@@ -12,9 +12,11 @@ class MappingController extends Controller
 {
     public function index()
     {
-        $mapping = UserTag::where('status_user_tag', 1)->get();
-        $user = ModelsUser::where('status_user', 1)->where('role', 1)->get();
+        $mapping = UserTag::all();
+        $user = User::where('status_user', 1)->where('role', 1)->get();
         $tags = Tag::where('status_tag', 1)->get();
+        
+        // dd($user);
 
         return view('mapping.index', compact('mapping', 'tags', 'user'));
     }
@@ -23,16 +25,13 @@ class MappingController extends Controller
     {
         // dd($request->all());
         $request->validate([
-            'user' => 'required|integer',
-            'tags' => 'required|integer',
+            'id_user' => 'required|integer',
+            'id_tag' => 'required|integer',
         ]);
 
-        $id_user = $request->user;
-        $id_tags = $request->tags;
-
         $mapping = new UserTag();
-        $mapping->id_user = $id_user;
-        $mapping->id_tag = $id_tags;
+        $mapping->id_user = $request->id_user;
+        $mapping->id_tag = $request->id_tag;
         $mapping->save();
         // foreach ($id_tags as $id_tag) {
         //     $mapping = new UserTag();
@@ -50,14 +49,15 @@ class MappingController extends Controller
         // try {
             $request->validate([
                 'id_user_tag' => 'required|integer',
-                'user' => 'required|integer',
-                'tags' => 'required|string|max:255',
+                'id_user' => 'required|integer',
+                'id_tag' => 'required|string|max:255',
             ]);
 
             $mapping = UserTag::find($request->id_user_tag);
-            $mapping->id_user = $request->user;
-            $mapping->id_tag = $request->tags;
+            $mapping->id_user = $request->id_user;
+            $mapping->id_tag = $request->id_tag;
             $mapping->save();
+
             return redirect()->route('mapping.index')->with('success', 'Mapping berhasil diperbarui.');
         // } catch (\Exception $e) {
         //     return redirect()->route('mapping.index')->with('error', 'Terjadi kesalahan saat memperbarui mapping.');

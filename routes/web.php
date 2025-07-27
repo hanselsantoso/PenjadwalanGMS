@@ -115,6 +115,7 @@ Route::prefix('tim_pelayanan')->middleware(['role:0'])->group(function(){
 
 Route::prefix('grading')->middleware(['role:0'])->group(function(){
     Route::get('/', [GradingController::class, 'index'])->name('grading.index');
+    Route::post('/', [GradingController::class, 'store'])->name('grading.store');
     Route::put('/', [GradingController::class, 'update'])->name('grading.update');
 });
 
@@ -126,18 +127,20 @@ Route::prefix('jadwal')->middleware(['role:0'])->group(function(){
     Route::post('/activate/{id}', [JadwalController::class, 'activate'])->name('jadwal.activate');
     Route::post('/deactivate/{id}', [JadwalController::class, 'deactivate'])->name('jadwal.deactivate');
 
-    Route::get('/download', [JadwalController::class, 'download'])->name('jadwal.download');
+    Route::prefix('excel')->group(function(){
+        Route::get('/', [JadwalController::class, 'excelIndex'])->name('jadwal.excel.index');
+        Route::post('/download', [JadwalController::class, 'downloadExcel'])->name('jadwal.excel.download');
+    });
 
     Route::prefix('detail')->group(function(){
         Route::get('/{id}', [JadwalDetailController::class, 'index'])->name('jadwal_detail.index');
         Route::post('/', [JadwalDetailController::class, 'store'])->name('jadwal_detail.store');
         Route::put('/', [JadwalDetailController::class, 'update'])->name('jadwal_detail.update');
         
+        Route::post('/remove/{id}', [JadwalDetailController::class, 'remove'])->name('jadwal_detail.remove');
         // Route::post('/activate/{id}', [JadwalDetailController::class, 'activate'])->name('jadwal_detail.activate');
         // Route::post('/deactivate/{id}', [JadwalDetailController::class, 'deactivate'])->name('jadwal_detail.deactivate');
         
-        Route::post('/delete/{id}', [JadwalDetailController::class, 'delete'])->name('jadwal_detail.delete');
-
         Route::post('/automation', [JadwalAutomationController::class, 'automation'])->name('jadwal_detail.automation');
     });
 });

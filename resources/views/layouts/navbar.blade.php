@@ -29,7 +29,7 @@
                                 <a class="dropdown-item" href="{{ route('bagian.index') }}">{{ __('Bagian') }}</a>
                                 <a class="dropdown-item" href="{{ route('mapping.index') }}">{{ __('Mapping') }}</a>
                                 <a class="dropdown-item" href="{{ route('jadwal_ibadah.index') }}">{{ __('Jadwal Ibadah') }}</a>
-                                <a class="dropdown-item" href="{{ route('jadwal.index') }}">{{ __('Jadwal Tugas') }}</a>
+                                <a class="dropdown-item" href="{{ route('jadwal.index') }}">{{ __('Jadwal Pelayanan') }}</a>
                                 <a class="dropdown-item" href="{{ route('tim_pelayanan.index') }}">{{ __('Tim Pelayanan') }}</a>
                                 <a class="dropdown-item" href="{{ route('grading.index') }}">{{ __('Grading') }}</a>
                             </div>

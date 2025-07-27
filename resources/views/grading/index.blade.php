@@ -22,16 +22,14 @@
                 <tbody>
                     @foreach ($user as $item)
                         <tr>
-                            <input type="hidden" name="idUser" value="{{$item["id"] }}">
-                            <input type="hidden" name="grade" value="{{$item["grade"] }}">
+                            <input type="hidden" name="id_user" value="{{$item["id"] }}">
                             <td>{{ $loop->index + 1 }}</td>
                             <td> {{$item["nij"] }}</td>
                             <td> {{$item["nama_lengkap"] }}</td>
                             <td> {{$item->team_name }}</td>
                             <td> {{$item["grade"] }}</td>
                             <td>
-                                {{-- <a href="" class="btn btn-primary">View</a> --}}
-                                <a href="#" class="btn btn-warning buttonEdit w-100" data-toggle="modal" data-target="#updateUser">Update</a>
+                                <button class="btn btn-warning w-100 btnEdit" data-bs-toggle="modal" data-bs-target="#gradingModal">Update</button>
                             </td>
                         </tr>
                     @endforeach
@@ -40,28 +38,43 @@
         </div>
     </div>
 
-    <!-- Update User Modal -->
-    <div class="modal fade" id="updateUser">
+    <!-- Grading Modal -->
+    <div class="modal fade" id="gradingModal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 class="modal-title">Ubah User</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="gradingModalLabel"></h4>
+                    <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
                 </div>
-                <form action="{{ route('grading.update') }}" method="post">
-                    @method('PUT')
+
+                {{-- TODO: Bug 419 Page Expired when Updating --}}
+                <form id="gradingForm" method="POST">
                     @csrf
-                    <input type="hidden" name="idUser">
+                    @method('POST') {{-- This will be dynamically changed to PUT for updates --}}
+                    <input type="hidden" name="id_user" id="id_user">
                     <div class="modal-body">
-                        <div class="form-group">
+                        <div class="form-group mb-1">
+                            <label for="nij">NIJ</label>
+                            <input type="text" class="form-control" name="nij" id="nij">
+                        </div>
+                        <div class="form-group mb-1">
+                            <label for="nama_lengkap">Nama Lengkap</label>
+                            <input type="text" class="form-control" name="nama_lengkap" id="nama_lengkap">
+                        </div>
+                        <div class="form-group mb-1">
+                            <label for="team_name">Team</label>
+                            <input type="text" class="form-control" name="team_name" id="team_name">
+                        </div>
+                        <div class="form-group mb-1">
                             <label for="grade">Grade</label>
-                            <input type="number" min="1" max="10"  class="form-control" name="grade" required>
+                            <input type="number" min="1" max="10"  class="form-control" name="grade" id="grade" required>
                         </div>
                     </div>
+                    
                     <!-- Modal footer -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </form>
@@ -94,20 +107,42 @@
     });
 
     $(document).ready(function () {
-        $('.buttonEdit').on('click', function() {
-            var row = $(this).closest('tr');
-            var hiddenInputs = row.find('input[type="hidden"]');
-            var data = [];
-            hiddenInputs.each(function() {
-                var value = $(this).val();
-                data.push(value);
-            });
-            console.log(data);
-            let id = data[0];
-            let grade = data[1];
+        // Function to fill modal fields
+        function fillFields(userObject) {
+            let modal = $('#gradingModal');
+            modal.find('#id_user').val(userObject.id);
+            modal.find('#nij').val(userObject.nij);
+            modal.find('#nama_lengkap').val(userObject.nama_lengkap);
+            modal.find('#team_name').val(userObject.team_name);
+            modal.find('#grade').val(userObject.grade);
+        }
 
-            $('#updateUser').find('input[name="idUser"]').val(id);
-            $('#updateUser').find('input[name="grade"]').val(grade);
+        // Function to get user object from array
+        function getUserFromArray(userId) {
+            const users = <?php echo json_encode($user); ?>;
+            const user = users.find(u => u.id == userId);
+            console.log(user);
+            return user;
+        }
+
+        // Handle Edit button click
+        $('.btnEdit').on('click', function() {
+            $('#gradingModalLabel').text('Ubah Grade');
+            $('#gradingForm').attr('action', '{{ route('grading.update') }}');
+            $('#gradingForm').find('input[name="_method"]').val('PUT');
+            
+            // Enable only the grade input
+            $('#gradingForm :input').prop('disabled', true);
+            $('#gradingForm #grade').prop('disabled', false);
+            $('#gradingModal .modal-footer button[type="submit"]').show(); // Show submit button
+            $('#gradingModal .modal-footer button[type="submit"]').prop('disabled', false);
+            $('#gradingModal .modal-footer button[type="button"]').prop('disabled', false);
+
+            const userId = $(this).closest('tr').find('input[name="id_user"]').val();
+            const userObject = getUserFromArray(userId);
+            fillFields(userObject);
+
+            $('#gradingModal').modal('show');
         });
     });
 

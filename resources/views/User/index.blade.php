@@ -3,17 +3,17 @@
     <div class="main">
         <div class="container">
             <div class="row align-items-center mb-2">
-                <div class="col-md-6">
-                    <h2>Daftar User</h2>
-                </div>
+                    <div class="col-md-6">
+                        <h2>Daftar User</h2>
+                    </div>
 
-                <div class="col-md-6 text-end">
+                    <div class="col-md-6 text-end">
                     <div class="d-flex justify-content-end gap-2">
                         <a href="{{ route('user.excel.index') }}" class="btn btn-success">
                             Upload/Download Excel
                         </a>
                         <button type="button" id="btnCreate" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#userModal">
-                            Tambah User
+                            Tambah User 
                         </button>
                     </div>
                 </div>

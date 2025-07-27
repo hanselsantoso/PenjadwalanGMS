@@ -8,8 +8,8 @@
                 </a>
             </div>
 
-            <div class="row align-items-center mb-2 shadow-sm rounded bg-light">
-                <div class="col-md px-4 pt-2 mb-2">
+            <div class="row align-items-center mb-2">
+                <div class="col-md mb-2">
                     <h2 class="text-primary fw-bold mb-3">
                         Detail Jadwal
                     </h2>
@@ -39,8 +39,8 @@
                     </h5>
                 </div>
 
-                <div class="d-flex gap-2 text-start px-4 pb-4">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createJadwal" 
+                <div class="d-flex gap-2 text-start mb-2">
+                    <button type="button" id="btnCreate" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#jadwalDetailModal"
                         {{ $jadwal->status_jadwal_h == 0 ? 'disabled' : '' }}
                     >
                         Tambah Jadwal
@@ -49,7 +49,7 @@
                     <form action="{{ route('jadwal_detail.automation') }}" method="POST">
                         @csrf
                         <input type="hidden" name="jadwal" value="{{ $id_H }}">
-                        <button type="submit" class="btn btn-success" 
+                        <button type="submit" class="btn btn-success"
                             {{ $jadwal->status_jadwal_h == 0 ? 'disabled' : '' }}
                         >
                             Automate Schedule
@@ -71,25 +71,22 @@
                 <tbody>
                     @foreach ($jadwal->detail as $item)
                         <tr>
-                            <input type="hidden" name="id_jadwal_h" value="{{$item["id_jadwal_h"] }}">
-                            <input type="hidden" name="nama_bagian" value="{{$item["id_jadwal_d"] }}">
-                            <input type="hidden" name="nama_bagian" value="{{$item["id_bagian"] }}">
-                            <input type="hidden" name="nama_bagian" value="{{$item["id_user"] }}">
+                            <input type="hidden" name="id_jadwal_d" value="{{$item["id_jadwal_d"] }}">
                             <td>{{ $loop->index + 1 }}</td>
                             <td> {{$item->user->nama_lengkap }}</td>
                             <td> {{$item->bagian->nama_bagian }}</td>
                             <td> {{$item->status_jadwal_d == 1 ? "Aktif" : "Tidak Aktif" }}</td>
 
                             <td>
-                                <button href="#" class="btn btn-warning buttonEdit w-100 mb-2" data-toggle="modal" data-target="#updateJadwal" 
+                                <button class="btn btn-warning w-100 mb-2 btnEdit" data-bs-toggle="modal" data-bs-target="#jadwalDetailModal"
                                     {{ $jadwal->status_jadwal_h == 0 ? 'disabled' : '' }}
                                 >
                                     Update
                                 </button>
 
-                                <form action="{{ route('jadwal_detail.delete', $item['id_jadwal_d']) }}" method="post">
+                                <form action="{{ route('jadwal_detail.remove', $item['id_jadwal_d']) }}" method="post">
                                     @csrf
-                                    <button type="submit" class="btn btn-danger w-100" 
+                                    <button type="submit" class="btn btn-danger w-100"
                                         {{ $jadwal->status_jadwal_h == 0 ? 'disabled' : '' }}
                                     >
                                         Remove
@@ -104,22 +101,25 @@
         </div>
     </div>
 
-    <!-- Create User Modal -->
-    <div class="modal fade" id="createJadwal">
+    <!-- Jadwal Detail Modal -->
+    <div class="modal fade" id="jadwalDetailModal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 class="modal-title">Tambah Jadwal</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="jadwalDetailModalLabel"></h4>
+                    <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
                 </div>
-                <form action="{{ route('jadwal_detail.store') }}" method="post">
+                
+                <form id="jadwalDetailForm" method="POST">
                     @csrf
-                    <input type="hidden" name="jadwal" value="{{$jadwal["id_jadwal_h"]}}">
+                    @method('POST') {{-- This will be dynamically changed to PUT for updates --}}
+                    <input type="hidden" name="id_jadwal_h" value="{{$jadwal["id_jadwal_h"]}}">
+                    <input type="hidden" name="id_jadwal_d" id="id_jadwal_d">
                     <div class="modal-body">
                         <div class="form-group mb-1">
                             <label for="user">Anggota</label>
-                            <select class="form-control" name="user" required>
+                            <select class="form-control form-select" name="user" id="user" required>
                                 <option value="" disabled selected>Pilih Anggota</option>
                                 @foreach ($user as $item)
                                     <option value="{{ $item->id }}">{{ $item->nama_lengkap }}</option>
@@ -129,65 +129,18 @@
 
                         <div class="form-group mb-1">
                             <label for="bagian">Bagian</label>
-                            <select class="form-control" name="bagian" required>
+                            <select class="form-control form-select" name="bagian" id="bagian" required>
                                 <option value="" disabled selected>Pilih Bagian</option>
                                 @foreach ($bagian as $item)
                                     <option value="{{ $item->id_bagian }}">{{ $item->nama_bagian }}</option>
                                 @endforeach
                             </select>
                         </div>
-
-
                     </div>
+                    
                     <!-- Modal footer -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Update User Modal -->
-    <div class="modal fade" id="updateJadwal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Tambah Jadwal</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <form action="{{ route('jadwal_detail.update') }}" method="post">
-                    @method('PUT')
-                    @csrf
-                    <input type="hidden" name="id_jadwal_h">
-                    <input type="hidden" name="jadwal">
-                    <div class="modal-body">
-                        <div class="form-group mb-1">
-                            <label for="user">Anggota</label>
-                            <select class="form-control" name="user" required>
-                                <option value="" disabled selected>Pilih Anggota</option>
-                                @foreach ($user as $item)
-                                    <option value="{{ $item->id }}">{{ $item->nama_lengkap }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="form-group mb-1">
-                            <label for="bagian">Bagian</label>
-                            <select class="form-control" name="bagian" required>
-                                <option value="" disabled selected>Pilih Jam</option>
-                                @foreach ($bagian as $item)
-                                    <option value="{{ $item->id_bagian }}">{{ $item->nama_bagian }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                    </div>
-                    <!-- Modal footer -->
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </form>
@@ -206,28 +159,42 @@
     });
 
     $(document).ready(function () {
-        $('.buttonEdit').on('click', function() {
-            var row = $(this).closest('tr');
-            var hiddenInputs = row.find('input[type="hidden"]');
-            var data = [];
-            hiddenInputs.each(function() {
-                var value = $(this).val();
-                data.push(value);
-            });
-            console.log(data);
-            let id = data[0];
-            let jadwal = data[1];
-            let bagian = data[2];
-            let user = data[3];
+        function fillFields(jadwalDetailObject) {
+            let modal = $('#jadwalDetailModal');
+            modal.find('#id_jadwal_d').val(jadwalDetailObject.id_jadwal_d);
+            modal.find('#user').val(jadwalDetailObject.id_user);
+            modal.find('#bagian').val(jadwalDetailObject.id_bagian);
+        }
 
-            $('#updateJadwal').find('input[name="id_jadwal_h"]').val(id);
-            $('#updateJadwal').find('input[name="jadwal"]').val(jadwal);
-            $('#updateJadwal').find('select[name="bagian"]').val(bagian);
-            $('#updateJadwal').find('select[name="user"]').val(user);
+        function getJadwalDetailFromArray(jadwalDetailId) {
+            const jadwalDetails = <?php echo json_encode($jadwal->detail); ?>;
+            return jadwalDetails.find(item => item.id_jadwal_d == jadwalDetailId);
+        }
 
-            $('#updateJadwal').find('input[name="tanggal_jadwal"]').datepicker('setDate', tanggal);
+        // Handle Create Jadwal button click
+        $('#btnCreate').on('click', function() {
+            $('#jadwalDetailModalLabel').text('Tambah Jadwal');
+            $('#jadwalDetailForm').attr('action', '{{ route("jadwal_detail.store") }}');
+            $('#jadwalDetailForm').find('input[name="_method"]').val('POST');
+            $('#jadwalDetailForm')[0].reset(); // Clear form fields
+            $('#jadwalDetailForm :input').prop('disabled', false); // Enable all inputs
+            $('#jadwalDetailModal .modal-footer button[type="submit"]').show(); // Show submit button
+            $('#jadwalDetailModal').modal('show');
+        });
 
-            // $("#tanggal_jadwal").datepicker("setDate", tanggal);
+        // Handle Update Jadwal button click
+        $('.btnEdit').on('click', function() {
+            $('#jadwalDetailModalLabel').text('Ubah Jadwal');
+            $('#jadwalDetailForm').attr('action', '{{ route("jadwal_detail.update") }}');
+            $('#jadwalDetailForm').find('input[name="_method"]').val('PUT');
+            $('#jadwalDetailForm :input').prop('disabled', false); // Enable all inputs
+            $('#jadwalDetailModal .modal-footer button[type="submit"]').show(); // Show submit button
+
+            const jadwalDetailId = $(this).closest('tr').find('input[name="id_jadwal_d"]').val();
+            const jadwalDetailObject = getJadwalDetailFromArray(jadwalDetailId);
+            fillFields(jadwalDetailObject);
+
+            $('#jadwalDetailModal').modal('show');
         });
     });
 

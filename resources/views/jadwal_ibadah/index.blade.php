@@ -7,7 +7,7 @@
                     <h2>Daftar Jadwal Ibadah</h2>
                 </div>
                 <div class="col-md-6 text-end">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createJadwalIbadah">
+                    <button type="button" id="btnCreate" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#jadwalIbadahModal">
                         Tambah Jadwal Ibadah 
                     </button>
                 </div>
@@ -30,11 +30,6 @@
                     @foreach ($jadwalActive as $item)
                     <tr>
                         <input type="hidden" name="id_jadwal_ibadah" value="{{$item["id_jadwal_ibadah"] }}">
-                        <input type="hidden" name="nama_ibadah" value="{{$item["nama_ibadah"] }}">
-                        <input type="hidden" name="alias_ibadah" value="{{$item["alias_ibadah"] }}">
-                        <input type="hidden" name="jadwal_stand_by" value="{{$item["jam_stand_by"] }}">
-                        <input type="hidden" name="jadwal_mulai" value="{{$item["jam_mulai"] }}">
-                        <input type="hidden" name="jadwal_akhir" value="{{$item["jam_akhir"] }}">
                         <td>{{ $loop->index + 1 }}</td>
                         <td> {{$item["nama_ibadah"] }}</td>
                         <td> {{$item["alias_ibadah"] }}</td>
@@ -43,9 +38,10 @@
                         <td> {{$item["jam_akhir"] }}</td>
 
                         <td>
-                            <a href="#" class="btn btn-warning buttonEdit w-100 mb-2" data-toggle="modal" data-target="#updateJadwalIbadah">
+                            <button class="btn btn-warning w-100 mb-2 btnEdit" data-bs-toggle="modal" data-bs-target="#jadwalIbadahModal">
                                 Update
-                            </a>
+                            </button>
+                            
                             <form action="{{ route('jadwal_ibadah.deactivate', $item['id_jadwal_ibadah']) }}" method="post">
                                 @csrf
                                 <button type="submit" class="btn btn-danger w-100">Suspend</button>
@@ -76,11 +72,6 @@
                     @foreach ($jadwalInactive as $item)
                     <tr>
                         <input type="hidden" name="id_jadwal_ibadah" value="{{$item["id_jadwal_ibadah"] }}">
-                        <input type="hidden" name="nama_ibadah" value="{{$item["nama_ibadah"] }}">
-                        <input type="hidden" name="alias_ibadah" value="{{$item["alias_ibadah"] }}">
-                        <input type="hidden" name="jadwal_stand_by" value="{{$item["jam_stand_by"] }}">
-                        <input type="hidden" name="jadwal_mulai" value="{{$item["jam_mulai"] }}">
-                        <input type="hidden" name="jadwal_akhir" value="{{$item["jam_akhir"] }}">
                         <td>{{ $loop->index + 1 }}</td>
                         <td> {{$item["nama_ibadah"] }}</td>
                         <td> {{$item["alias_ibadah"] }}</td>
@@ -89,9 +80,10 @@
                         <td> {{$item["jam_akhir"] }}</td>
 
                         <td>
-                            <a href="#" class="btn btn-warning buttonEdit w-100 mb-2" data-toggle="modal" data-target="#updateJadwalIbadah">
+                            <button class="btn btn-warning w-100 mb-2 btnEdit" data-bs-toggle="modal" data-bs-target="#jadwalIbadahModal">
                                 Update
-                            </a>
+                            </button>
+                            
                             <form action="{{ route('jadwal_ibadah.activate', $item['id_jadwal_ibadah']) }}" method="post">
                                 @csrf
                                 <button type="submit" class="btn btn-success w-100">Activate</button>
@@ -105,95 +97,58 @@
         </div>
     </div>
 
-    <!-- Create User Modal -->
-    <div class="modal fade" id="createJadwalIbadah">
-        <div class="modal-dialog">
+    <!-- Jadwal Ibadah Modal -->
+    <div class="modal fade" id="jadwalIbadahModal">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 class="modal-title">Tambah Jadwal Ibadah</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="jadwalIbadahModalLabel"></h4>
+                    <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
                 </div>
-                <form action="{{ route('jadwal_ibadah.store') }}" method="post">
+                <form id="jadwalIbadahForm" method="POST">
                     @csrf
+                    @method('POST') {{-- This will be dynamically changed to PUT for updates --}}
+                    <input type="hidden" name="id_jadwal_ibadah" id="id_jadwal_ibadah">
                     <div class="modal-body">
-                        <div class="form-group mb-1">
-                            <label for="nama_ibadah">Nama Ibadah</label>
-                            <input type="text" class="form-control" name="nama_ibadah" required>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-1">
+                                    <label for="nama_ibadah">Nama Ibadah</label>
+                                    <input type="text" class="form-control" name="nama_ibadah" id="nama_ibadah" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-1">
+                                    <label for="alias_ibadah">Alias Ibadah</label>
+                                    <input type="text" class="form-control" name="alias_ibadah" id="alias_ibadah" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-1">
+                                    <label for="jam_stand_by">Jam Stand By</label>
+                                    <input class="form-control" type="time" id="jam_stand_by" name="jam_stand_by" value="00:00" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-1">
+                                    <label for="jam_mulai">Jam Ibadah Mulai</label>
+                                    <input class="form-control" type="time" id="jam_mulai" name="jam_mulai" value="00:00" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-1">
+                                    <label for="jam_akhir">Jam Ibadah Selesai</label>
+                                    <input class="form-control" type="time" id="jam_akhir" name="jam_akhir" value="00:00" required>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group mb-1">
-                            <label for="alias_ibadah">Alias Ibadah</label>
-                            <input type="text" class="form-control" name="alias_ibadah" required>
-                        </div>
-                        <div class="form-group mb-1">
-                            <label for="jam_stand_by">Jam Stand By</label>
-                            <input class="form-control" type="time" id="jam_stand_by" name="jam_stand_by" value="00:00" required>
-                        </div>
-                        <div class="form-group mb-1">
-                            <label for="jam_mulai">Jam Ibadah Mulai</label>
-                            <input class="form-control" type="time" id="jam_mulai" name="jam_mulai" value="00:00" required>
-                        </div>
-
-                        <div class="form-group mb-1">
-                            <label for="jam_akhir">Jam Ibadah Selesai</label>
-                            <input class="form-control" type="time" id="jam_akhir" name="jam_akhir" value="00:00" required>
-                        </div>
-
                     </div>
+
                     <!-- Modal footer -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Update User Modal -->
-    <div class="modal fade" id="updateJadwalIbadah">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Ubah Jadwal Ibadah</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <form action="{{ route('jadwal_ibadah.update') }}" method="post">
-                    @method('PUT')
-                    @csrf
-                    <input type="hidden" name="id_jadwal_ibadah">
-                    <div class="modal-body">
-                        <div class="modal-body">
-                            <div class="form-group mb-1">
-                                <label for="nama_ibadah">Nama Ibadah</label>
-                                <input type="text" class="form-control" name="nama_ibadah" required>
-                            </div>
-                            <div class="form-group mb-1">
-                                <label for="alias_ibadah">Alias Ibadah</label>
-                                <input type="text" class="form-control" name="alias_ibadah" required>
-                            </div>
-                            <div class="form-group mb-1">
-                                <label for="jam_stand_by">Jam Stand By</label>
-                                <input class="form-control" type="time" id="jam_stand_by" name="jam_stand_by" value="00:00" required>
-                            </div>
-                            <div class="form-group mb-1">
-                                <label for="jam_mulai">Jam Ibadah Mulai</label>
-                                <input class="form-control" type="time" id="jam_mulai" name="jam_mulai" value="00:00" required>
-                            </div>
-
-                            <div class="form-group mb-1">
-                                <label for="jam_akhir">Jam Ibadah Selesai</label>
-                                <input class="form-control" type="time" id="jam_akhir" name="jam_akhir" value="00:00" required>
-                            </div>
-
-                        </div>
-                        <!-- Modal footer -->
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </div>
-
                     </div>
                 </form>
             </div>
@@ -216,28 +171,54 @@
     });
 
     $(document).ready(function () {
-        $('.buttonEdit').on('click', function() {
-            var row = $(this).closest('tr');
-            var hiddenInputs = row.find('input[type="hidden"]');
-            var data = [];
-            hiddenInputs.each(function() {
-                var value = $(this).val();
-                data.push(value);
-            });
+        // Function to fill modal fields
+        function fillFields(jadwalIbadahObject) {
+            let modal = $('#jadwalIbadahModal');
+            modal.find('#id_jadwal_ibadah').val(jadwalIbadahObject.id_jadwal_ibadah);
+            modal.find('#nama_ibadah').val(jadwalIbadahObject.nama_ibadah);
+            modal.find('#alias_ibadah').val(jadwalIbadahObject.alias_ibadah);
+            modal.find('#jam_stand_by').val(jadwalIbadahObject.jam_stand_by);
+            modal.find('#jam_mulai').val(jadwalIbadahObject.jam_mulai);
+            modal.find('#jam_akhir').val(jadwalIbadahObject.jam_akhir);
+        }
 
-            let id = data[0];
-            let nama_ibadah = data[1];
-            let alias_ibadah = data[2];
-            let stand = data[3];
-            let awal = data[4];
-            let akhir = data[5];
+        // Function to get jadwal ibadah object from array
+        function getJadwalIbadahFromArray(jadwalIbadahId) {
+            const jadwalActive = <?php echo json_encode($jadwalActive); ?>;
+            const jadwalInactive = <?php echo json_encode($jadwalInactive); ?>;
+            
+            let jadwal = jadwalActive.find(j => j.id_jadwal_ibadah == jadwalIbadahId);
+            if (!jadwal) {
+                jadwal = jadwalInactive.find(j => j.id_jadwal_ibadah == jadwalIbadahId);
+            }
+            console.log(jadwal);
+            return jadwal;
+        }
 
-            $('#updateJadwalIbadah').find('input[name="id_jadwal_ibadah"]').val(id);
-            $('#updateJadwalIbadah').find('input[name="nama_ibadah"]').val(nama_ibadah);
-            $('#updateJadwalIbadah').find('input[name="alias_ibadah"]').val(alias_ibadah);
-            $('#updateJadwalIbadah').find('input[name="jam_stand_by"]').val(stand);
-            $('#updateJadwalIbadah').find('input[name="jam_mulai"]').val(awal);
-            $('#updateJadwalIbadah').find('input[name="jam_akhir"]').val(akhir);
+        // Handle Create button click
+        $('#btnCreate').on('click', function() {
+            $('#jadwalIbadahModalLabel').text('Tambah Jadwal Ibadah');
+            $('#jadwalIbadahForm').attr('action', '{{ route('jadwal_ibadah.store') }}');
+            $('#jadwalIbadahForm').find('input[name="_method"]').val('POST');
+            $('#jadwalIbadahForm')[0].reset(); // Clear form fields
+            $('#jadwalIbadahForm :input').prop('disabled', false); // Enable all inputs
+            $('#jadwalIbadahModal .modal-footer button[type="submit"]').show(); // Show submit button
+            $('#jadwalIbadahModal').modal('show');
+        });
+
+        // Handle Edit button click
+        $('.btnEdit').on('click', function() {
+            $('#jadwalIbadahModalLabel').text('Ubah Jadwal Ibadah');
+            $('#jadwalIbadahForm').attr('action', '{{ route('jadwal_ibadah.update') }}');
+            $('#jadwalIbadahForm').find('input[name="_method"]').val('PUT');
+            $('#jadwalIbadahForm :input').prop('disabled', false); // Enable all inputs
+            $('#jadwalIbadahModal .modal-footer button[type="submit"]').show(); // Show submit button
+
+            const jadwalIbadahId = $(this).closest('tr').find('input[name="id_jadwal_ibadah"]').val();
+            const jadwalIbadahObject = getJadwalIbadahFromArray(jadwalIbadahId);
+            fillFields(jadwalIbadahObject);
+
+            $('#jadwalIbadahModal').modal('show');
         });
     });
 

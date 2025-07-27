@@ -86,15 +86,19 @@ class ScheduleExport implements FromCollection, WithHeadings, WithStyles
     private function getSchedules($idCabang)
     {
         // Retrieve jadwal_h entries within the date range and group by date and time slot
-        return Jadwal_H::whereBetween('tanggal_jadwal', [$this->startDate, $this->endDate])
-            ->where('status_jadwal_h', 1)
-            ->where('id_cabang', $idCabang) 
-            ->with(['detail' => function ($query) {
-                $query->with('bagian', 'user');
-            }, 'jadwalIbadah'])
-            ->get()
-            ->groupBy(['tanggal_jadwal', 'id_jadwal_ibadah'])
-            ->sortBy('tanggal_jadwal');
+        $query = Jadwal_H::whereBetween('tanggal_jadwal', [$this->startDate, $this->endDate])
+            ->where('status_jadwal_h', 1);
+
+        if ($idCabang !== null) {
+            $query->where('id_cabang', $idCabang);
+        }
+
+        return $query->with(['detail' => function ($query) {
+                                $query->with('bagian', 'user');
+                            }, 'jadwalIbadah'])
+                                ->get()
+                                ->groupBy(['tanggal_jadwal', 'id_jadwal_ibadah'])
+                                ->sortBy('tanggal_jadwal');
     }
     
     private function getDatePairs($schedules)

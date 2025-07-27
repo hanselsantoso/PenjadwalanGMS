@@ -220,7 +220,7 @@ class JadwalAutomationController extends Controller
 
         DB::commit();
         return redirect()
-            ->route('jadwal_detail_index', $jadwalHeader->id_jadwal_h)
+            ->route('jadwal_detail.index', $jadwalHeader->id_jadwal_h)
             ->with('success', 'Penugasan volunteer berhasil secara otomatis berhasil.')
             ->with('warning', $warningMessages);
     }
@@ -267,7 +267,7 @@ class JadwalAutomationController extends Controller
     private function redirectWithError($jadwalId, $message)
     {
         return redirect()
-            ->route('jadwal_detail_index', $jadwalId)
+            ->route('jadwal_detail.index', $jadwalId)
             ->with('error', $message);
     }
 

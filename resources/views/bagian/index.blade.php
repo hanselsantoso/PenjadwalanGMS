@@ -7,7 +7,7 @@
                     <h2>Daftar Bagian</h2>
                 </div>
                 <div class="col-md-6 text-end">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createBagian">
+                    <button type="button" id="btnCreate" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bagianModal">
                         Tambah Bagian 
                     </button>
                 </div>
@@ -17,7 +17,7 @@
                 <thead>
                     <tr>
                         <th width="10%">No</th>
-                        <th width="60%">Nama Bagian</th>
+                        <th width="60%">Nama</th>
                         <th width="15%">Status</th>
                         <th width="15%">Action</th>
                     </tr>
@@ -26,15 +26,14 @@
                     @foreach ($bagian as $item)
                     <tr>
                         <input type="hidden" name="id_bagian" value="{{$item["id_bagian"] }}">
-                        <input type="hidden" name="nama_bagian" value="{{$item["nama_bagian"] }}">
                         <td> {{ $loop->index + 1 }}</td>
                         <td> {{ $item["nama_bagian"] }}</td>
                         <td> {{$item["status_bagian"] == 1 ? 'Aktif' : 'Tidak Aktif' }}</td>
 
                         <td>
-                            <a href="#" class="btn btn-warning buttonEdit w-100 mb-2" data-toggle="modal" data-target="#updateBagian">
+                            <button class="btn btn-warning w-100 mb-2 btnEdit" data-bs-toggle="modal" data-bs-target="#bagianModal">
                                 Update
-                            </a>
+                            </button>
 
                             @if ($item->status_bagian == 1)
                                 <form action="{{ route('bagian.deactivate', ['id' => $item["id_bagian"]]) }}" method="post">
@@ -55,65 +54,36 @@
             </table>
         </div>
     </div>
-    <!-- Create User Modal -->
-    <div class="modal fade" id="createBagian">
+    <!-- Bagian Modal -->
+    <div class="modal fade" id="bagianModal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 class="modal-title">Tambah Bagian</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="bagianModalLabel"></h4>
+                    <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
                 </div>
-                <form action="{{ route('bagian.store') }}" method="post">
+
+                <form id="bagianForm" method="POST">
                     @csrf
+                    @method('POST') {{-- This will be dynamically changed to PUT for updates --}}
+                    <input type="hidden" name="id_bagian" id="id_bagian">
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="nama_bagian">Nama Bagian</label>
-                            <input type="text" class="form-control" name="nama_bagian" required>
+                            <input type="text" class="form-control" name="nama_bagian" id="nama_bagian" required>
                         </div>
-
                     </div>
+                    
                     <!-- Modal footer -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-
-    <!-- Update User Modal -->
-    <div class="modal fade" id="updateBagian">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Ubah Bagian</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <form action="{{ route('bagian.update') }}" method="post">
-                    @method('PUT')
-                    @csrf
-                    <input type="hidden" name="id_bagian">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="nama_bagian">Nama Bagian</label>
-                            <input type="text" class="form-control" name="nama_bagian" required>
-                        </div>
-
-                    </div>
-                    <!-- Modal footer -->
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-
 @endsection
 
 @section('script')
@@ -124,20 +94,45 @@
     });
 
     $(document).ready(function () {
-        $('.buttonEdit').on('click', function() {
-            var row = $(this).closest('tr');
-            var hiddenInputs = row.find('input[type="hidden"]');
-            var data = [];
-            hiddenInputs.each(function() {
-                var value = $(this).val();
-                data.push(value);
-            });
-            console.log(data);
-            let id = data[0];
-            let nama = data[1];
+        // Function to fill modal fields
+        function fillFields(bagianObject) {
+            let modal = $('#bagianModal');
+            modal.find('#id_bagian').val(bagianObject.id_bagian);
+            modal.find('#nama_bagian').val(bagianObject.nama_bagian);
+        }
 
-            $('#updateBagian').find('input[name="id_bagian"]').val(id);
-            $('#updateBagian').find('input[name="nama_bagian"]').val(nama);
+        // Function to get bagian object from array
+        function getBagianFromArray(bagianId) {
+            const bagians = <?php echo json_encode($bagian); ?>;
+            const bagian = bagians.find(b => b.id_bagian == bagianId);
+            console.log(bagian);
+            return bagian;
+        }
+
+        // Handle Create button click
+        $('#btnCreate').on('click', function() {
+            $('#bagianModalLabel').text('Tambah Bagian');
+            $('#bagianForm').attr('action', '{{ route('bagian.store') }}');
+            $('#bagianForm').find('input[name="_method"]').val('POST');
+            $('#bagianForm')[0].reset(); // Clear form fields
+            $('#bagianForm :input').prop('disabled', false); // Enable all inputs
+            $('#bagianModal .modal-footer button[type="submit"]').show(); // Show submit button
+            $('#bagianModal').modal('show');
+        });
+
+        // Handle Edit button click
+        $('.btnEdit').on('click', function() {
+            $('#bagianModalLabel').text('Ubah Bagian');
+            $('#bagianForm').attr('action', '{{ route('bagian.update') }}');
+            $('#bagianForm').find('input[name="_method"]').val('PUT');
+            $('#bagianForm :input').prop('disabled', false); // Enable all inputs
+            $('#bagianModal .modal-footer button[type="submit"]').show(); // Show submit button
+
+            const bagianId = $(this).closest('tr').find('input[name="id_bagian"]').val();
+            const bagianObject = getBagianFromArray(bagianId);
+            fillFields(bagianObject);
+
+            $('#bagianModal').modal('show');
         });
     });
 

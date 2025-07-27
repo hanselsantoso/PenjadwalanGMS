@@ -118,7 +118,13 @@ class JadwalController extends Controller
         return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil dinonaktifkan.');
     }
 
-    public function download(Request $request)
+    public function excelIndex()
+    {
+        $cabang = Cabang::where('status_cabang', 1)->get();
+        return view('jadwal.excel', compact('cabang'));
+    }
+
+    public function downloadExcel(Request $request)
     {
         $request->validate([
             'start_date' => 'required|date',
@@ -128,12 +134,19 @@ class JadwalController extends Controller
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
         $idCabang = $request->id_cabang;
-        $cabang = Cabang::find($idCabang);
         
+        $cabangName = 'All_Cabang';
+        if ($idCabang != 0) {
+            $cabang = Cabang::find($idCabang);
+            $cabangName = $cabang->nama_cabang;
+        } else {
+            $idCabang = null; // Pass null to ScheduleExport to indicate all branches
+        }
+
         // Format dates for filename
         $startDateFormatted = date('d-m-Y', strtotime($startDate));
         $endDateFormatted = date('d-m-Y', strtotime($endDate));
-        $filename = "GMS_Sound_Schedule_{$cabang->nama_cabang}_{$startDateFormatted}_to_{$endDateFormatted}.xlsx";
+        $filename = "GMS_Sound_Schedule_{$cabangName}_{$startDateFormatted}_to_{$endDateFormatted}.xlsx";
 
         // Trigger the download
         return Excel::download(
