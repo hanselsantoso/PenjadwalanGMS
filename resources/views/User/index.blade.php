@@ -1,219 +1,212 @@
 @extends('layouts.app')
 @section('content')
     <div class="main">
-        <div class="container row m-auto" >
-            @if ($user["status"] == 0)
-                <h2>{{$user["name"]}} - <span style="color: red;">SUSPEND</span></h2>
+        <div class="container">
+            <div class="">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h2>Data Volunteer</h2>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createUser">
+                            Tambah Volunteer 
+                        </button>
+                    </div>
+                </div>
 
-            @else
-                <h2>{{$user["name"]}}</h2>
-            @endif
-            
-            <div class="container col-6">
-            <div class="header">
-                <div class="row">
-                <div class="col-8">
-                    <h2>Total Simpanan - {{format_idr($user->simpanan["total_simpanan"] ?? 0)}}</h2>
-                    <h5>Bunga Simpanan / bulan - {{$info['interestRate']}}%</h5>
+                <div class="col-md p-2 px-3 mt-2 mb-3 shadow-sm rounded bg-light">                    
+                    <form action="{{ route('user.excel_store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="mb-2">
+                            <label for="file" class="form-label fs-4">Upload User Excel File</label>
+                            <input type="file" class="form-control" name="file" required>
+                        </div>
+                        <div class="mb-2">
+                            <button type="submit" class="btn btn-success">Import Users</button>
+                        </div>
+                    </form>
                 </div>
-                </div>
-                <br>
+
             </div>
-            <div class="content">
-                <table id="tabelSimpan" class="table table-striped table-bordered">
+            <table id="tabelUser" class="table table-striped table-bordered">
                 <thead>
-                  <tr>
-                    <th>Tanggal</th>
-                    <th>Nominal</th>
-                    <th>Status</th>
-                  </tr>
+                    <tr>
+                        <th>No</th>
+                        <th>NIJ</th>
+                        <th>Nama</th>
+                        <th>Email</th>
+                        <th>No. Telp</th>
+                        <th>Tim</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
                 </thead>
                 <tbody>
-                    @foreach ($user->simpanan->simpanans ?? [] as $item)
+                    @foreach ($user as $item)
                         <tr>
-                            <input type="hidden" id="idSimpanan" value="{{$item["id"]}}">
-                            <input type="hidden" id="tanggalSimpanan" value="{{$item->getTanggal($item["tanggal"])}}">
-                            <input type="hidden" id="nominalSimpanan" value="{{$item["nominal"]}}">
-                            <input type="hidden" id="statusSimpanan" value="{{$item["status"]}}">
-                            <td>{{$item->getTanggal($item["tanggal"])}}</td>
-                            <td>{{ format_idr($item["nominal"])}}</td>
-                            <td>{{$item->getStatusSimpanan($item["status"])}}</td>
+                            <input type="hidden" name="idUser" value="{{$item["id"] }}">
+                            <input type="hidden" name="nij" value="{{$item["nij"] }}">
+                            <input type="hidden" name="nama" value="{{$item["nama_lengkap"] }}">
+                            <input type="hidden" name="email" value="{{$item["email"] }}">
+                            <input type="hidden" name="alamat" value="{{$item["alamat"] }}">
+                            <input type="hidden" name="jenis_kelamin" value="{{$item["jenis_kelamin"] }}">
+                            <input type="hidden" name="tempatLahir" value="{{$item["tempat_lahir"] }}">
+                            <input type="hidden" name="tanggalLahir" value="{{$item->getTanggal($item["tanggal_lahir"])}}">
+                            <input type="hidden" name="telp" value="{{$item["telp"] }}">
+                            <input type="hidden" name="kesibukan" value="{{$item["kesibukan"] }}">
+                            <input type="hidden" name="nomor_cg" value="{{$item["nomor_cg"] }}">
+                            <input type="hidden" name="posisi_cg" value="{{$item["posisi_cg"] }}">
+                            <input type="hidden" name="nama_pemimpin" value="{{$item["nama_pemimpin"] }}">
+                            <input type="hidden" name="telp_pemimpin" value="{{$item["telp_pemimpin"] }}">
+                            <td> {{ $loop->index + 1 }}</td>
+                            <td> {{$item["nij"] }}</td>
+                            <td> {{$item["nama_lengkap"] }}</td>
+                            <td> {{$item["email"] }}</td>
+                            <td> {{$item["telp"] }}</td>
+                            <td> {{$item->team_name }}</td>
+                            <td> {{$item["status_user"] == 1 ? 'Aktif' : 'Tidak Aktif' }}</td>
+                            <td>
+                                {{-- <a href="" class="btn btn-primary">View</a> --}}
+                                <a href="#" class="btn btn-warning buttonEdit w-100 mb-2" data-toggle="modal" data-target="#updateUser">
+                                    Update
+                                </a>
+
+                                @if ($item->status_user == 1)
+                                    <form action="{{ route('user.deactivate', ['id' => $item['id']]) }}" method="post">
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger w-100">Suspend</button>
+                                    </form>
+                                @else
+                                    <form action="{{ route('user.activate', ['id' => $item['id']]) }}" method="post">
+                                        @csrf
+                                        <button type="submit" class="btn btn-success w-100">Aktifkan</button>
+                                    </form>
+                                @endif
+                            </td>
                         </tr>
                     @endforeach
+
                 </tbody>
-                  </table>
-            </div>
-            </div>
-
-            <div class="container col-6">
-            <div class="header">
-                <div class="row">
-                <div class="col-8">
-                    <h2>Total Pinjaman - {{format_idr($user->countTotalPinjaman())}}</h2>
-                    <h5>Maximal Pinjaman - {{$info['aturanPinjam']}}% - {{format_idr($info['jumlahPinjaman'])}}</h5>
-                </div>
-                </div>
-                <br>
-            </div>
-            <div class="content">
-                @foreach ($user->pinjaman ?? [] as $item)
-                    <table class="tabelPinjaman table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Tanggal Mulai Pinjaman</th>
-                                <th>Tanggal Jatuh Tempo</th>
-                                <th>Total Pinjaman</th>
-                                <th>+ {{$info["bungaPinjaman"]}}%</th>
-                                <th>Total Terbayar</th>
-                                <th>Total Cicilan</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                                <tr>
-                                    <td>{{ $item->getTanggal($item->tanggal_pinjaman) }}</td>
-                                    <td>{{ $item->getTanggal($item->jatuh_tempo) }}</td>
-                                    <td>{{ format_idr($item->total_pinjaman) }}</td>
-                                    <td>{{ format_idr($item->getTotalPinjamanD()) }}</td>
-                                    <td>{{ format_idr($item->getTotalTerbayar()) }}</td>
-                                    <td>{{ $item->total_cicilan }}</td>
-                                    @if ($item->status_pinjaman_h == 1)
-                                        <td>Belum Lunas</td>
-                                    @else
-                                        <td>Lunas</td>
-                                    @endif
-                                    <td>
-                                        <button data-toggle="modal" class="buttonBayar btn btn-success" onclick="window.location.href='/user/pinjaman/{{$item->id_pinjaman_h}}'">
-                                            <span>Detail</span>
-                                        </button>
-                                    </td>
-                                    </td>
-                                </tr>
-
-
-
-                        </tbody>
-                    </table>
-                @endforeach
-
-            </div>
-
-            </div>
+            </table>
         </div>
-
-
     </div>
 
-@endsection
-@section('script')
-<script>
-    function confirmDelete() {
-        if (confirm("Apakah Anda yakin ingin menghapus pinjaman ini?")) {
-            document.getElementById('formHapusPinjaman').submit();
-        }
-    }
-    $(document).ready(function () {
-        $('#tglSimpanan').datepicker({
-            // format: 'yyyy-mm-dd', // You can change the date format
-            format: 'dd-mm-yyyy', // You can change the date format
-            autoclose: true
-        });
+    <!-- Create User Modal -->
+    <div class="modal fade" id="createUser">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Tambah User</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <form action="{{ route('user.store') }}" method="post">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group mb-1">
+                            <label for="nij">NIJ*</label>
+                            <input type="text" class="form-control" name="nij" required>
+                        </div>
+                        <div class="form-group mb-1">
+                            <label for="nama_lengkap">Nama Lengkap*</label>
+                            <input type="text" class="form-control" name="nama_lengkap" required>
+                        </div>
+                        <div class="form-group mb-1">
+                            <label for="email">Email*</label>
+                            <input type="email" class="form-control" name="email" required>
+                        </div>
+                        <div class="form-group mb-1">
+                            <label for="alamat">Alamat*</label>
+                            <input type="text" class="form-control" name="alamat" required>
+                        </div>
+                        <div class="form-group mb-1">
+                            <label for="jenis_kelamin">Jenis Kelamin*</label>
+                            <select class="form-control" name="jenis_kelamin" required>
+                                <option value="0">Laki-laki</option>
+                                <option value="1">Perempuan</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-1">
+                            <label for="tempat_lahir">Tempat Lahir*</label>
+                            <input type="text" class="form-control" name="tempat_lahir" required>
+                        </div>
+                        <div class="form-group mb-1">
+                            <label for="tanggal_lahir">Tanggal Lahir* [bug]</label>
+                            <input type="text" class="form-control datepicker" id="tglLahir" name="tanggal_lahir" required>
+                        </div>
+                        <div class="form-group mb-1">
+                            <label for="telp">No. Telp*</label>
+                            <input type="text" class="form-control" name="telp" required>
+                        </div>
+                        <div class="form-group mb-1">
+                            <label for="kesibukan">Kesibukan*</label>
+                            <select class="form-control" name="kesibukan" required>
+                                <option value="Bekerja">Bekerja</option>
+                                <option value="Kuliah">Kuliah</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-1">
+                            <label for="nomor_cg">Nomor CG*</label>
+                            <input type="text" class="form-control" name="nomor_cg" required>
+                        </div>
+                        <div class="form-group mb-1">
+                            <label for="posisi_cg">Posisi CG*</label>
+                            <select class="form-control" name="posisi_cg" required>
+                                <option value="Anggota">Anggota</option>
+                                <option value="Pemimpin">Pemimpin</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-1">
+                            <label for="nama_pemimpin">Nama Pemimpin*</label>
+                            <input type="text" class="form-control" name="nama_pemimpin" required>
+                        </div>
+                        <div class="form-group mb-1">
+                            <label for="telp_pemimpin">No. Telp Pemimpin*</label>
+                            <input type="text" class="form-control" name="telp_pemimpin" required>
+                        </div>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
-        $('#tglPinjaman').datepicker({
-            // format: 'yyyy-mm-dd', // You can change the date format
-            format: 'dd-mm-yyyy', // You can change the date format
-            autoclose: true
-        });
-
-        $('#tglBayarPinjaman').datepicker({
-            // format: 'yyyy-mm-dd', // You can change the date format
-            format: 'dd-mm-yyyy', // You can change the date format
-            autoclose: true
-        });
-        // $( row.child() ).DataTable();
-
-        var today = new Date();
-        var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
-        var yyyy = today.getFullYear();
-        today = dd + '-' + mm + '-' + yyyy;
-
-        // Set the default value property to today's date
-        $("#tglSimpanan").val(today);
-        $('#tglSimpananUpdate').datepicker({
-            // format: 'yyyy-mm-dd', // You can change the date format
-            format: 'dd-mm-yyyy', // You can change the date format
-            autoclose: true
-        });
-
-        $("#tglPinjaman").val(today);
-        $('#tglPinjamanUpdate').datepicker({
-            // format: 'yyyy-mm-dd', // You can change the date format
-            format: 'dd-mm-yyyy', // You can change the date format
-            autoclose: true
-        });
-
-        $("#tglBayarPinjaman").val(today);
-        $('#tglBayarPinjamanUpdate').datepicker({
-            // format: 'yyyy-mm-dd', // You can change the date format
-            format: 'dd-mm-yyyy', // You can change the date format
-            autoclose: true
-        });
-
-        var table = $('#tabelSimpan').DataTable({
-            "paging": true,
-            "pageLength": 10,
-        });
-
-        $('.tabelPinjaman').DataTable({
-            "paging": true,
-            "searching": true,
-            "ordering": true,
-            "info": true
-        });
-        $('.buttonEdit').on('click', function() {
-            var row = $(this).closest('tr');
-            var data = row.find('input[type="hidden"]').map(function() {
-                return $(this).val();
-            }).get();
-            console.log(data);
-
-            let id = data[0];
-            let tgl = data[1];
-            let nominal = data[2];
-            let status = data[3];
-            $('#idSimpananUpdate').val(id)
-            $("#tglSimpananUpdate").datepicker("setDate", tgl);
-            // console.log(id)
-            $('#nominalSimpananUpdate').val(nominal)
-
-            $('#statusSimpananUpdate').val(status).change();
-        });
-
-        $('#btnCreatePinjaman').on('click', function() {
-            var nominalPinjaman = parseInt($('#txtNominalPinjaman').val());
-            var maximalPinjam = parseInt("{{$info['jumlahPinjaman']}}");
-            var totalTerbayar = parseInt("{{$user->countAllPinjamanTerbayar()}}");
-            var totalPinjaman = parseInt("{{$user->countTotalPinjaman()}}");
-            console.log(nominalPinjaman);
-            console.log(maximalPinjam);
-            console.log(totalTerbayar);
-            console.log(totalPinjaman);
-            var maxTerbayar = 0.8 * totalPinjaman; // 80% of total_pinjaman
-
-            if (nominalPinjaman + totalPinjaman > maximalPinjam) {
-                alert("Nominal pinjaman melebihi batas maksimal pinjaman");
-                return false;
-            }
-
-            if (totalTerbayar > maxTerbayar) {
-                alert("Total terbayar melebihi 80% dari total pinjaman");
-                return false;
-            }
-        });
-    });
-
-</script>
-@endsection
+    <!-- Update User Modal -->
+    <div class="modal fade" id="updateUser">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Ubah User</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <form action="{{ route('user.update') }}" method="post">
+                    @method('PUT')
+                    @csrf
+                    <input type="hidden" name="idUser">
+                    <div class="modal-body">
+                        <div class="form-group mb-1">
+                            <label for="nij">NIJ*</label>
+                            <input type="text" class="form-control" name="nij" required>
+                        </div>
+                        <div class="form-group mb-1">
+                            <label for="nama_lengkap">Nama Lengkap*</label>
+                            <input type="text" class="form-control" name="nama_lengkap" required>
+                        </div>
+                        <!-- ... existing code ... -->
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+@endsection 

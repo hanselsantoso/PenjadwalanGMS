@@ -22,16 +22,16 @@
                                 {{ __('Menu') }}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('admin.dashboard') }}">{{ __('Dashboard') }}</a>
-                                <a class="dropdown-item" href="{{ route('volunteers.index') }}">{{ __('Volunteer') }}</a>
-                                <a class="dropdown-item" href="{{ route('cabang.index') }}">{{ __('Lokasi') }}</a>
+                                <a class="dropdown-item" href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a>
+                                <a class="dropdown-item" href="{{ route('user.index') }}">{{ __('User') }}</a>
+                                <a class="dropdown-item" href="{{ route('cabang.index') }}">{{ __('Cabang') }}</a>
                                 <a class="dropdown-item" href="{{ route('tag.index') }}">{{ __('Tag') }}</a>
-                                <a class="dropdown-item" href="{{ route('bagian.index') }}">{{ __('Position') }}</a>
+                                <a class="dropdown-item" href="{{ route('bagian.index') }}">{{ __('Bagian') }}</a>
                                 <a class="dropdown-item" href="{{ route('mapping.index') }}">{{ __('Mapping') }}</a>
-                                <a class="dropdown-item" href="{{ route('jadwal_ibadah.index') }}">{{ __('Services') }}</a>
-                                <a class="dropdown-item" href="{{ route('tim_pelayanan.index') }}">{{ __('Team') }}</a>
+                                <a class="dropdown-item" href="{{ route('jadwal_ibadah.index') }}">{{ __('Jadwal Ibadah') }}</a>
+                                <a class="dropdown-item" href="{{ route('jadwal.index') }}">{{ __('Jadwal Tugas') }}</a>
+                                <a class="dropdown-item" href="{{ route('tim_pelayanan.index') }}">{{ __('Tim Pelayanan') }}</a>
                                 <a class="dropdown-item" href="{{ route('grading.index') }}">{{ __('Grading') }}</a>
-                                <a class="dropdown-item" href="{{ route('jadwal.index') }}">{{ __('Schedule') }}</a>
                             </div>
                         </li>
 
@@ -41,7 +41,6 @@
                                 {{ __('Menu') }}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('servo.index') }}">{{ __('Servo Dashboard') }}</a>
                                 <!-- Add more Servo-specific links here -->
                             </div>
                         </li>
@@ -52,7 +51,6 @@
                                 {{ __('Menu') }}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('pic.index') }}">{{ __('PIC Dashboard') }}</a>
                                 <!-- Add more PIC-specific links here -->
                             </div>
                         </li>
@@ -63,7 +61,6 @@
                                 {{ __('Menu') }}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('volunteer.schedule.index') }}">{{ __('Schedule') }}</a>
                                 <!-- Add more Volunteer-specific links here -->
                             </div>
                         </li>
@@ -76,8 +73,7 @@
 
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ route('logout') }}"
-                            onclick="event.preventDefault();
-                                            document.getElementById('logout-form').submit();">
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 {{ __('Logout') }}
                             </a>
 

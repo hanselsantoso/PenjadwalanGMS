@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -43,16 +41,17 @@ class LoginController extends Controller
 
     protected function redirectTo(): string
     {
-        if (Auth::user()->role == 0) {
-            return '/admin';
-        } elseif (Auth::user()->role == 1) {
-            return '/servo';
-        }elseif (Auth::user()->role == 2) {
-            return '/pic';
-        }elseif (Auth::user()->role == 3) {
-            return '/volunteer';
-        }else{
-            return '/dashboard';
-        }
+        return '/';
+        // if (Auth::user()->role == 0) {
+        //     return '/admin';
+        // } elseif (Auth::user()->role == 1) {
+        //     return '/servo';
+        // }elseif (Auth::user()->role == 2) {
+        //     return '/pic';
+        // }elseif (Auth::user()->role == 3) {
+        //     return '/volunteer';
+        // }else{
+        //     return '/dashboard';
+        // }
     }
 }

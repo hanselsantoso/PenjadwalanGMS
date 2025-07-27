@@ -19,22 +19,21 @@ class AdminMiddleware
         //admin role = 0
         //user role = 1
         if (Auth::check()) {
-            if (Auth::user()->role == '0') {
-                return $next($request);
-            } elseif (Auth::user()->role == '1') {
-                return $next($request);
-            }elseif (Auth::user()->role == '2') {
-                return $next($request);
-            }elseif (Auth::user()->role == '3') {
-                return $next($request);
-            }else{
-                return redirect('/dashboard')->with('message','Access Denied!, Your are not an admin');
+            switch (Auth::user()->role) {
+                case "0":
+                    return $next($request);
+                case "1":
+                    return $next($request);
+                case "2":
+                    return $next($request);
+                case "3":
+                    return $next($request);
+
+                default: 
+                    return redirect('/')->with('message','Access Denied!, Your are not an admin');
             }
-        }else{
+        } else{
             return redirect('/login')->with('message','Login to access');
         }
-
-        return $next($request);
-
     }
 }
