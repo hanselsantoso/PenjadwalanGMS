@@ -60,8 +60,8 @@
                 <div class="modal-header">
                     <h4 class="modal-title" id="mappingModalLabel"></h4>
                     <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
-                </div>
-                
+                        </div>
+
                 <form id="mappingForm" method="POST">
                     @csrf
                     @method('POST') {{-- This will be dynamically changed to PUT for updates --}}

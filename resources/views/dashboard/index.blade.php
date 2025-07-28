@@ -26,44 +26,38 @@
                                     </a>
                                 </div>
                                 <div class="col-md-4 mb-3">
+                                    <a href="{{ route('tim_pelayanan.index') }}" class="btn btn-primary w-100" style="height: 100px; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-users-cog" style="margin-right: 10px;"></i> {{ __('Tim Pelayanan') }}
+                                    </a>
+                                </div>
+                                <div class="col-md-4 mb-3">
                                     <a href="{{ route('cabang.index') }}" class="btn btn-primary w-100" style="height: 100px; display: flex; align-items: center; justify-content: center;">
                                         <i class="fas fa-map-marker-alt" style="margin-right: 10px;"></i> {{ __('Cabang') }}
                                     </a>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <a href="{{ route('tag.index') }}" class="btn btn-primary w-100" style="height: 100px; display: flex; align-items: center; justify-content: center;">
-                                        <i class="fas fa-tags" style="margin-right: 10px;"></i> {{ __('Tag') }}
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-4 mb-3">
                                     <a href="{{ route('bagian.index') }}" class="btn btn-primary w-100" style="height: 100px; display: flex; align-items: center; justify-content: center;">
                                         <i class="fas fa-sitemap" style="margin-right: 10px;"></i> {{ __('Bagian') }}
                                     </a>
                                 </div>
-                                <div class="col-md-4 mb-3">
+                                {{-- <div class="col-md-4 mb-3">
+                                    <a href="{{ route('tag.index') }}" class="btn btn-primary w-100" style="height: 100px; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-tags" style="margin-right: 10px;"></i> {{ __('Tag') }}
+                                    </a>
+                                </div> --}}
+                                {{-- <div class="col-md-4 mb-3">
                                     <a href="{{ route('mapping.index') }}" class="btn btn-primary w-100" style="height: 100px; display: flex; align-items: center; justify-content: center;">
                                         <i class="fas fa-map-pin" style="margin-right: 10px;"></i> {{ __('Mapping') }}
                                     </a>
-                                </div>
+                                </div> --}}
                                 <div class="col-md-4 mb-3">
                                     <a href="{{ route('jadwal_ibadah.index') }}" class="btn btn-primary w-100" style="height: 100px; display: flex; align-items: center; justify-content: center;">
                                         <i class="fas fa-church" style="margin-right: 10px;"></i> {{ __('Jadwal Ibadah') }}
                                     </a>
                                 </div>
-                            </div>
-
-                            <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <a href="{{ route('jadwal.index') }}" class="btn btn-primary w-100" style="height: 100px; display: flex; align-items: center; justify-content: center;">
                                         <i class="fas fa-calendar-alt" style="margin-right: 10px;"></i> {{ __('Jadwal Pelayanan') }}
-                                    </a>
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <a href="{{ route('tim_pelayanan.index') }}" class="btn btn-primary w-100" style="height: 100px; display: flex; align-items: center; justify-content: center;">
-                                        <i class="fas fa-users-cog" style="margin-right: 10px;"></i> {{ __('Tim Pelayanan') }}
                                     </a>
                                 </div>
                                 <div class="col-md-4 mb-3">

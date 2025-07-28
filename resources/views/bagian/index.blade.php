@@ -73,8 +73,8 @@
                             <label for="nama_bagian">Nama Bagian</label>
                             <input type="text" class="form-control" name="nama_bagian" id="nama_bagian" required>
                         </div>
-                    </div>
-                    
+                        </div>
+
                     <!-- Modal footer -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

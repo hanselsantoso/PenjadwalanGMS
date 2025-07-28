@@ -113,33 +113,33 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group mb-1">
-                                    <label for="nama_ibadah">Nama Ibadah</label>
+                        <div class="form-group mb-1">
+                            <label for="nama_ibadah">Nama Ibadah</label>
                                     <input type="text" class="form-control" name="nama_ibadah" id="nama_ibadah" required>
                                 </div>
-                            </div>
+                        </div>
                             <div class="col-md-6">
-                                <div class="form-group mb-1">
-                                    <label for="alias_ibadah">Alias Ibadah</label>
+                        <div class="form-group mb-1">
+                            <label for="alias_ibadah">Alias Ibadah</label>
                                     <input type="text" class="form-control" name="alias_ibadah" id="alias_ibadah" required>
                                 </div>
+                        </div>
+                            <div class="col-md-6">
+                        <div class="form-group mb-1">
+                            <label for="jam_stand_by">Jam Stand By</label>
+                            <input class="form-control" type="time" id="jam_stand_by" name="jam_stand_by" value="00:00" required>
+                        </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group mb-1">
-                                    <label for="jam_stand_by">Jam Stand By</label>
-                                    <input class="form-control" type="time" id="jam_stand_by" name="jam_stand_by" value="00:00" required>
-                                </div>
+                        <div class="form-group mb-1">
+                            <label for="jam_mulai">Jam Ibadah Mulai</label>
+                            <input class="form-control" type="time" id="jam_mulai" name="jam_mulai" value="00:00" required>
+                        </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group mb-1">
-                                    <label for="jam_mulai">Jam Ibadah Mulai</label>
-                                    <input class="form-control" type="time" id="jam_mulai" name="jam_mulai" value="00:00" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group mb-1">
-                                    <label for="jam_akhir">Jam Ibadah Selesai</label>
-                                    <input class="form-control" type="time" id="jam_akhir" name="jam_akhir" value="00:00" required>
+                        <div class="form-group mb-1">
+                            <label for="jam_akhir">Jam Ibadah Selesai</label>
+                            <input class="form-control" type="time" id="jam_akhir" name="jam_akhir" value="00:00" required>
                                 </div>
                             </div>
                         </div>

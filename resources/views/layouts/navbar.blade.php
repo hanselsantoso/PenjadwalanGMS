@@ -24,13 +24,13 @@
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a>
                                 <a class="dropdown-item" href="{{ route('user.index') }}">{{ __('User') }}</a>
+                                <a class="dropdown-item" href="{{ route('tim_pelayanan.index') }}">{{ __('Tim Pelayanan') }}</a>
                                 <a class="dropdown-item" href="{{ route('cabang.index') }}">{{ __('Cabang') }}</a>
-                                <a class="dropdown-item" href="{{ route('tag.index') }}">{{ __('Tag') }}</a>
                                 <a class="dropdown-item" href="{{ route('bagian.index') }}">{{ __('Bagian') }}</a>
-                                <a class="dropdown-item" href="{{ route('mapping.index') }}">{{ __('Mapping') }}</a>
+                                {{-- <a class="dropdown-item" href="{{ route('tag.index') }}">{{ __('Tag') }}</a> --}}
+                                {{-- <a class="dropdown-item" href="{{ route('mapping.index') }}">{{ __('Mapping') }}</a> --}}
                                 <a class="dropdown-item" href="{{ route('jadwal_ibadah.index') }}">{{ __('Jadwal Ibadah') }}</a>
                                 <a class="dropdown-item" href="{{ route('jadwal.index') }}">{{ __('Jadwal Pelayanan') }}</a>
-                                <a class="dropdown-item" href="{{ route('tim_pelayanan.index') }}">{{ __('Tim Pelayanan') }}</a>
                                 <a class="dropdown-item" href="{{ route('grading.index') }}">{{ __('Grading') }}</a>
                             </div>
                         </li>

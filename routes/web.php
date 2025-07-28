@@ -98,19 +98,17 @@ Route::prefix('jadwal_ibadah')->middleware(['role:0'])->group(function(){
 
 Route::prefix('tim_pelayanan')->middleware(['role:0'])->group(function(){
     Route::get('/', [TimPelayananController::class, 'index'])->name('tim_pelayanan.index');
-    Route::post('/', [TimPelayananController::class, 'store'])->name('tim_pelayanan.store');
+    Route::post('/', [TimPelayananController::class, 'storeTim'])->name('tim_pelayanan.store');
+    Route::put('/', [TimPelayananController::class, 'updateTim'])->name('tim_pelayanan.tim.update');
+    
+    Route::post('/activate/{id}', [TimPelayananController::class, 'activate'])->name('tim_pelayanan.activate');
+    Route::post('/deactivate/{id}', [TimPelayananController::class, 'deactivate'])->name('tim_pelayanan.deactivate');
 
     Route::prefix('member')->group(function(){
         Route::post('/', [TimPelayananController::class, 'storeMember'])->name('tim_pelayanan.member.store');
         Route::put('/', [TimPelayananController::class, 'updateMember'])->name('tim_pelayanan.member.update');
+        Route::delete('/{id}/{id_user}', [TimPelayananController::class, 'removeMember'])->name('tim_pelayanan.member.remove');
     });
-    
-    Route::prefix('tim')->group(function(){
-        Route::put('/', [TimPelayananController::class, 'updateTim'])->name('tim_pelayanan.tim.update');
-    });
-
-    Route::post('/activate/{id}', [TimPelayananController::class, 'activate'])->name('tim_pelayanan.activate');
-    Route::delete('/deactivate/{id}/{id_user}', [TimPelayananController::class, 'deactivate'])->name('tim_pelayanan.deactivate');
 });
 
 Route::prefix('grading')->middleware(['role:0'])->group(function(){
