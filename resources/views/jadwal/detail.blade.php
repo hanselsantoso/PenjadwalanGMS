@@ -32,9 +32,11 @@
                         <i class="bi bi-check-circle-fill"></i>
                         <p class="mb-0 ms-2">
                             Status: 
-                            <span class="{{$jadwal->status_jadwal_h == 1 ? 'text-success fw-bold' : 'text-danger fw-bold'}}">
-                                {{$jadwal->status_jadwal_h == 1 ? "Aktif" : "Tidak Aktif"}}
-                            </span>
+                            @if($jadwal->status_jadwal_h == 1)
+                                <span class="badge rounded-pill badge-status-active">Aktif</span>
+                            @else
+                                <span class="badge rounded-pill badge-status-inactive">Tidak Aktif</span>
+                            @endif
                         </p>
                     </h5>
                 </div>
@@ -71,31 +73,38 @@
                 <tbody>
                     @foreach ($jadwal->detail as $item)
                         <tr>
-                            <input type="hidden" name="id_jadwal_d" value="{{$item["id_jadwal_d"] }}">
+                            <input type="hidden" name="id_jadwal_d" value="{{$item->id_jadwal_d }}">
                             <td>{{ $loop->index + 1 }}</td>
                             <td> {{$item->user->nama_lengkap }}</td>
                             <td> {{$item->bagian->nama_bagian }}</td>
-                            <td> {{$item->status_jadwal_d == 1 ? "Aktif" : "Tidak Aktif" }}</td>
+                            <td>
+                                @if ($item->status_jadwal_d == 1)
+                                    <span class="badge rounded-pill badge-status-active">Aktif</span>
+                                @else
+                                    <span class="badge rounded-pill badge-status-inactive">Tidak Aktif</span>
+                                @endif
+                            </td>
 
                             <td>
-                                <button class="btn btn-warning w-100 mb-2 btnEdit" data-bs-toggle="modal" data-bs-target="#jadwalDetailModal"
-                                    {{ $jadwal->status_jadwal_h == 0 ? 'disabled' : '' }}
-                                >
-                                    Update
-                                </button>
-
-                                <form action="{{ route('jadwal_detail.remove', $item['id_jadwal_d']) }}" method="post">
-                                    @csrf
-                                    <button type="submit" class="btn btn-danger w-100"
-                                        {{ $jadwal->status_jadwal_h == 0 ? 'disabled' : '' }}
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-warning btnEdit" data-bs-toggle="modal" data-bs-target="#jadwalDetailModal"
+                                        {{ $jadwal->status_jadwal_h == 0 ? 'disabled' : '' }} title="Update"
                                     >
-                                        Remove
+                                        <i class="fas fa-pencil-alt"></i>
                                     </button>
-                                </form>
+
+                                    <form action="{{ route('jadwal_detail.remove', $item->id_jadwal_d) }}" method="post" style="display:inline;">
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger"
+                                            {{ $jadwal->status_jadwal_h == 0 ? 'disabled' : '' }} title="Remove"
+                                        >
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     @endforeach
-
                 </tbody>
             </table>
         </div>

@@ -9,6 +9,9 @@
 
                     <div class="col-md-6 text-end">
                     <div class="d-flex justify-content-end gap-2">
+                        <button type="button" id="btnFilter" class="btn btn-outline-secondary">
+                            Filter
+                        </button>
                         <a href="{{ route('user.excel.index') }}" class="btn btn-success">
                             Upload/Download Excel
                         </a>
@@ -29,41 +32,51 @@
                         <th>No. Telp</th>
                         <th>Tim</th>
                         <th>Status</th>
-                        <th>Action</th>
+                        <th style="width: 10%">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($user as $item)
                         <tr>
-                            <input type="hidden" name="id_user" value="{{$item["id"] }}">
+                            <input type="hidden" name="id_user" value="{{$item->id }}">
 
                             <td> {{ $loop->index + 1 }}</td>
-                            <td> {{$item["nij"] }}</td>
-                            <td> {{$item["nama_lengkap"] }}</td>
-                            <td> {{$item["email"] }}</td>
-                            <td> {{$item["telp"] }}</td>
+                            <td> {{$item->nij }}</td>
+                            <td> {{$item->nama_lengkap }}</td>
+                            <td> {{$item->email }}</td>
+                            <td> {{$item->telp }}</td>
                             <td> {{$item->team_name }}</td>
-                            <td> {{$item["status_user"] == 1 ? 'Aktif' : 'Tidak Aktif' }}</td>
-                            <td>
-                                <button class="btn btn-primary w-100 mb-2 btnDetail" data-toggle="modal">
-                                    Detail
-                                </button>
-                                
-                                <button class="btn btn-warning w-100 mb-2 btnEdit" data-toggle="modal">
-                                    Update
-                                </button>
-
+                            <td> 
                                 @if ($item->status_user == 1)
-                                    <form action="{{ route('user.deactivate', ['id' => $item['id']]) }}" method="post">
-                                        @csrf
-                                        <button type="submit" class="btn btn-danger w-100">Suspend</button>
-                                    </form>
+                                    <span class="badge rounded-pill badge-status-active">Aktif</span>
+                                @elseif ($item->status_user == 2)
+                                    <span class="badge rounded-pill badge-status-cuti">Cuti</span>
                                 @else
-                                    <form action="{{ route('user.activate', ['id' => $item['id']]) }}" method="post">
-                                        @csrf
-                                        <button type="submit" class="btn btn-success w-100">Aktifkan</button>
-                                    </form>
+                                    <span class="badge rounded-pill badge-status-inactive">Tidak Aktif</span>
                                 @endif
+                            </td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-primary btnDetail" data-toggle="modal" title="Detail">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-warning btnEdit" data-toggle="modal" title="Update">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </button>
+
+                                    @if ($item->status_user == 1)
+                                        <button type="button" class="btn btn-danger btnDeactivateModal" data-id="{{ $item->id }}" data-bs-toggle="modal" data-bs-target="#deactivateModal" title="Non-Aktifkan">
+                                            <i class="fas fa-user-slash"></i>
+                                        </button>
+                                    @else
+                                        <form action="{{ route('user.activate', ['id' => $item->id]) }}" method="post" style="display:inline;">
+                                            @csrf
+                                            <button type="submit" class="btn btn-success" title="Aktifkan">
+                                                <i class="fas fa-user-check"></i>
+                                            </button>
+                                        </form>
+                                    @endif
+                                </div>
                             </td>
                         </tr>
                     @endforeach
@@ -71,6 +84,38 @@
             </table>
         </div>
     </div>
+
+    <x-filter-overlay title="Filter User">
+        <div class="mb-3">
+            <label for="filter_nij" class="form-label">NIJ</label>
+            <input type="text" class="form-control" id="filter_nij" name="filter_nij" placeholder="Cari NIJ">
+        </div>
+        <div class="mb-3">
+            <label for="filter_nama" class="form-label">Nama</label>
+            <input type="text" class="form-control" id="filter_nama" name="filter_nama" placeholder="Cari Nama">
+        </div>
+        <div class="mb-3">
+            <label for="filter_email" class="form-label">Email</label>
+            <input type="text" class="form-control" id="filter_email" name="filter_email" placeholder="Cari Email">
+        </div>
+        <div class="mb-3">
+            <label for="filter_telp" class="form-label">No. Telp</label>
+            <input type="text" class="form-control" id="filter_telp" name="filter_telp" placeholder="Cari No. Telp">
+        </div>
+        <div class="mb-3">
+            <label for="filter_team" class="form-label">Tim</label>
+            <input type="text" class="form-control" id="filter_team" name="filter_team" placeholder="Cari Tim">
+        </div>
+        <div class="mb-3">
+            <label for="filter_status" class="form-label">Status</label>
+            <select class="form-select" id="filter_status" name="filter_status">
+                <option value="">Semua Status</option>
+                <option value="1">Aktif</option>
+                <option value="2">Cuti</option>
+                <option value="0">Tidak Aktif</option>
+            </select>
+        </div>
+    </x-filter-overlay>
 
     <!-- User Modal -->
     <div class="modal fade" id="userModal">
@@ -167,16 +212,83 @@
             </div>
         </div>
     </div>
+
+    <!-- Deactivate/Cuti Modal -->
+    <div class="modal fade" id="deactivateModal" tabindex="-1" aria-labelledby="deactivateModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deactivateModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <i class="fas fa-exclamation-triangle text-warning mb-3" style="font-size: 5rem;"></i>
+                    <h4>Pilih Aksi Non-Aktifkan</h4>
+                    <p>Mohon pilih tindakan yang sesuai untuk user ini.</p>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <form id="deactivateForm" method="POST" style="display:inline;">
+                        @csrf
+                        <button type="submit" class="btn btn-danger">Non-Aktifkan</button>
+                    </form>
+                    <form id="cutiForm" method="POST" style="display:inline;">
+                        @csrf
+                        <button type="submit" class="btn btn-warning">Cuti</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection 
 
 @section('script')
 <script>
-    $('#table-list').DataTable({
-        "paging": true,
-        "pageLength": 10,
-    });
-
     $(document).ready(function () {
+        const table = $('#table-list').DataTable({
+            "paging": true,
+            "pageLength": 10,
+        });
+
+        // Page-specific filter functions
+        window.applyFilters = function() {
+            const nij = $('#filter_nij').val();
+            const nama = $('#filter_nama').val();
+            const email = $('#filter_email').val();
+            const telp = $('#filter_telp').val();
+            const team = $('#filter_team').val();
+            const status = $('#filter_status').val();
+
+            // Status filter mapping
+            const STATUS_FILTER = {
+                "": "",           // No filter
+                "1": "Aktif",
+                "2": "Cuti",
+                "0": "Tidak Aktif"
+            };
+
+            // Apply filters
+            table.column(1).search(nij).draw();      // NIJ column
+            table.column(2).search(nama).draw();     // Nama column
+            table.column(3).search(email).draw();    // Email column
+            table.column(4).search(telp).draw();     // No. Telp column
+            table.column(5).search(team).draw();     // Tim column
+            if (status == "") {
+                table.column(6).search('').draw();
+            } else {
+                table.column(6).search(`^${STATUS_FILTER[status]}$`, true, false).draw(); // Status column (EQUAL and not LIKE)
+            }
+        };
+
+        window.resetFilters = function() {
+            // Clear filters
+            table.column(1).search('').draw(); // NIJ
+            table.column(2).search('').draw(); // Nama
+            table.column(3).search('').draw(); // Email
+            table.column(4).search('').draw(); // No. Telp
+            table.column(5).search('').draw(); // Tim
+            table.column(6).search('').draw(); // Status
+        };
+
         // Handle Create User button click
         $('#btnCreate').on('click', function() {
             $('#userModalLabel').text('Tambah User');
@@ -250,6 +362,15 @@
             fillFields(userObject);
 
             $('#userModal').modal('show');
+        });
+
+        // Handle Deactivate/Cuti Modal button click
+        $('.btnDeactivateModal').on('click', function() {
+            const userId = $(this).data('id');
+            $('#deactivateModalLabel').text('Konfirmasi Aksi');
+            $('#deactivateForm').attr('action', '{{ route('user.deactivate', ['id' => '__ID__']) }}'.replace('__ID__', userId));
+            $('#cutiForm').attr('action', '{{ route('user.cuti', ['id' => '__ID__']) }}'.replace('__ID__', userId));
+            $('#deactivateModal').modal('show');
         });
     });
 </script>

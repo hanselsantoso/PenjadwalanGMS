@@ -7,6 +7,9 @@
                     <h2>Daftar Mapping User</h2>
                 </div>
                 <div class="col-md-6 text-end">
+                    <button type="button" id="btnFilter" class="btn btn-outline-secondary me-2">
+                        Filter
+                    </button>
                     <button type="button" id="btnCreate" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mappingModal">
                         Tambah Mapping 
                     </button>
@@ -25,33 +28,58 @@
                 <tbody>
                     @foreach ($mapping as $item)
                         <tr>
-                            <input type="hidden" name="id_user_tag" value="{{$item["id_user_tag"] }}">
+                            <input type="hidden" name="id_user_tag" value="{{$item->id_user_tag }}">
                             <td>{{ $loop->index + 1 }}</td>
-                            <td> {{$item->user->nama_lengkap }}</td>
-                            <td> {{$item->tag->nama_tag }}</td>
-
+                            <td>{{ $item->user->nama_lengkap }}</td>
+                            <td>{{ $item->tag->nama_tag }}</td>
                             <td>
-                                <button class="btn btn-warning w-100 mb-2 btnEdit" data-bs-toggle="modal" data-bs-target="#mappingModal">Update</button>
-                                
                                 @if ($item->status_user_tag == 1)
-                                    <form action="{{ route('mapping.deactivate', $item['id_user_tag']) }}" method="post">
-                                        @csrf
-                                        <button type="submit" class="btn btn-danger w-100">Suspend</button>
-                                    </form>
+                                    <span class="badge rounded-pill badge-status-active">Aktif</span>
                                 @else
-                                    <form action="{{ route('mapping.activate', $item['id_user_tag']) }}" method="post">
-                                        @csrf
-                                        <button type="submit" class="btn btn-success w-100">Aktifkan</button>
-                                    </form>
+                                    <span class="badge rounded-pill badge-status-inactive">Tidak Aktif</span>
                                 @endif
+                            </td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-warning btnEdit" data-bs-toggle="modal" data-bs-target="#mappingModal" title="Update">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </button>
+
+                                    @if ($item->status_user_tag == 1)
+                                        <form action="{{ route('mapping.deactivate', $item->id_user_tag) }}" method="post" style="display:inline;">
+                                            @csrf
+                                            <button type="submit" class="btn btn-danger" title="Non-Aktifkan">
+                                                <i class="fas fa-user-slash"></i>
+                                            </button>
+                                        </form>
+                                    @else
+                                        <form action="{{ route('mapping.activate', $item->id_user_tag) }}" method="post" style="display:inline;">
+                                            @csrf
+                                            <button type="submit" class="btn btn-success" title="Aktifkan">
+                                                <i class="fas fa-user-check"></i>
+                                            </button>
+                                        </form>
+                                    @endif
+                                </div>
                             </td>
                         </tr>
                     @endforeach
-
                 </tbody>
               </table>
         </div>
     </div>
+
+    <x-filter-overlay title="Filter Mapping">
+        <div class="mb-3">
+            <label for="filter_nama_user" class="form-label">Nama User</label>
+            <input type="text" class="form-control" id="filter_nama_user" name="filter_nama_user" placeholder="Cari Nama User">
+        </div>
+        <div class="mb-3">
+            <label for="filter_tags" class="form-label">Tags</label>
+            <input type="text" class="form-control" id="filter_tags" name="filter_tags" placeholder="Cari Tags">
+        </div>
+    </x-filter-overlay>
+
     <!-- Mapping Modal -->
     <div class="modal fade" id="mappingModal">
         <div class="modal-dialog">
@@ -101,12 +129,28 @@
 
 @section('script')
 <script>
-    $('#tabelUser').DataTable({
-        "paging": true,
-        "pageLength": 10,
-    });
-
     $(document).ready(function () {
+        const table = $('#tabelUser').DataTable({
+            "paging": true,
+            "pageLength": 10,
+        });
+
+        // Page-specific filter functions
+        window.applyFilters = function() {
+            const namaUser = $('#filter_nama_user').val();
+            const tags = $('#filter_tags').val();
+
+            // Apply filters
+            table.column(1).search(namaUser).draw(); // Nama User column
+            table.column(2).search(tags).draw();      // Tags column
+        };
+
+        window.resetFilters = function() {
+            // Clear filters
+            table.column(1).search('').draw(); // Nama User
+            table.column(2).search('').draw(); // Tags
+        };
+
         // Function to fill modal fields
         function fillFields(mappingObject) {
             let modal = $('#mappingModal');

@@ -64,8 +64,8 @@
                                             <div class="mb-2">
                                                 <p class="mb-1"><b>Nama Tim:</b> {{ $team->nama_tim_pelayanan_h }}</p>
                                                 <p class="mb-1"><b>Cabang:</b> {{ $team->cabang->nama_cabang ?? '-' }}</p>
-                                                <p class="mb-2"><b>Team Leader:</b> {{ $team->user["nama_lengkap"] }}</p>
-                                                <input type="hidden" name="id_pelayanan_h" value="{{$team["id_pelayanan_h"]}}">
+                                                <p class="mb-2"><b>Team Leader:</b> {{ $team->user->nama_lengkap }}</p>
+                                                <input type="hidden" name="id_pelayanan_h" value="{{$team->id_pelayanan_h}}">
 
                                                 <button class="btn btn-success btnAddMember" data-id="{{ $team->id_pelayanan_h }}" data-bs-toggle="modal" data-bs-target="#memberModal">Tambah Anggota</button>
                                                 <button class="btn btn-warning btnEditTeam" data-id="{{ $team->id_pelayanan_h }}" data-bs-toggle="modal" data-bs-target="#timPelayananModal">Ubah Detail</button>
@@ -90,23 +90,31 @@
                                                 <tbody>
                                                     @foreach ($team->tim_pelayanan_d as $member)
                                                         <tr>
-                                                            <input type="hidden" name="id_pelayanan_d" value="{{$member["id_pelayanan_d"]}}">
+                                                            <input type="hidden" name="id_pelayanan_d" value="{{$member->id_pelayanan_d}}">
 
                                                             <td>{{ $loop->iteration }}</td>
-                                                            <td>{{ $member->user["nama_lengkap"] }}</td>
+                                                            <td>{{ $member->user->nama_lengkap }}</td>
                                                             <td>
-                                                                {{ ($member->user["role"] == 2) ? 'Team Leader' : (($member->user["role"] == 3) ? 'Anggota' : '-') }}
+                                                                {{ ($member->user->role == 2) ? 'Team Leader' : (($member->user->role == 3) ? 'Anggota' : '-') }}
                                                             </td>
                                                             <td>
-                                                                {{ $member->user["status_user"] == 1 ? 'Active' : 'Suspended' }}
+                                                                @if ($member->user->status_user == 1)
+                                                                    <span class="badge rounded-pill badge-status-active">Aktif</span>
+                                                                @else
+                                                                    <span class="badge rounded-pill badge-status-inactive">Tidak Aktif</span>
+                                                                @endif
                                                             </td>
                                                             <td>
                                                                 <div class="d-flex gap-2">
-                                                                    <button class="btn btn-warning w-50 btnEditMember" data-id="{{ $member->id_pelayanan_d }}" data-bs-toggle="modal" data-bs-target="#memberModal">Edit</button>
-                                                                    <form action="{{ route('tim_pelayanan.member.remove', ['id' => $member->id_pelayanan_d, 'id_user' => $member->id_user]) }}" method="POST" style="display:inline; width: 50%;">
+                                                                    <button class="btn btn-warning btnEditMember" data-id="{{ $member->id_pelayanan_d }}" data-bs-toggle="modal" data-bs-target="#memberModal" title="Edit">
+                                                                        <i class="fas fa-pencil-alt"></i>
+                                                                    </button>
+                                                                    <form action="{{ route('tim_pelayanan.member.remove', ['id' => $member->id_pelayanan_d, 'id_user' => $member->id_user]) }}" method="POST" style="display:inline;">
                                                                         @csrf
                                                                         @method('DELETE')
-                                                                        <button type="submit" class="btn btn-danger w-100">Remove</button>
+                                                                        <button type="submit" class="btn btn-danger" title="Remove">
+                                                                            <i class="fas fa-trash"></i>
+                                                                        </button>
                                                                     </form>
                                                                 </div>
                                                             </td>

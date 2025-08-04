@@ -1,0 +1,55 @@
+.badge-status-active {
+    width: 100px;
+    display: inline-block;
+    font-size: 0.8rem;
+    background-color: #198754; /* Bootstrap's bg-success */
+}
+
+.badge-status-inactive {
+    width: 100px;
+    display: inline-block;
+    font-size: 0.8rem;
+    background-color: #dc3545; /* Bootstrap's bg-danger */
+}
+
+.badge-status-cuti {
+    width: 100px;
+    display: inline-block;
+    font-size: 0.8rem;
+    background-color: #ffc107; /* Bootstrap's bg-warning */
+    color: #212529; /* Bootstrap's text-dark for warning */
+} 
+
+/* _filter.blade.php styles */
+.filter-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Darker background */
+    z-index: 1040;
+    display: none; /* Hidden by default */
+}
+
+.filter-sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 20%; /* 20% of page width */
+    height: 100%;
+    background-color: #fff;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    z-index: 1050;
+    transform: translateX(100%); /* Start off-screen */
+    transition: transform 0.3s ease-in-out;
+}
+
+.filter-overlay.show {
+    display: block;
+}
+
+.filter-overlay.show .filter-sidebar {
+    transform: translateX(0); /* Slide in */
+} 

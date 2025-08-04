@@ -43,6 +43,7 @@ Route::prefix('user')->middleware(['role:0'])->group(function(){
 
     Route::post('/activate/{id}', [UserController::class, 'activate'])->name('user.activate');
     Route::post('/deactivate/{id}', [UserController::class, 'deactivate'])->name('user.deactivate');
+    Route::post('/cuti/{id}', [UserController::class, 'cuti'])->name('user.cuti');
 
     Route::prefix('excel')-> group(function() {
         Route::get('/', [UserController::class, 'excelIndex'])->name('user.excel.index');

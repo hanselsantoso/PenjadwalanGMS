@@ -9,6 +9,9 @@
 
                 <div class="col-md-6 text-end">
                     <div class="d-flex justify-content-end gap-2">
+                        <button type="button" id="btnFilter" class="btn btn-outline-secondary">
+                            Filter
+                        </button>
                         <a href="{{ route('jadwal.excel.index') }}" class="btn btn-success">
                             Download Excel
                         </a>
@@ -30,35 +33,45 @@
                         <th width="10%">Stand By</th>
                         <th width="10%">Jam</th>
                         <th width="10%">PIC</th>
+                        <th width="10%">Status</th>
                         <th width="15%">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-
                     @foreach ($jadwalActive as $item)
                         <tr>
-                            <input type="hidden" name="id_jadwal_h" value="{{$item["id_jadwal_h"] }}">
+                            <input type="hidden" name="id_jadwal_h" value="{{$item->id_jadwal_h }}">
                             <td> {{ $loop->index + 1 }}</td>
                             <td> {{ $item->cabang->nama_cabang ?? "-" }}</td>
                             <td> {{ $item->jadwalIbadah->nama_ibadah ?? "-" }}</td>
-                            <td> {{ date('d-m-Y', strtotime($item["tanggal_jadwal"])) }}</td>
+                            <td> {{ date('d-m-Y', strtotime($item->tanggal_jadwal)) }}</td>
                             <td> {{ $item->jadwalIbadah->jam_stand_by ?? "-" }}</td>
                             <td> {{ $item->jadwalIbadah->jam_mulai ?? "-" }} - {{$item->jadwalIbadah->jam_akhir ?? "-" }}</td>
                             <td> {{ $item->user->nama_lengkap ?? "-" }}</td>
-
                             <td>
-                                <a href="{{ route('jadwal_detail.index', $item['id_jadwal_h']) }}" class="btn btn-primary w-100 mb-2">
-                                    Detail
-                                </a>
+                                @if ($item->status_jadwal_h == 1)
+                                    <span class="badge rounded-pill badge-status-active">Aktif</span>
+                                @else
+                                    <span class="badge rounded-pill badge-status-inactive">Tidak Aktif</span>
+                                @endif
+                            </td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <a href="{{ route('jadwal_detail.index', $item->id_jadwal_h) }}" class="btn btn-primary" title="Detail">
+                                        <i class="fas fa-info-circle"></i>
+                                    </a>
 
-                                <button class="btn btn-warning w-100 mb-2 btnEdit" data-bs-toggle="modal" data-bs-target="#jadwalModal">
-                                    Update
-                                </button>
+                                    <button class="btn btn-warning btnEdit" data-bs-toggle="modal" data-bs-target="#jadwalModal" title="Update">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </button>
 
-                                <form action="{{ route('jadwal.deactivate', $item['id_jadwal_h']) }}" method="post">
-                                    @csrf
-                                    <button type="submit" class="btn btn-danger w-100">Deactivate</button>
-                                </form>
+                                    <form action="{{ route('jadwal.deactivate', $item->id_jadwal_h) }}" method="post" style="display:inline;">
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger" title="Non-Aktifkan">
+                                            <i class="fas fa-user-slash"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     @endforeach
@@ -78,39 +91,75 @@
                         <th width="10%">Stand By</th>
                         <th width="10%">Jam</th>
                         <th width="10%">PIC</th>
+                        <th width="10%">Status</th>
                         <th width="15%">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-
                     @foreach ($jadwalInactive as $item)
                         <tr>
-                            <input type="hidden" name="id_jadwal_h" value="{{$item["id_jadwal_h"] }}">
+                            <input type="hidden" name="id_jadwal_h" value="{{$item->id_jadwal_h }}">
                             <td> {{ $loop->index + 1 }}</td>
                             <td> {{ $item->cabang->nama_cabang ?? "-" }}</td>
                             <td> {{ $item->jadwalIbadah->nama_ibadah ?? "-" }}</td>
-                            <td> {{ date('d-m-Y', strtotime($item["tanggal_jadwal"])) }}</td>
+                            <td> {{ date('d-m-Y', strtotime($item->tanggal_jadwal)) }}</td>
                             <td> {{ $item->jadwalIbadah->jam_stand_by ?? "-" }}</td>
                             <td> {{ $item->jadwalIbadah->jam_mulai ?? "-" }} - {{$item->jadwalIbadah->jam_akhir ?? "-" }}</td>
                             <td> {{ $item->user->nama_lengkap ?? "-" }}</td>
-
                             <td>
-                                <a href="{{ route('jadwal_detail.index', $item['id_jadwal_h']) }}" class="btn btn-primary w-100 mb-2">
-                                    Detail
-                                </a>
+                                @if ($item->status_jadwal_h == 1)
+                                    <span class="badge rounded-pill badge-status-active">Aktif</span>
+                                @else
+                                    <span class="badge rounded-pill badge-status-inactive">Tidak Aktif</span>
+                                @endif
+                            </td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <a href="{{ route('jadwal_detail.index', $item->id_jadwal_h) }}" class="btn btn-primary" title="Detail">
+                                        <i class="fas fa-info-circle"></i>
+                                    </a>
 
-                                <form action="{{ route('jadwal.activate', $item['id_jadwal_h']) }}" method="post">
-                                    @csrf
-                                    <button type="submit" class="btn btn-success w-100">Activate</button>
-                                </form>
+                                    <form action="{{ route('jadwal.activate', $item->id_jadwal_h) }}" method="post" style="display:inline;">
+                                        @csrf
+                                        <button type="submit" class="btn btn-success" title="Aktifkan">
+                                            <i class="fas fa-user-check"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     @endforeach
-
                 </tbody>
             </table>
         </div>
     </div>
+
+    <x-filter-overlay title="Filter Jadwal Pelayanan">
+        <div class="mb-3">
+            <label for="filter_cabang" class="form-label">Cabang</label>
+            <input type="text" class="form-control" id="filter_cabang" name="filter_cabang" placeholder="Cari Cabang">
+        </div>
+        <div class="mb-3">
+            <label for="filter_nama_ibadah" class="form-label">Nama Ibadah</label>
+            <input type="text" class="form-control" id="filter_nama_ibadah" name="filter_nama_ibadah" placeholder="Cari Nama Ibadah">
+        </div>
+        <div class="mb-3">
+            <label for="filter_tanggal" class="form-label">Tanggal</label>
+            <input type="text" class="form-control" id="filter_tanggal" name="filter_tanggal" placeholder="Cari Tanggal">
+        </div>
+        <div class="mb-3">
+            <label for="filter_stand_by" class="form-label">Stand By</label>
+            <input type="text" class="form-control" id="filter_stand_by" name="filter_stand_by" placeholder="Cari Stand By">
+        </div>
+        <div class="mb-3">
+            <label for="filter_jam" class="form-label">Jam</label>
+            <input type="text" class="form-control" id="filter_jam" name="filter_jam" placeholder="Cari Jam">
+        </div>
+        <div class="mb-3">
+            <label for="filter_pic" class="form-label">PIC</label>
+            <input type="text" class="form-control" id="filter_pic" name="filter_pic" placeholder="Cari PIC">
+        </div>
+    </x-filter-overlay>
 
     <!-- Jadwal Modal -->
     <div class="modal fade" id="jadwalModal">
@@ -174,35 +223,78 @@
 
 @section('script')
 <script>
-    $('#tabelJadwalActive').DataTable({
-        "paging": true,
-        "pageLength": 10,
-    });
-
-    $('#tabelJadwalInactive').DataTable({
-        "paging": true,
-        "pageLength": 10,
-    });
-
-    var USERS = @json($user);
-    var today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
-    var yyyy = today.getFullYear();
-    today = dd + '-' + mm + '-' + yyyy;
-
-    // Set the default value property to today's date
-    $('#tanggal_jadwal').datepicker({
-        format: 'dd-mm-yyyy',
-        autoclose: true
-    });
-    $("#tanggal_jadwal").val(today);
-    // $('#tanggal_jadwal').datepicker({
-    //     format: 'dd-mm-yyyy',
-    //     autoclose: true
-    // });
-
     $(document).ready(function () {
+        const tableActive = $('#tabelJadwalActive').DataTable({
+            "paging": true,
+            "pageLength": 10,
+        });
+
+        const tableInactive = $('#tabelJadwalInactive').DataTable({
+            "paging": true,
+            "pageLength": 10,
+        });
+
+        // Page-specific filter functions
+        window.applyFilters = function() {
+            const cabang = $('#filter_cabang').val();
+            const namaIbadah = $('#filter_nama_ibadah').val();
+            const tanggal = $('#filter_tanggal').val();
+            const standBy = $('#filter_stand_by').val();
+            const jam = $('#filter_jam').val();
+            const pic = $('#filter_pic').val();
+            const statusJadwal = $('#filter_status_jadwal').val();
+
+            // Apply filters to both tables
+            tableActive.column(1).search(cabang).draw();           // Cabang column
+            tableActive.column(2).search(namaIbadah).draw();       // Nama Ibadah column
+            tableActive.column(3).search(tanggal).draw();          // Tanggal column
+            tableActive.column(4).search(standBy).draw();          // Stand By column
+            tableActive.column(5).search(jam).draw();              // Jam column
+            tableActive.column(6).search(pic).draw();              // PIC column
+
+            tableInactive.column(1).search(cabang).draw();         // Cabang column
+            tableInactive.column(2).search(namaIbadah).draw();     // Nama Ibadah column
+            tableInactive.column(3).search(tanggal).draw();        // Tanggal column
+            tableInactive.column(4).search(standBy).draw();        // Stand By column
+            tableInactive.column(5).search(jam).draw();            // Jam column
+            tableInactive.column(6).search(pic).draw();            // PIC column
+        };
+
+        window.resetFilters = function() {
+            // Clear filters from both tables
+            tableActive.column(1).search('').draw(); // Cabang
+            tableActive.column(2).search('').draw(); // Nama Ibadah
+            tableActive.column(3).search('').draw(); // Tanggal
+            tableActive.column(4).search('').draw(); // Stand By
+            tableActive.column(5).search('').draw(); // Jam
+            tableActive.column(6).search('').draw(); // PIC
+
+            tableInactive.column(1).search('').draw(); // Cabang
+            tableInactive.column(2).search('').draw(); // Nama Ibadah
+            tableInactive.column(3).search('').draw(); // Tanggal
+            tableInactive.column(4).search('').draw(); // Stand By
+            tableInactive.column(5).search('').draw(); // Jam
+            tableInactive.column(6).search('').draw(); // PIC
+        };
+
+        var USERS = @json($user);
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+        var yyyy = today.getFullYear();
+        today = dd + '-' + mm + '-' + yyyy;
+
+        // Set the default value property to today's date
+        $('#tanggal_jadwal').datepicker({
+            format: 'dd-mm-yyyy',
+            autoclose: true
+        });
+        $("#tanggal_jadwal").val(today);
+        // $('#tanggal_jadwal').datepicker({
+        //     format: 'dd-mm-yyyy',
+        //     autoclose: true
+        // });
+
         // Function to fill modal fields
         function fillFields(jadwalObject) {
             let modal = $('#jadwalModal');

@@ -177,7 +177,16 @@ class UserController extends Controller
         $user->status_user = 0;
         $user->save();
 
-        return redirect()->back()->with('success', 'User berhasil di-suspend.');
+        return redirect()->back()->with('success', 'User berhasil di-non-aktifkan.');
+    }
+
+    public function cuti(Request $request, $id)
+    {
+        $user = User::find($id);
+        $user->status_user = 2;
+        $user->save();
+
+        return redirect()->back()->with('success', 'User berhasil di-cuti-kan.');
     }
 
     public function excelIndex(Request $request)

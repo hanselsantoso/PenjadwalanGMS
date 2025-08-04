@@ -7,6 +7,9 @@
                     <h2>Daftar Cabang</h2>
                 </div>
                 <div class="col-md-6 text-end">
+                    <button type="button" id="btnFilter" class="btn btn-outline-secondary me-2">
+                        Filter
+                    </button>
                     <button type="button" id="btnCreate" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cabangModal">
                         Tambah Cabang 
                     </button>
@@ -25,27 +28,39 @@
                 <tbody>
                     @foreach ($cabang as $item)
                         <tr>
-                            <input type="hidden" name="id_cabang" value="{{$item["id_cabang"] }}">
+                            <input type="hidden" name="id_cabang" value="{{$item->id_cabang }}">
 
                             <td> {{ $loop->index + 1 }}</td>
-                            <td> {{$item["nama_cabang"] }}</td>
-                            <td> {{$item["status_cabang"] == 1 ? 'Aktif' : 'Tidak Aktif' }}</td>
+                            <td> {{ $item->nama_cabang }}</td>
                             <td>
-                                <button class="btn btn-warning w-100 mb-2 btnEdit" data-bs-toggle="modal" data-bs-target="#cabangModal">
-                                    Update
-                                </button>
-
                                 @if ($item->status_cabang == 1)
-                                    <form action="{{ route('cabang.deactivate', $item['id_cabang']) }}" method="post">
-                                        @csrf
-                                        <button type="submit" class="btn btn-danger w-100">Suspend</button>
-                                    </form>
+                                    <span class="badge rounded-pill badge-status-active">Aktif</span>
                                 @else
-                                    <form action="{{ route('cabang.activate', $item['id_cabang']) }}" method="post">
-                                        @csrf
-                                        <button type="submit" class="btn btn-success w-100">Aktifkan</button>
-                                    </form>
+                                    <span class="badge rounded-pill badge-status-inactive">Tidak Aktif</span>
                                 @endif
+                            </td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-warning btnEdit" data-bs-toggle="modal" data-bs-target="#cabangModal" title="Update">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </button>
+
+                                    @if ($item->status_cabang == 1)
+                                        <form action="{{ route('cabang.deactivate', $item->id_cabang) }}" method="post" style="display:inline;">
+                                            @csrf
+                                            <button type="submit" class="btn btn-danger" title="Non-Aktifkan">
+                                                <i class="fas fa-user-slash"></i>
+                                            </button>
+                                        </form>
+                                    @else
+                                        <form action="{{ route('cabang.activate', $item->id_cabang) }}" method="post" style="display:inline;">
+                                            @csrf
+                                            <button type="submit" class="btn btn-success" title="Aktifkan">
+                                                <i class="fas fa-user-check"></i>
+                                            </button>
+                                        </form>
+                                    @endif
+                                </div>
                             </td>
                         </tr>
                     @endforeach
@@ -53,6 +68,21 @@
             </table>
         </div>
     </div>
+
+    <x-filter-overlay title="Filter Cabang">
+        <div class="mb-3">
+            <label for="filter_nama_cabang" class="form-label">Nama Cabang</label>
+            <input type="text" class="form-control" id="filter_nama_cabang" name="filter_nama_cabang" placeholder="Cari Nama Cabang">
+        </div>
+        <div class="mb-3">
+            <label for="filter_status_cabang" class="form-label">Status</label>
+            <select class="form-select" id="filter_status_cabang" name="filter_status_cabang">
+                <option value="">Semua Status</option>
+                <option value="1">Aktif</option>
+                <option value="0">Tidak Aktif</option>
+            </select>
+        </div>
+    </x-filter-overlay>
 
     <!-- Cabang Modal -->
     <div class="modal fade" id="cabangModal">
@@ -88,12 +118,37 @@
 
 @section('script')
 <script>
-    $('#table-list').DataTable({
-        "paging": true,
-        "pageLength": 10,
-    });
-
     $(document).ready(function () {
+        const table = $('#table-list').DataTable({
+            "paging": true,
+            "pageLength": 10,
+        });
+
+        // Page-specific filter functions
+        window.applyFilters = function() {
+            const namaCabang = $('#filter_nama_cabang').val();
+            const statusCabang = $('#filter_status_cabang').val();
+
+            // Apply filters
+            const STATUS_FILTER = {
+                "": "",           // No filter
+                "1": "Aktif",
+                "0": "Tidak Aktif"
+            };
+            table.column(1).search(namaCabang).draw();
+            if (statusCabang == "") {
+                table.column(2).search('').draw();
+            } else {
+                table.column(2).search(`^${STATUS_FILTER[statusCabang]}$`, true, false).draw(); // Status column (EQUAL and not LIKE)
+            }
+        };
+
+        window.resetFilters = function() {
+            // Clear filters
+            table.column(1).search('').draw();
+            table.column(2).search('').draw();
+        };
+
         function fillFields(cabangObject) {
             let modal = $('#cabangModal');
             modal.find('#id_cabang').val(cabangObject.id_cabang);
@@ -133,7 +188,6 @@
             $('#cabangModal').modal('show');
         });
     });
-
 </script>
 @endsection
 
