@@ -17,6 +17,7 @@ use App\Http\Controllers\Dump\Pic\PicController;
 use App\Http\Controllers\Dump\Volunteer\VolunteerController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Helpers\MenuHelper;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,7 +37,7 @@ Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/reset-password', [AuthController::class, 'resetPassword'])->name('resetPassword');
 Route::post('/reset-password', [AuthController::class, 'doResetPassword'])->name('doResetPassword');
 
-Route::prefix('user')->middleware(['role:0'])->group(function(){
+Route::prefix('user')->middleware(MenuHelper::getAllowedRolesForPrefix('user'))->group(function(){
     Route::get('/', [UserController::class, 'index'])->name('user.index');
     Route::post('/', [UserController::class, 'store'])->name('user.store');
     Route::put('/', [UserController::class, 'update'])->name('user.update');
@@ -52,7 +53,7 @@ Route::prefix('user')->middleware(['role:0'])->group(function(){
     });
 });
 
-Route::prefix('cabang')->middleware(['role:0'])->group(function(){
+Route::prefix('cabang')->middleware(MenuHelper::getAllowedRolesForPrefix('cabang'))->group(function(){
     Route::get('/', [CabangController::class, 'index'])->name('cabang.index');
     Route::post('/', [CabangController::class, 'store'])->name('cabang.store');
     Route::put('/', [CabangController::class, 'update'])->name('cabang.update');
@@ -61,7 +62,7 @@ Route::prefix('cabang')->middleware(['role:0'])->group(function(){
     Route::post('/deactivate/{id}', [CabangController::class, 'deactivate'])->name('cabang.deactivate');
 });
 
-Route::prefix('tag')->middleware(['role:0'])->group(function(){
+Route::prefix('tag')->middleware(MenuHelper::getAllowedRolesForPrefix('tag'))->group(function(){
     Route::get('/', [TagController::class, 'index'])->name('tag.index');
     Route::post('/', [TagController::class, 'store'])->name('tag.store');
     Route::put('/', [TagController::class, 'update'])->name('tag.update');
@@ -70,7 +71,7 @@ Route::prefix('tag')->middleware(['role:0'])->group(function(){
     Route::post('/deactivate/{id}', [TagController::class, 'deactivate'])->name('tag.deactivate');
 });
 
-Route::prefix('bagian')->middleware(['role:0'])->group(function(){
+Route::prefix('bagian')->middleware(MenuHelper::getAllowedRolesForPrefix('bagian'))->group(function(){
     Route::get('/', [BagianController::class, 'index'])->name('bagian.index');
     Route::post('/', [BagianController::class, 'store'])->name('bagian.store');
     Route::put('/', [BagianController::class, 'update'])->name('bagian.update');
@@ -79,7 +80,7 @@ Route::prefix('bagian')->middleware(['role:0'])->group(function(){
     Route::post('/deactivate/{id}', [BagianController::class, 'deactivate'])->name('bagian.deactivate');
 });
 
-Route::prefix('mapping')->middleware(['role:0'])->group(function(){
+Route::prefix('mapping')->middleware(MenuHelper::getAllowedRolesForPrefix('mapping'))->group(function(){
     Route::get('/', [MappingController::class, 'index'])->name('mapping.index');
     Route::post('/', [MappingController::class, 'store'])->name('mapping.store');
     Route::put('/', [MappingController::class, 'update'])->name('mapping.update');
@@ -88,7 +89,7 @@ Route::prefix('mapping')->middleware(['role:0'])->group(function(){
     Route::post('/deactivate/{id}', [MappingController::class, 'deactivate'])->name('mapping.deactivate');
 });
 
-Route::prefix('jadwal_ibadah')->middleware(['role:0'])->group(function(){
+Route::prefix('jadwal_ibadah')->middleware(MenuHelper::getAllowedRolesForPrefix('jadwal_ibadah'))->group(function(){
     Route::get('/', [JadwalIbadahController::class, 'index'])->name('jadwal_ibadah.index');
     Route::post('/', [JadwalIbadahController::class, 'store'])->name('jadwal_ibadah.store');
     Route::put('/', [JadwalIbadahController::class, 'update'])->name('jadwal_ibadah.update');
@@ -97,7 +98,7 @@ Route::prefix('jadwal_ibadah')->middleware(['role:0'])->group(function(){
     Route::post('/deactivate/{id}', [JadwalIbadahController::class, 'deactivate'])->name('jadwal_ibadah.deactivate');
 });
 
-Route::prefix('tim_pelayanan')->middleware(['role:0'])->group(function(){
+Route::prefix('tim_pelayanan')->middleware(MenuHelper::getAllowedRolesForPrefix('tim_pelayanan'))->group(function(){
     Route::get('/', [TimPelayananController::class, 'index'])->name('tim_pelayanan.index');
     Route::post('/', [TimPelayananController::class, 'storeTim'])->name('tim_pelayanan.store');
     Route::put('/', [TimPelayananController::class, 'updateTim'])->name('tim_pelayanan.tim.update');
@@ -112,13 +113,13 @@ Route::prefix('tim_pelayanan')->middleware(['role:0'])->group(function(){
     });
 });
 
-Route::prefix('grading')->middleware(['role:0'])->group(function(){
+Route::prefix('grading')->middleware(MenuHelper::getAllowedRolesForPrefix('grading'))->group(function(){
     Route::get('/', [GradingController::class, 'index'])->name('grading.index');
     Route::post('/', [GradingController::class, 'store'])->name('grading.store');
     Route::put('/', [GradingController::class, 'update'])->name('grading.update');
 });
 
-Route::prefix('jadwal')->middleware(['role:0'])->group(function(){
+Route::prefix('jadwal')->middleware(MenuHelper::getAllowedRolesForPrefix('jadwal'))->group(function(){
     Route::get('/', [JadwalController::class, 'index'])->name('jadwal.index');
     Route::post('/', [JadwalController::class, 'store'])->name('jadwal.store');
     Route::put('/', [JadwalController::class, 'update'])->name('jadwal.update');

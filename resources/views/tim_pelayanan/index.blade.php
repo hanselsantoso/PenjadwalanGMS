@@ -67,14 +67,12 @@
                                                 <p class="mb-2"><b>Team Leader:</b> {{ $team->user->nama_lengkap }}</p>
                                                 <input type="hidden" name="id_pelayanan_h" value="{{$team->id_pelayanan_h}}">
 
-                                                <button class="btn btn-success btnAddMember" data-id="{{ $team->id_pelayanan_h }}" data-bs-toggle="modal" data-bs-target="#memberModal">Tambah Anggota</button>
-                                                <button class="btn btn-warning btnEditTeam" data-id="{{ $team->id_pelayanan_h }}" data-bs-toggle="modal" data-bs-target="#timPelayananModal">Ubah Detail</button>
-                                                <!-- TODO: FIX SUSPEND/DELETE TIM -->
-                                                <!-- <button type="submit" class="btn btn-danger">Suspend</button> -->
-                                                {{-- <form action="{{ route('tim_pelayanan.deactivate', $team->id) }}" method="POST" style="display:inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                </form> --}}
+                                                <div class="d-flex justify-content-end gap-2">
+                                                    <button type="button" class="btn btn-danger btnDeleteTeam" data-id="{{ $team->id_pelayanan_h }}" data-nama="{{ $team->nama_tim_pelayanan_h }}" data-bs-toggle="modal" data-bs-target="#deleteTeamModal">Hapus Tim</button>
+                                                    
+                                                    <button class="btn btn-warning btnEditTeam" data-id="{{ $team->id_pelayanan_h }}" data-bs-toggle="modal" data-bs-target="#timPelayananModal">Update Tim</button>
+                                                    <button class="btn btn-success btnAddMember" data-id="{{ $team->id_pelayanan_h }}" data-bs-toggle="modal" data-bs-target="#memberModal">Tambah Anggota</button>
+                                                </div>
                                             </div>
 
                                             <table id="tabelUser{{ $team->id_pelayanan_h }}" class="table table-striped table-bordered">
@@ -228,6 +226,29 @@
             </div>
         </div>
     </div>
+
+    <!-- Delete Team Confirmation Modal -->
+    <div class="modal fade" id="deleteTeamModal" tabindex="-1" aria-labelledby="deleteTeamModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteTeamModalLabel">Konfirmasi Hapus Tim</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Apakah Anda yakin ingin menghapus tim <strong id="teamNameToDelete"></strong>?</p>
+                    <p class="text-danger"><small>Peringatan: Tindakan ini tidak dapat dibatalkan. Semua data tim dan anggota akan dihapus secara permanen.</small></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <form id="deleteTeamForm" method="POST" style="display: inline;">
+                        @csrf
+                        <button type="submit" class="btn btn-danger">Hapus Tim</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('script')
@@ -371,6 +392,18 @@
             fillMemberFields(memberObject);
 
             $('#memberModal').modal('show');
+        });
+
+        // Handle Delete Team button click
+        $('.btnDeleteTeam').on('click', function() {
+            const teamId = $(this).data('id');
+            const teamName = $(this).data('nama');
+            
+            // Set the team name in the modal
+            $('#teamNameToDelete').text(teamName);
+            
+            // Set the form action
+            $('#deleteTeamForm').attr('action', '{{ route("tim_pelayanan.deactivate", "") }}/' + teamId);
         });
     });
 </script>

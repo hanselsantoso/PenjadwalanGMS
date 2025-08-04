@@ -48,14 +48,14 @@ class TimPelayananController extends Controller
                 $timPelayananH->id_user = $request->team_leader;
                 $timPelayananH->save();
 
-                User::where('id', $request->team_leader)->update(['role' => 2]);
+                User::where('id', $request->team_leader)->update(['role' => 1]);
                 $timPelayananD = new TimPelayanan_D();
                 $timPelayananD->id_pelayanan_h = $timPelayananH->id_pelayanan_h;
                 $timPelayananD->id_user = $request->team_leader;
                 $timPelayananD->save();
 
                 foreach ($request->user as $item) {
-                    User::where('id', $item)->update(['role' => 3]);
+                    User::where('id', $item)->update(['role' => 2]);
                     $timPelayananD = new TimPelayanan_D();
                     $timPelayananD->id_pelayanan_h = $timPelayananH->id_pelayanan_h;
                     $timPelayananD->id_user = $item;
@@ -92,22 +92,49 @@ class TimPelayananController extends Controller
         $timData->id_user = $picBaru;
         $timData->save();
 
-        User::where('id', $picLama)->update(['role' => 3]);
-        User::where('id', $picBaru)->update(['role' => 2]);
+        User::where('id', $picLama)->update(['role' => 2]);
+        User::where('id', $picBaru)->update(['role' => 1]);
 
         return redirect()->route('tim_pelayanan.index')->with('success', 'Tim berhasil diperbarui.');
     }
 
     public function activate($id) {
-        // TODO: add functionality
+        try {
+            $timPelayanan = TimPelayanan_H::findOrFail($id);
+            $timPelayanan->status = 1; // Assuming 1 means active
+            $timPelayanan->save();
 
-        return redirect()->route('tim_pelayanan.index')->with('success', 'Tim berhasil diaktifkan.');
+            return redirect()->route('tim_pelayanan.index')->with('success', 'Tim berhasil diaktifkan.');
+        } catch (\Exception $e) {
+            return redirect()->route('tim_pelayanan.index')->with('error', 'Gagal mengaktifkan tim: ' . $e->getMessage());
+        }
     }
 
-    public function deactivate($id, $id_user) {
-        // TODO: add functionality
-        
-        return redirect()->route('tim_pelayanan.index')->with('success', 'Tim berhasil dinonaktifkan.');
+    public function deactivate($id) {
+        try {
+            DB::transaction(function () use ($id) {
+                $timPelayanan = TimPelayanan_H::findOrFail($id);
+                
+                // Update team leader role back to regular user (role 1)
+                User::where('id', $timPelayanan->id_user)->update(['role' => 1]);
+                
+                // Get all team members and update their roles back to regular user (role 1)
+                $teamMembers = TimPelayanan_D::where('id_pelayanan_h', $id)->get();
+                foreach ($teamMembers as $member) {
+                    User::where('id', $member->id_user)->update(['role' => 2]);
+                }
+                
+                // Hard delete all team members (detail records)
+                TimPelayanan_D::where('id_pelayanan_h', $id)->delete();
+                
+                // Hard delete the team header
+                $timPelayanan->delete();
+            });
+
+            return redirect()->route('tim_pelayanan.index')->with('success', 'Tim berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->route('tim_pelayanan.index')->with('error', 'Gagal menghapus tim: ' . $e->getMessage());
+        }
     }
 
     public function storeMember(Request $request) {

@@ -6,13 +6,15 @@ use Illuminate\Support\Facades\Auth;
 
 class Role {
 
-  public function handle($request, Closure $next, String $role) {
+  public function handle($request, Closure $next, ...$roles) {
     if (!Auth::check())
       return redirect('/');
+    
+    $userRole = Auth::user()->role;
+    if (!in_array((string) $userRole, $roles)) {
+      return redirect('/');
+    }
 
-    if(Auth::user()->role == $role)
-      return $next($request);
-
-    return redirect('/');
+    return $next($request);
   }
 }

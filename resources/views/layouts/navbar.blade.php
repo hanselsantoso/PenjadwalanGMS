@@ -16,52 +16,21 @@
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ms-auto">
                 @if (Auth::check())
-                    @if (Auth::user()->role == 0)
+                    {{-- Dynamic Navigation based on role --}}
+                    @php
+                        $menuItems = App\Helpers\MenuHelper::getNavbarMenuItems(Auth::user()->role);
+                    @endphp
+                    
+                    @if (!empty($menuItems))
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {{ __('Menu') }}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a>
-                                <a class="dropdown-item" href="{{ route('user.index') }}">{{ __('User') }}</a>
-                                <a class="dropdown-item" href="{{ route('tim_pelayanan.index') }}">{{ __('Tim Pelayanan') }}</a>
-                                <a class="dropdown-item" href="{{ route('cabang.index') }}">{{ __('Cabang') }}</a>
-                                <a class="dropdown-item" href="{{ route('bagian.index') }}">{{ __('Bagian') }}</a>
-                                {{-- <a class="dropdown-item" href="{{ route('tag.index') }}">{{ __('Tag') }}</a> --}}
-                                {{-- <a class="dropdown-item" href="{{ route('mapping.index') }}">{{ __('Mapping') }}</a> --}}
-                                <a class="dropdown-item" href="{{ route('jadwal_ibadah.index') }}">{{ __('Jadwal Ibadah') }}</a>
-                                <a class="dropdown-item" href="{{ route('jadwal.index') }}">{{ __('Jadwal Pelayanan') }}</a>
-                                <a class="dropdown-item" href="{{ route('grading.index') }}">{{ __('Grading') }}</a>
-                            </div>
-                        </li>
-
-                    @elseif (Auth::user()->role == 1)
-                        <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {{ __('Menu') }}
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <!-- Add more Servo-specific links here -->
-                            </div>
-                        </li>
-
-                    @elseif (Auth::user()->role == 2)
-                        <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {{ __('Menu') }}
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <!-- Add more PIC-specific links here -->
-                            </div>
-                        </li>
-
-                    @elseif (Auth::user()->role == 3)
-                        <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {{ __('Menu') }}
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <!-- Add more Volunteer-specific links here -->
+                                @foreach ($menuItems as $item)
+                                    <a class="dropdown-item" href="{{ route($item['route']) }}">{{ $item['title'] }}</a>
+                                @endforeach
                             </div>
                         </li>
                     @endif

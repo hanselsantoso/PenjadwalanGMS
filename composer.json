@@ -29,7 +29,8 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-                "app/formatIDR.php"
+                "app/formatIDR.php",
+                "app/Helpers/MenuHelper.php"
         ]
     },
     "autoload-dev": {

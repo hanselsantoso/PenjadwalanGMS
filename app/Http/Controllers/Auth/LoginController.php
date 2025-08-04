@@ -39,6 +39,10 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    // Role == 0 : Admin
+    // Role == 1 : PIC
+    // Role == 2 : Volunteer
+    // Role == 3 : Servo
     protected function redirectTo(): string
     {
         return '/';
